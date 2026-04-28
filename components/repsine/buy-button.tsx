@@ -12,6 +12,13 @@ type BuyButtonProps = {
 const COURSE_PRICE = 1299
 const COURSE_MRP = 4999
 
+// Cashfree SDK types
+declare global {
+  interface Window {
+    Cashfree: any
+  }
+}
+
 export function BuyButton({ label = "BUY Now", className }: BuyButtonProps) {
   const [open, setOpen] = useState(false)
 
@@ -47,9 +54,35 @@ export function BuyButton({ label = "BUY Now", className }: BuyButtonProps) {
 
 function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [submitting, setSubmitting] = useState(false)
-  const [success, setSuccess] = useState(false)
   const [form, setForm] = useState({ name: "", email: "", phone: "" })
   const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string }>({})
+  const [cashfreeLoaded, setCashfreeLoaded] = useState(false)
+
+  // Load Cashfree SDK
+  useEffect(() => {
+    if (typeof window === "undefined" || window.Cashfree) {
+      setCashfreeLoaded(true)
+      return
+    }
+
+    const script = document.createElement("script")
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js"
+    script.async = true
+    script.onload = () => {
+      console.log("[v0] Cashfree SDK loaded")
+      setCashfreeLoaded(true)
+    }
+    script.onerror = () => {
+      console.error("[v0] Failed to load Cashfree SDK")
+    }
+    document.body.appendChild(script)
+
+    return () => {
+      if (script.parentNode) {
+        script.parentNode.removeChild(script)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (!open) return
@@ -75,19 +108,58 @@ function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }
     return Object.keys(next).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
+    if (!cashfreeLoaded) {
+      alert("Payment system is loading. Please try again in a moment.")
+      return
+    }
+
     setSubmitting(true)
-    // Simulated payment initialisation. Replace with real payment gateway call.
-    setTimeout(() => {
+    console.log("[v0] Creating Cashfree order...")
+
+    try {
+      // Create order on server
+      const response = await fetch("/api/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error("[v0] Order creation failed:", errorData)
+        alert("Failed to initiate payment. Please try again.")
+        setSubmitting(false)
+        return
+      }
+
+      const { payment_session_id } = await response.json()
+      console.log("[v0] Order created, opening Cashfree checkout...")
+
+      // Initialize Cashfree SDK
+      const cashfree = await window.Cashfree({
+        mode: "sandbox", // Change to "production" when going live
+      })
+
+      // Open checkout
+      cashfree.checkout({
+        paymentSessionId: payment_session_id,
+        redirectTarget: "_self", // Redirect in same window
+      })
+    } catch (error) {
+      console.error("[v0] Payment error:", error)
+      alert("An error occurred. Please try again.")
       setSubmitting(false)
-      setSuccess(true)
-    }, 1400)
+    }
   }
 
   const handleClose = () => {
-    setSuccess(false)
     setForm({ name: "", email: "", phone: "" })
     setErrors({})
     onClose()
@@ -144,99 +216,97 @@ function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }
           </div>
         </div>
 
-        {success ? (
-          <SuccessState
-            email={form.email}
-            onClose={handleClose}
-          />
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6 text-left">
-            {/* Order summary */}
-            <div className="rounded-xl border border-border/60 bg-background/40 p-4">
-              <div className="flex items-baseline justify-between">
-                <p className="text-sm font-medium text-foreground">Canva Mastery Course</p>
-                <p className="font-display text-lg font-bold text-foreground">
-                  ₹{COURSE_PRICE.toLocaleString("en-IN")}
-                </p>
-              </div>
-              <div className="mt-1 flex items-baseline justify-between text-xs text-muted-foreground">
-                <span>One-time payment · Lifetime access</span>
-                <span className="line-through">₹{COURSE_MRP.toLocaleString("en-IN")}</span>
-              </div>
-              <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-primary uppercase">
-                <span>Save ₹{(COURSE_MRP - COURSE_PRICE).toLocaleString("en-IN")}</span>
-              </div>
-            </div>
-
-            {/* Form fields */}
-            <div className="space-y-4">
-              <Field
-                id="name"
-                label="Full Name"
-                type="text"
-                placeholder="Aarav Sharma"
-                autoComplete="name"
-                value={form.name}
-                onChange={(v) => setForm({ ...form, name: v })}
-                error={errors.name}
-              />
-              <Field
-                id="email"
-                label="Email"
-                type="email"
-                placeholder="you@example.com"
-                autoComplete="email"
-                value={form.email}
-                onChange={(v) => setForm({ ...form, email: v })}
-                error={errors.email}
-                hint="Course access link will be sent here."
-              />
-              <PhoneField
-                value={form.phone}
-                onChange={(v) => setForm({ ...form, phone: v })}
-                error={errors.phone}
-              />
-            </div>
-
-            {/* Pay button */}
-            <button
-              type="submit"
-              disabled={submitting}
-              className="group relative flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3 text-sm font-semibold tracking-wide text-primary-foreground transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-80 disabled:hover:translate-y-0"
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Initialising payment…</span>
-                </>
-              ) : (
-                <>
-                  <Lock className="h-4 w-4" />
-                  <span>Pay ₹{COURSE_PRICE.toLocaleString("en-IN")} — Secure Checkout</span>
-                </>
-              )}
-            </button>
-
-            {/* Trust strip */}
-            <div className="flex flex-col items-start gap-2 border-t border-border/60 pt-4">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                <span>256-bit SSL Encryption · 7-day Refund Policy</span>
-              </div>
-              <p className="text-left text-[11px] text-muted-foreground">
-                By continuing you agree to our{" "}
-                <a href="/terms-and-conditions" className="underline-offset-2 hover:text-foreground hover:underline">
-                  Terms
-                </a>{" "}
-                and{" "}
-                <a href="/privacy-policy" className="underline-offset-2 hover:text-foreground hover:underline">
-                  Privacy Policy
-                </a>
-                .
+        <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6 text-left">
+          {/* Order summary */}
+          <div className="rounded-xl border border-border/60 bg-background/40 p-4">
+            <div className="flex items-baseline justify-between">
+              <p className="text-sm font-medium text-foreground">Canva Mastery Course</p>
+              <p className="font-display text-lg font-bold text-foreground">
+                ₹{COURSE_PRICE.toLocaleString("en-IN")}
               </p>
             </div>
-          </form>
-        )}
+            <div className="mt-1 flex items-baseline justify-between text-xs text-muted-foreground">
+              <span>One-time payment · Lifetime access</span>
+              <span className="line-through">₹{COURSE_MRP.toLocaleString("en-IN")}</span>
+            </div>
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-primary uppercase">
+              <span>Save ₹{(COURSE_MRP - COURSE_PRICE).toLocaleString("en-IN")}</span>
+            </div>
+          </div>
+
+          {/* Form fields */}
+          <div className="space-y-4">
+            <Field
+              id="name"
+              label="Full Name"
+              type="text"
+              placeholder="Aarav Sharma"
+              autoComplete="name"
+              value={form.name}
+              onChange={(v) => setForm({ ...form, name: v })}
+              error={errors.name}
+            />
+            <Field
+              id="email"
+              label="Email"
+              type="email"
+              placeholder="you@example.com"
+              autoComplete="email"
+              value={form.email}
+              onChange={(v) => setForm({ ...form, email: v })}
+              error={errors.email}
+              hint="Course access link will be sent here."
+            />
+            <PhoneField
+              value={form.phone}
+              onChange={(v) => setForm({ ...form, phone: v })}
+              error={errors.phone}
+            />
+          </div>
+
+          {/* Pay button */}
+          <button
+            type="submit"
+            disabled={submitting || !cashfreeLoaded}
+            className="group relative flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3 text-sm font-semibold tracking-wide text-primary-foreground transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-80 disabled:hover:translate-y-0"
+          >
+            {submitting ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Opening secure checkout…</span>
+              </>
+            ) : !cashfreeLoaded ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Loading payment system…</span>
+              </>
+            ) : (
+              <>
+                <Lock className="h-4 w-4" />
+                <span>Pay ₹{COURSE_PRICE.toLocaleString("en-IN")} — Secure Checkout</span>
+              </>
+            )}
+          </button>
+
+          {/* Trust strip */}
+          <div className="flex flex-col items-start gap-2 border-t border-border/60 pt-4">
+            <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+              <span>256-bit SSL Encryption · 7-day Refund Policy</span>
+            </div>
+            <p className="text-left text-[11px] text-muted-foreground">
+              By continuing you agree to our{" "}
+              <a href="/terms-and-conditions" className="underline-offset-2 hover:text-foreground hover:underline">
+                Terms
+              </a>{" "}
+              and{" "}
+              <a href="/privacy-policy" className="underline-offset-2 hover:text-foreground hover:underline">
+                Privacy Policy
+              </a>
+              .
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   )
@@ -333,28 +403,6 @@ function PhoneField({
         />
       </div>
       {error && <p className="text-[11px] text-destructive">{error}</p>}
-    </div>
-  )
-}
-
-function SuccessState({ email, onClose }: { email: string; onClose: () => void }) {
-  return (
-    <div className="px-6 py-10 text-center">
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 text-primary">
-        <CheckCircle2 className="h-7 w-7" />
-      </div>
-      <h3 className="font-display mt-5 text-xl font-bold text-foreground">Almost there!</h3>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        We&apos;ve received your details. Your secure payment link will be sent to{" "}
-        <span className="font-medium text-foreground">{email || "your email"}</span>.
-      </p>
-      <button
-        type="button"
-        onClick={onClose}
-        className="mt-6 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2 text-sm font-semibold text-background"
-      >
-        Done
-      </button>
     </div>
   )
 }
