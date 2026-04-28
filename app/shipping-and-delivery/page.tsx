@@ -49,11 +49,11 @@ export default function ShippingPage() {
 
         <h2 className="font-display pt-4 text-xl font-bold text-foreground">Payment Methods</h2>
         <p>
-          We use Razorpay, a secure and widely-trusted payment gateway, to process all transactions. You may
-          pay using your credit or debit card (Visa, MasterCard, American Express, or RuPay), UPI, net
-          banking, or any other method supported by Razorpay at checkout. Once your payment is successfully
-          completed, your access to the course is granted immediately and a confirmation email with your
-          login details is dispatched to the email address you provided at checkout.
+          We use a secure and trusted payment gateway to process all transactions. You may pay using your
+          credit or debit card (Visa, MasterCard, American Express, or RuPay), UPI, net banking, or any
+          other supported method at checkout. Once your payment is successfully completed, your access to the
+          course is granted immediately and a confirmation email with your login details is dispatched to the
+          email address you provided at checkout.
         </p>
 
         <h2 className="font-display pt-4 text-xl font-bold text-foreground">Support &amp; Assistance</h2>
