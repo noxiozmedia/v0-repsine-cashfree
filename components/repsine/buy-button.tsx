@@ -21,22 +21,22 @@ export function BuyButton({ label = "BUY Now", className }: BuyButtonProps) {
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          "group relative inline-flex h-12 cursor-pointer items-center overflow-hidden rounded-full bg-foreground pl-1 pr-5 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5",
+          "group relative inline-flex h-12 cursor-pointer items-center overflow-hidden rounded-full bg-foreground pl-1.5 pr-5 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5",
           className,
         )}
       >
-        {/* Purple circle — starts small on left, expands to full width on hover */}
+        {/* Purple circle — sits inset on left; on hover expands to fill the inset area (keeps padding) */}
         <span
           aria-hidden="true"
-          className="absolute top-1 left-1 h-10 w-10 origin-left rounded-full bg-primary transition-all duration-500 ease-out group-hover:top-0 group-hover:left-0 group-hover:h-full group-hover:w-full group-hover:rounded-full"
+          className="absolute top-1.5 left-1.5 h-9 w-9 rounded-full bg-primary transition-[width,height,top,left] duration-500 ease-out group-hover:top-1.5 group-hover:left-1.5 group-hover:h-[calc(100%-0.75rem)] group-hover:w-[calc(100%-0.75rem)]"
         />
 
-        {/* Arrow icon — always lives inside the purple circle area */}
-        <span className="relative z-10 mr-3 flex h-10 w-10 flex-shrink-0 items-center justify-center">
+        {/* Arrow icon — centred inside the purple circle area */}
+        <span className="relative z-10 mr-2.5 flex h-9 w-9 flex-shrink-0 items-center justify-center">
           <ChevronRight className="h-4 w-4 text-primary-foreground" />
         </span>
 
-        {/* Label — white by default, stays white on hover (circle swallows background) */}
+        {/* Label */}
         <span className="relative z-10 tracking-wide">{label}</span>
       </button>
 
@@ -219,12 +219,12 @@ function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }
             </button>
 
             {/* Trust strip */}
-            <div className="flex flex-col items-center gap-2 border-t border-border/60 pt-4 text-center">
+            <div className="flex flex-col items-start gap-2 border-t border-border/60 pt-4">
               <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
                 <ShieldCheck className="h-3.5 w-3.5 text-primary" />
                 <span>Secured by Razorpay · 256-bit SSL · 7-day refund</span>
               </div>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-left text-[11px] text-muted-foreground">
                 By continuing you agree to our{" "}
                 <a href="/terms" className="underline-offset-2 hover:text-foreground hover:underline">
                   Terms

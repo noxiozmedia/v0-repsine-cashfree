@@ -21,7 +21,7 @@ export function SiteHeader() {
         Repsine
       </a>
 
-      <BuyButton label="Enroll now" className="h-9 scale-90 pl-0.5 pr-4 text-xs sm:scale-100 sm:text-sm" />
+      <BuyButton label="Enroll now" />
     </header>
   )
 }
