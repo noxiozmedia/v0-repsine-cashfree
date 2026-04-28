@@ -50,7 +50,7 @@ export function Faq() {
               value={`item-${i}`}
               className="rounded-xl border border-border/60 bg-card/40 px-5 backdrop-blur"
             >
-              <AccordionTrigger className="py-4 text-left text-sm font-semibold text-foreground hover:no-underline sm:text-[15px]">
+              <AccordionTrigger className="cursor-pointer py-4 text-left text-sm font-semibold text-foreground hover:no-underline sm:text-[15px]">
                 {item.q}
               </AccordionTrigger>
               <AccordionContent className="pb-4 text-sm leading-relaxed text-muted-foreground">
