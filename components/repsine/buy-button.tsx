@@ -21,14 +21,19 @@ export function BuyButton({ label = "BUY Now", className }: BuyButtonProps) {
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          "group inline-flex items-center gap-2 rounded-full bg-foreground py-2 pr-5 pl-1 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5",
+          "group relative inline-flex h-11 items-center overflow-hidden rounded-full bg-foreground pr-12 pl-12 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5",
           className,
         )}
       >
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <ChevronRight className="h-4 w-4" />
+        <span
+          aria-hidden="true"
+          className="absolute top-1/2 left-1 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-primary-foreground transition-[left] duration-300 ease-out group-hover:left-[calc(100%-2.5rem)]"
+        >
+          <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
         </span>
-        <span className="tracking-wide">{label}</span>
+        <span className="mx-auto tracking-wide transition-transform duration-300 group-hover:-translate-x-1">
+          {label}
+        </span>
       </button>
 
       <CheckoutModal open={open} onClose={() => setOpen(false)} />
