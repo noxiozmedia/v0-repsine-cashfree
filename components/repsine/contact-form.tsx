@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Send, Loader2, Check } from "lucide-react"
-import { submitContact } from "@/app/contact/actions"
+import { submitContact } from "@/app/contact-us/actions"
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
