@@ -4,7 +4,7 @@ export function SiteHeader() {
   return (
     <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between px-4 pt-6 sm:px-6">
       <a
-        href="#"
+        href="/"
         aria-label="Cart"
         className="flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-card/40 text-foreground/80 backdrop-blur transition-colors hover:text-foreground"
       >
@@ -12,7 +12,7 @@ export function SiteHeader() {
       </a>
 
       <a
-        href="#"
+        href="/"
         className="font-display text-lg font-bold tracking-tight text-foreground sm:text-xl"
       >
         Repsine

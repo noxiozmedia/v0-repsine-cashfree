@@ -1,12 +1,12 @@
 import { ArrowUpRight, MapPin } from "lucide-react"
 
 const links = [
-  { label: "Contact", href: "#" },
-  { label: "About Us", href: "#" },
-  { label: "Terms & Conditions", href: "#" },
-  { label: "Privacy Policy", href: "#" },
-  { label: "Refund Policy", href: "#" },
-  { label: "Shipping and Delivery", href: "#" },
+  { label: "Contact", href: "/contact" },
+  { label: "About Us", href: "/about" },
+  { label: "Terms & Conditions", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Refund Policy", href: "/refund" },
+  { label: "Shipping and Delivery", href: "/shipping" },
 ]
 
 export function SiteFooter() {
