@@ -36,8 +36,8 @@ export function BuyButton({ label = "BUY Now", className }: BuyButtonProps) {
           <ChevronRight className="h-4 w-4 text-primary-foreground" />
         </span>
 
-        {/* Label */}
-        <span className="relative z-10 tracking-wide">{label}</span>
+        {/* Label — turns white when purple fills the pill */}
+        <span className="relative z-10 tracking-wide transition-colors duration-300 group-hover:text-primary-foreground">{label}</span>
       </button>
 
       <CheckoutModal open={open} onClose={() => setOpen(false)} />
@@ -151,7 +151,7 @@ function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }
             onClose={handleClose}
           />
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6">
+          <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6 text-left">
             {/* Order summary */}
             <div className="rounded-xl border border-border/60 bg-background/40 p-4">
               <div className="flex items-baseline justify-between">
