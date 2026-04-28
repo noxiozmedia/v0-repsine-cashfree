@@ -1,4 +1,4 @@
-import { ArrowUpRight, MapPin } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 
 const links = [
   { label: "Contact", href: "/contact" },
@@ -31,19 +31,9 @@ export function SiteFooter() {
           ))}
         </ul>
 
-        <div className="mt-8 flex items-start gap-2 text-sm text-muted-foreground">
-          <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
-          <p className="leading-relaxed">
-            Rangat, N &amp; M Andaman, India - 744205
-          </p>
-        </div>
-
-        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border/60 pt-6 sm:flex-row sm:items-center">
+        <div className="mt-10 border-t border-border/60 pt-6">
           <p className="text-xs text-muted-foreground">
             © Repsine {new Date().getFullYear()}. All Rights Reserved.
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Crafted in the Andaman Islands
           </p>
         </div>
       </div>

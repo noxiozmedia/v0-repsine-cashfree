@@ -1,4 +1,3 @@
-import { SiteHeader } from "@/components/repsine/header"
 import { Hero } from "@/components/repsine/hero"
 import { TrustedBy } from "@/components/repsine/trusted-by"
 import { WhatsIncluded } from "@/components/repsine/whats-included"
@@ -9,7 +8,6 @@ import { SiteFooter } from "@/components/repsine/footer"
 export default function Page() {
   return (
     <main className="relative min-h-screen bg-background text-foreground">
-      <SiteHeader />
       <Hero />
       <TrustedBy />
       <WhatsIncluded />

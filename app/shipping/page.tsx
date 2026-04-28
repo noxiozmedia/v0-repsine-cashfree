@@ -1,56 +1,10 @@
-import { PageShell, ProseSection } from "@/components/repsine/page-shell"
+import { PageShell } from "@/components/repsine/page-shell"
 
 export const metadata = {
   title: "Shipping & Delivery | Repsine",
   description:
     "Repsine's Canva Mastery course is a digital product. Learn how instant access and lifetime delivery work.",
 }
-
-const steps = [
-  {
-    title: "1. Order Confirmation",
-    body: "Once you complete your purchase, you will receive an order confirmation email. This includes a receipt of your purchase, login credentials to access the course, and a link to your personal dashboard where you can begin learning.",
-  },
-  {
-    title: "2. Instant Access to the Course",
-    body: "After your payment is processed, you will be able to access the course immediately through our secure online platform. You can start learning right away by logging into your account. The course content will be available in its entirety, and you will have lifetime access to the materials.",
-  },
-  {
-    title: "3. Lifetime Access",
-    body: "All course materials, video lessons, design exercises, templates, and projects are available for lifetime access. You can return to the content at any time, ensuring you can refresh your knowledge or revisit any lesson as needed.",
-  },
-  {
-    title: "4. Updates & New Content",
-    body: "As part of your lifetime access, we offer regular updates to the course content. Whenever we add new lessons, features, or resources, you will receive free access to them automatically.",
-  },
-]
-
-const features = [
-  { title: "Available 24/7", body: "Learn at your own pace, on your schedule." },
-  {
-    title: "Interactive Learning",
-    body: "Practical design exercises, quizzes, and hands-on projects for better retention.",
-  },
-  {
-    title: "Mobile Friendly",
-    body: "Access the course from your mobile device, tablet, or computer.",
-  },
-]
-
-const faqs = [
-  {
-    q: "How soon will I get access to the course?",
-    a: "As soon as your payment is completed, you will receive an instant access email with all the details needed to log into your account and start learning.",
-  },
-  {
-    q: "Can I share the course with others?",
-    a: "Access to the course is granted only to the person who purchases it. Sharing of login credentials is strictly prohibited under our terms of service.",
-  },
-  {
-    q: "What happens if I forget my password?",
-    a: "You can easily reset your password using the “Forgot Password” option on the login page. A reset link will be sent to your registered email address.",
-  },
-]
 
 export default function ShippingPage() {
   return (
@@ -59,69 +13,80 @@ export default function ShippingPage() {
       title="Shipping & Delivery"
       description="At Repsine, we prioritize delivering your Canva Mastery course efficiently and securely. Since our course is a digital product, there is no physical shipping involved. Below is everything you need to know about how we handle course delivery."
     >
-      <div className="space-y-6">
-        <ProseSection>
-          <h2 className="font-display text-xl font-bold text-foreground">Digital Product Delivery</h2>
-          <p>
-            The Canva Mastery course is entirely online, so you will receive immediate access to all course
-            content after completing your purchase. Here&apos;s how our process works:
-          </p>
-          <div className="space-y-4">
-            {steps.map((s) => (
-              <div key={s.title} className="rounded-xl border border-border/60 bg-background/40 p-4">
-                <p className="font-semibold text-foreground">{s.title}</p>
-                <p className="mt-1 text-sm text-muted-foreground sm:text-base">{s.body}</p>
-              </div>
-            ))}
-          </div>
-        </ProseSection>
+      <article className="space-y-6 text-sm leading-relaxed text-muted-foreground sm:text-base">
+        <p>
+          Last updated: {new Date().toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}
+        </p>
 
-        <ProseSection>
-          <h2 className="font-display text-xl font-bold text-foreground">Course Access &amp; Features</h2>
-          <ul className="grid gap-4 sm:grid-cols-3">
-            {features.map((f) => (
-              <li key={f.title} className="rounded-xl border border-border/60 bg-background/40 p-4">
-                <p className="font-semibold text-foreground">{f.title}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{f.body}</p>
-              </li>
-            ))}
-          </ul>
-        </ProseSection>
+        <h2 className="font-display pt-4 text-xl font-bold text-foreground">Digital Product Delivery</h2>
+        <p>
+          The Canva Mastery course is delivered entirely online — there is no physical shipment, no waiting
+          for a package, and no delivery charges. As soon as your payment is successfully processed through
+          our payment partner, you will receive an order confirmation email containing your receipt, login
+          credentials, and a direct link to your personal learning dashboard where you can begin learning
+          immediately. The complete course content is unlocked at the time of purchase, including all video
+          lessons, design exercises, downloadable templates, and project files.
+        </p>
 
-        <ProseSection>
-          <h2 className="font-display text-xl font-bold text-foreground">Payment Methods</h2>
-          <p>
-            We offer secure payment methods to ensure that your transaction is processed efficiently:
-            Credit/Debit Cards (Visa, MasterCard, American Express, RuPay) and Razorpay — a secure and widely
-            accepted payment gateway. Upon successful payment, your access to the course will be granted
-            immediately. You will also receive a confirmation email with the course login details.
-          </p>
-        </ProseSection>
+        <h2 className="font-display pt-4 text-xl font-bold text-foreground">Lifetime Access &amp; Updates</h2>
+        <p>
+          Every purchase of the Canva Mastery course includes lifetime access to all course materials,
+          allowing you to revisit lessons whenever you need a refresher or want to apply a concept to a new
+          project. Lifetime access also extends to future updates — whenever we add new lessons, expand
+          existing modules, or introduce additional templates and resources, you will receive free access to
+          them automatically through the same dashboard. There are no recurring fees and no hidden charges.
+        </p>
 
-        <ProseSection>
-          <h2 className="font-display text-xl font-bold text-foreground">Support &amp; Assistance</h2>
-          <p>
-            If you experience any issues with your course access or encounter technical difficulties, our
-            dedicated support team is ready to assist you. Reach out at{" "}
-            <a href="mailto:repsine.agency@gmail.com" className="text-primary hover:underline">
-              repsine.agency@gmail.com
-            </a>
-            . We aim to respond to all inquiries within 48 hours.
-          </p>
-        </ProseSection>
+        <h2 className="font-display pt-4 text-xl font-bold text-foreground">Course Access Features</h2>
+        <p>
+          Our learning platform is available 24 hours a day, 7 days a week, so you can learn entirely at your
+          own pace and on your own schedule. The course is fully mobile-friendly and can be accessed from any
+          modern smartphone, tablet, or computer with an internet connection. The learning experience itself
+          is interactive, combining video instruction with practical design exercises, quizzes, and
+          hands-on projects to help you retain what you learn and build a real portfolio of work as you
+          progress.
+        </p>
 
-        <ProseSection>
-          <h2 className="font-display text-xl font-bold text-foreground">FAQs</h2>
-          <div className="space-y-4">
-            {faqs.map((f) => (
-              <div key={f.q}>
-                <p className="font-semibold text-foreground">{f.q}</p>
-                <p className="mt-1 text-sm text-muted-foreground sm:text-base">{f.a}</p>
-              </div>
-            ))}
-          </div>
-        </ProseSection>
-      </div>
+        <h2 className="font-display pt-4 text-xl font-bold text-foreground">Payment Methods</h2>
+        <p>
+          We use Razorpay, a secure and widely-trusted payment gateway, to process all transactions. You may
+          pay using your credit or debit card (Visa, MasterCard, American Express, or RuPay), UPI, net
+          banking, or any other method supported by Razorpay at checkout. Once your payment is successfully
+          completed, your access to the course is granted immediately and a confirmation email with your
+          login details is dispatched to the email address you provided at checkout.
+        </p>
+
+        <h2 className="font-display pt-4 text-xl font-bold text-foreground">Support &amp; Assistance</h2>
+        <p>
+          If you experience any difficulty accessing your course, do not receive your confirmation email, or
+          encounter any other technical issue, our dedicated support team is ready to help. Reach out to us
+          at{" "}
+          <a href="mailto:repsine.agency@gmail.com" className="text-primary hover:underline">
+            repsine.agency@gmail.com
+          </a>{" "}
+          with your order details and a description of the issue, and we will respond within 48 hours to
+          resolve your concern.
+        </p>
+
+        <h2 className="font-display pt-4 text-xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <p>
+          <strong className="text-foreground">How soon will I get access to the course?</strong> As soon as
+          your payment is completed, you will receive an instant access email containing all the details
+          needed to log into your account and start learning. In the unlikely event that the email does not
+          arrive within a few minutes, please check your spam or promotions folder before contacting support.
+        </p>
+        <p>
+          <strong className="text-foreground">Can I share the course with others?</strong> Access to the
+          course is granted only to the person who purchases it. Sharing of login credentials, course videos,
+          or downloadable materials is strictly prohibited under our Terms &amp; Conditions and may result in
+          immediate suspension of your account without a refund.
+        </p>
+        <p>
+          <strong className="text-foreground">What happens if I forget my password?</strong> You can easily
+          reset your password using the &quot;Forgot Password&quot; option on the login page. A secure reset
+          link will be sent to your registered email address, and you can set a new password within minutes.
+        </p>
+      </article>
     </PageShell>
   )
 }
