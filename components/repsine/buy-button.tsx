@@ -121,18 +121,18 @@ function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }
             }}
             aria-hidden="true"
           />
-          <div className="relative flex items-start justify-between">
+          <div className="relative flex items-start justify-between text-left">
             <div>
-              <p className="text-[10px] font-semibold tracking-[0.2em] text-foreground/70 uppercase">
+              <p className="text-left text-[10px] font-semibold tracking-[0.2em] text-foreground/70 uppercase">
                 Secure Checkout
               </p>
               <h2
                 id="checkout-title"
-                className="font-display mt-1 text-xl font-bold tracking-tight text-foreground"
+                className="font-display mt-1 text-left text-xl font-bold tracking-tight text-foreground"
               >
                 Canva Mastery
               </h2>
-              <p className="mt-1 text-xs text-foreground/70">Beginner to Advanced — Lifetime Access</p>
+              <p className="mt-1 text-left text-xs text-foreground/70">Beginner to Advanced — Lifetime Access</p>
             </div>
             <button
               type="button"
