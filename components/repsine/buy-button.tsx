@@ -79,8 +79,7 @@ function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }
     e.preventDefault()
     if (!validate()) return
     setSubmitting(true)
-    // Simulated payment initialisation. Replace with real Razorpay create-order
-    // call once your Razorpay account is approved.
+    // Simulated payment initialisation. Replace with real payment gateway call.
     setTimeout(() => {
       setSubmitting(false)
       setSuccess(true)
@@ -213,7 +212,7 @@ function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }
               ) : (
                 <>
                   <Lock className="h-4 w-4" />
-                  <span>Pay ₹{COURSE_PRICE.toLocaleString("en-IN")} with Razorpay</span>
+                  <span>Pay ₹{COURSE_PRICE.toLocaleString("en-IN")} — Secure Checkout</span>
                 </>
               )}
             </button>
@@ -222,7 +221,7 @@ function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }
             <div className="flex flex-col items-start gap-2 border-t border-border/60 pt-4">
               <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
                 <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                <span>Secured by Razorpay · 256-bit SSL · 7-day refund</span>
+                <span>256-bit SSL Encryption · 7-day Refund Policy</span>
               </div>
               <p className="text-left text-[11px] text-muted-foreground">
                 By continuing you agree to our{" "}
@@ -346,8 +345,7 @@ function SuccessState({ email, onClose }: { email: string; onClose: () => void }
       </div>
       <h3 className="font-display mt-5 text-xl font-bold text-foreground">Almost there!</h3>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        We&apos;ve received your details. As soon as our Razorpay account is fully activated, your secure
-        payment link will be sent to{" "}
+        We&apos;ve received your details. Your secure payment link will be sent to{" "}
         <span className="font-medium text-foreground">{email || "your email"}</span>.
       </p>
       <button
