@@ -21,21 +21,23 @@ export function BuyButton({ label = "BUY Now", className }: BuyButtonProps) {
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          "group relative inline-flex h-11 items-center justify-center overflow-hidden rounded-full bg-foreground px-14 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5",
+          "group relative inline-flex h-12 cursor-pointer items-center overflow-hidden rounded-full bg-foreground pl-1 pr-5 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5",
           className,
         )}
       >
-        {/* Purple circle that expands to fill the button on hover */}
+        {/* Purple circle — starts small on left, expands to full width on hover */}
         <span
           aria-hidden="true"
-          className="absolute top-1 left-1 h-9 w-9 rounded-full bg-primary transition-all duration-500 ease-out group-hover:top-0 group-hover:left-0 group-hover:h-full group-hover:w-full"
+          className="absolute top-1 left-1 h-10 w-10 origin-left rounded-full bg-primary transition-all duration-500 ease-out group-hover:top-0 group-hover:left-0 group-hover:h-full group-hover:w-full group-hover:rounded-full"
         />
 
-        {/* Foreground content */}
-        <span className="relative z-10 flex items-center gap-2 tracking-wide text-background transition-colors duration-300 group-hover:text-primary-foreground">
-          <ChevronRight className="h-4 w-4 transition-transform duration-500 group-hover:-translate-x-1" />
-          <span>{label}</span>
+        {/* Arrow icon — always lives inside the purple circle area */}
+        <span className="relative z-10 mr-3 flex h-10 w-10 flex-shrink-0 items-center justify-center">
+          <ChevronRight className="h-4 w-4 text-primary-foreground" />
         </span>
+
+        {/* Label — white by default, stays white on hover (circle swallows background) */}
+        <span className="relative z-10 tracking-wide">{label}</span>
       </button>
 
       <CheckoutModal open={open} onClose={() => setOpen(false)} />

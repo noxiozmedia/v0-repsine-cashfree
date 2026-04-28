@@ -1,4 +1,7 @@
-import { ChevronRight, ShoppingCart } from "lucide-react"
+"use client"
+
+import { ShoppingCart } from "lucide-react"
+import { BuyButton } from "./buy-button"
 
 export function SiteHeader() {
   return (
@@ -18,15 +21,7 @@ export function SiteHeader() {
         Repsine
       </a>
 
-      <a
-        href="#enroll"
-        className="group inline-flex items-center gap-2 rounded-full bg-foreground py-1.5 pr-4 pl-1 text-xs font-semibold text-background sm:text-sm"
-      >
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <ChevronRight className="h-3.5 w-3.5" />
-        </span>
-        <span>Enroll now</span>
-      </a>
+      <BuyButton label="Enroll now" className="h-9 scale-90 pl-0.5 pr-4 text-xs sm:scale-100 sm:text-sm" />
     </header>
   )
 }

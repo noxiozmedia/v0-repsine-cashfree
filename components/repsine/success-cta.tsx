@@ -17,7 +17,7 @@ export function SuccessCta() {
             aria-hidden="true"
           />
 
-          <div className="relative flex flex-col items-center text-center">
+          <div className="relative flex flex-col items-start text-left sm:items-center sm:text-center">
             <span className="inline-flex items-center rounded-full border border-border/60 bg-background/60 px-4 py-1.5 text-[11px] font-semibold tracking-[0.18em] text-foreground/80 uppercase backdrop-blur">
               Guarantee
             </span>
