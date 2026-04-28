@@ -5,7 +5,8 @@ import { BuyButton } from "./buy-button"
 
 export function SiteHeader() {
   return (
-    <header className="relative z-20 flex w-full items-center justify-between px-4 pt-6 sm:px-8 lg:px-12">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/60 backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-8">
       <a
         href="/"
         aria-label="Cart"
@@ -22,6 +23,7 @@ export function SiteHeader() {
       </a>
 
       <BuyButton label="Enroll now" />
+      </div>
     </header>
   )
 }
