@@ -1,12 +1,12 @@
 import { ArrowUpRight } from "lucide-react"
 
 const links = [
-  { label: "Contact", href: "/contact" },
-  { label: "About Us", href: "/about" },
-  { label: "Terms & Conditions", href: "/terms" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Refund Policy", href: "/refund" },
-  { label: "Shipping and Delivery", href: "/shipping" },
+  { label: "Contact", href: "/contact-us" },
+  { label: "About Us", href: "/about-us" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Refund Policy", href: "/refund-policy" },
+  { label: "Shipping and Delivery", href: "/shipping-and-delivery" },
 ]
 
 export function SiteFooter() {

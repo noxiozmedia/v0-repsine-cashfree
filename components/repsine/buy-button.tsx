@@ -226,11 +226,11 @@ function CheckoutModal({ open, onClose }: { open: boolean; onClose: () => void }
               </div>
               <p className="text-left text-[11px] text-muted-foreground">
                 By continuing you agree to our{" "}
-                <a href="/terms" className="underline-offset-2 hover:text-foreground hover:underline">
+                <a href="/terms-and-conditions" className="underline-offset-2 hover:text-foreground hover:underline">
                   Terms
                 </a>{" "}
                 and{" "}
-                <a href="/privacy" className="underline-offset-2 hover:text-foreground hover:underline">
+                <a href="/privacy-policy" className="underline-offset-2 hover:text-foreground hover:underline">
                   Privacy Policy
                 </a>
                 .
