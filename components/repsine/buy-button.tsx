@@ -74,7 +74,7 @@ export function BuyButton({ label = "BUY Now", className }: BuyButtonProps) {
 
       // Initialize Cashfree SDK
       const cashfree = await window.Cashfree({
-        mode: "sandbox", // Change to "production" when going live
+        mode: "production",
       })
 
       // Open checkout — Cashfree's hosted page collects customer details

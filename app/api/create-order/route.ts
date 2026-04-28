@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID!
 const CASHFREE_SECRET_KEY = process.env.CASHFREE_SECRET_KEY!
-const CASHFREE_API_URL = "https://sandbox.cashfree.com/pg/orders"
+const CASHFREE_API_URL = "https://api.cashfree.com/pg/orders"
 
 export async function POST(request: NextRequest) {
   try {
