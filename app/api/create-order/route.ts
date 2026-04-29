@@ -7,15 +7,17 @@ const CASHFREE_API_URL = "https://api.cashfree.com/pg/orders"
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, phone } = body
+    const { name, email, phone, amount } = body
 
     if (!name || !email || !phone) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
+    const orderAmount = typeof amount === "number" && amount > 0 ? amount : 1299
+
     // Create order with Cashfree
     const orderPayload = {
-      order_amount: 1299,
+      order_amount: orderAmount,
       order_currency: "INR",
       order_id: `order_${Date.now()}_${Math.random().toString(36).substring(7)}`,
       customer_details: {
