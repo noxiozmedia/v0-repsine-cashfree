@@ -133,13 +133,14 @@ export async function POST(request: Request) {
         </p>
 
         <p style="font-size: 12px; color: #a1a1aa; margin-top: 32px; padding-top: 16px; border-top: 1px solid #e4e4e7;">
-          This is an automated confirmation from Repsine. If you did not authorize this payment, please reach out to repsine.agency@gmail.com.
+          This is an automated confirmation from Repsine. If you did not authorize this payment, please reach out to support@repsine.com.
         </p>
       </div>
     `
 
     const sent = await resend.emails.send({
-      from: "Repsine <onboarding@resend.dev>",
+      from: "Repsine Payments <payments@repsine.com>",
+      replyTo: "support@repsine.com",
       to: email,
       subject: `Payment receipt — Order ${orderId}`,
       html,
