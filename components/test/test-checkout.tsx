@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { CheckCircle2, Download, Loader2, RotateCcw, X, XCircle } from "lucide-react"
+import { CheckCircle2, Download, Loader2, Mail, RotateCcw, X, XCircle } from "lucide-react"
 
 declare global {
   interface Window {
@@ -10,16 +10,24 @@ declare global {
 }
 
 type Status = "idle" | "verifying" | "success" | "failed"
+type EmailStatus = "idle" | "sending" | "sent" | "error"
 
 export function TestCheckout() {
   const [open, setOpen] = useState(false)
   const [amount, setAmount] = useState("1")
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
-  const [errors, setErrors] = useState<{ amount?: string; email?: string; phone?: string }>({})
+  const [errors, setErrors] = useState<{
+    amount?: string
+    name?: string
+    email?: string
+    phone?: string
+  }>({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState<Status>("idle")
+  const [emailStatus, setEmailStatus] = useState<EmailStatus>("idle")
   const [paidOrder, setPaidOrder] = useState<{ id: string; amount: number } | null>(null)
 
   useEffect(() => {
@@ -51,7 +59,8 @@ export function TestCheckout() {
   }
 
   function validateModal() {
-    const next: { email?: string; phone?: string } = {}
+    const next: { name?: string; email?: string; phone?: string } = {}
+    if (!name.trim() || name.trim().length < 2) next.name = "Enter your full name"
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "Enter a valid email"
     const digits = phone.replace(/\D/g, "")
     if (digits.length !== 10) next.phone = "Enter a 10-digit WhatsApp number"
@@ -63,7 +72,29 @@ export function TestCheckout() {
     if (!validateOuter()) return
     setError(null)
     setStatus("idle")
+    setEmailStatus("idle")
     setOpen(true)
+  }
+
+  async function sendReceipt(orderId: string) {
+    setEmailStatus("sending")
+    try {
+      const res = await fetch("/api/send-receipt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId,
+          name: name.trim(),
+          email,
+          phone: phone.replace(/\D/g, ""),
+        }),
+      })
+      if (!res.ok) throw new Error("Could not send email")
+      setEmailStatus("sent")
+    } catch (err) {
+      console.log("[v0] send receipt error", err)
+      setEmailStatus("error")
+    }
   }
 
   async function verifyOrder(orderId: string) {
@@ -76,6 +107,8 @@ export function TestCheckout() {
       if (data?.order_status === "PAID") {
         setPaidOrder({ id: data.order_id, amount: data.order_amount })
         setStatus("success")
+        // Fire the email send in the background
+        sendReceipt(data.order_id)
       } else {
         setStatus("failed")
       }
@@ -92,13 +125,11 @@ export function TestCheckout() {
 
     setLoading(true)
     try {
-      const namePart = email.split("@")[0] || "Test Customer"
-
       const res = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: namePart,
+          name: name.trim(),
           email,
           phone: phone.replace(/\D/g, ""),
           amount: Number(amount),
@@ -120,7 +151,6 @@ export function TestCheckout() {
         redirectTarget: "_modal",
       })
 
-      // Modal closed — verify with server regardless of client-side outcome
       console.log("[v0] cashfree result", result)
       await verifyOrder(data.order_id)
     } catch (err) {
@@ -137,14 +167,15 @@ export function TestCheckout() {
     setOpen(false)
     setError(null)
     if (status === "success" || status === "failed") {
-      // Reset modal state once user closes after a final outcome
       setStatus("idle")
+      setEmailStatus("idle")
       setPaidOrder(null)
     }
   }
 
   function tryAgain() {
     setStatus("idle")
+    setEmailStatus("idle")
     setError(null)
     setPaidOrder(null)
   }
@@ -173,6 +204,7 @@ export function TestCheckout() {
       ["Status", "PAID"],
       ["Order ID", paidOrder.id],
       ["Amount", `INR ${paidOrder.amount.toFixed(2)}`],
+      ["Name", name.trim()],
       ["Email", email],
       ["WhatsApp", `+91 ${phone}`],
       ["Date", new Date().toLocaleString("en-IN")],
@@ -192,7 +224,7 @@ export function TestCheckout() {
 
     doc.setFontSize(10)
     doc.setTextColor(120)
-    doc.text("Thank you for your test payment.", 20, y + 12)
+    doc.text("Thank you for your payment.", 20, y + 12)
     doc.text("This is an automatically generated receipt.", 20, y + 18)
 
     doc.save(`receipt-${paidOrder.id}.pdf`)
@@ -302,6 +334,25 @@ export function TestCheckout() {
               <form onSubmit={handlePay} className="space-y-4 px-6 py-5">
                 <div>
                   <label
+                    htmlFor="test-name"
+                    className="mb-1.5 block text-xs font-semibold text-zinc-700"
+                  >
+                    Full name
+                  </label>
+                  <input
+                    id="test-name"
+                    type="text"
+                    autoComplete="name"
+                    placeholder="Aarav Sharma"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-900 focus:outline-none"
+                  />
+                  {errors.name && <p className="mt-1 text-[11px] text-red-600">{errors.name}</p>}
+                </div>
+
+                <div>
+                  <label
                     htmlFor="test-email"
                     className="mb-1.5 block text-xs font-semibold text-zinc-700"
                   >
@@ -403,10 +454,46 @@ export function TestCheckout() {
                   </p>
                 </div>
 
+                {/* Email status */}
+                <div
+                  className={`mt-5 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs ${
+                    emailStatus === "sent"
+                      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                      : emailStatus === "error"
+                        ? "border-amber-200 bg-amber-50 text-amber-700"
+                        : "border-zinc-200 bg-zinc-50 text-zinc-600"
+                  }`}
+                >
+                  {emailStatus === "sending" && (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span>Sending receipt to {email}…</span>
+                    </>
+                  )}
+                  {emailStatus === "sent" && (
+                    <>
+                      <Mail className="h-3.5 w-3.5" />
+                      <span>Receipt emailed to {email}</span>
+                    </>
+                  )}
+                  {emailStatus === "error" && (
+                    <>
+                      <Mail className="h-3.5 w-3.5" />
+                      <span>Could not send email — you can still download the receipt below.</span>
+                    </>
+                  )}
+                  {emailStatus === "idle" && (
+                    <>
+                      <Mail className="h-3.5 w-3.5" />
+                      <span>Preparing receipt…</span>
+                    </>
+                  )}
+                </div>
+
                 <button
                   type="button"
                   onClick={downloadReceipt}
-                  className="mt-6 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+                  className="mt-4 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
                 >
                   <Download className="h-4 w-4" />
                   Download PDF
