@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Loader2, X } from "lucide-react"
+import { CheckCircle2, Download, Loader2, RotateCcw, X, XCircle } from "lucide-react"
 
 declare global {
   interface Window {
@@ -9,15 +9,18 @@ declare global {
   }
 }
 
-const AMOUNT = 1
+type Status = "idle" | "verifying" | "success" | "failed"
 
 export function TestCheckout() {
   const [open, setOpen] = useState(false)
+  const [amount, setAmount] = useState("1")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
-  const [errors, setErrors] = useState<{ email?: string; phone?: string }>({})
+  const [errors, setErrors] = useState<{ amount?: string; email?: string; phone?: string }>({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [status, setStatus] = useState<Status>("idle")
+  const [paidOrder, setPaidOrder] = useState<{ id: string; amount: number } | null>(null)
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -37,23 +40,58 @@ export function TestCheckout() {
     }
   }, [open])
 
-  function validate() {
+  function validateOuter() {
+    const next: { amount?: string } = {}
+    const numeric = Number(amount)
+    if (!amount || Number.isNaN(numeric) || numeric < 1) {
+      next.amount = "Enter an amount of at least INR 1"
+    }
+    setErrors((prev) => ({ ...prev, ...next }))
+    return Object.keys(next).length === 0
+  }
+
+  function validateModal() {
     const next: { email?: string; phone?: string } = {}
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "Enter a valid email"
     const digits = phone.replace(/\D/g, "")
     if (digits.length !== 10) next.phone = "Enter a 10-digit WhatsApp number"
-    setErrors(next)
+    setErrors((prev) => ({ ...prev, ...next }))
     return Object.keys(next).length === 0
+  }
+
+  function openCheckoutModal() {
+    if (!validateOuter()) return
+    setError(null)
+    setStatus("idle")
+    setOpen(true)
+  }
+
+  async function verifyOrder(orderId: string) {
+    setStatus("verifying")
+    try {
+      const res = await fetch(`/api/order-status?orderId=${encodeURIComponent(orderId)}`, {
+        cache: "no-store",
+      })
+      const data = await res.json()
+      if (data?.order_status === "PAID") {
+        setPaidOrder({ id: data.order_id, amount: data.order_amount })
+        setStatus("success")
+      } else {
+        setStatus("failed")
+      }
+    } catch (err) {
+      console.log("[v0] verify error", err)
+      setStatus("failed")
+    }
   }
 
   async function handlePay(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
-    if (!validate()) return
+    if (!validateModal()) return
 
     setLoading(true)
     try {
-      // Use email prefix as the customer name (API requires a name field)
       const namePart = email.split("@")[0] || "Test Customer"
 
       const res = await fetch("/api/create-order", {
@@ -63,7 +101,7 @@ export function TestCheckout() {
           name: namePart,
           email,
           phone: phone.replace(/\D/g, ""),
-          amount: AMOUNT,
+          amount: Number(amount),
         }),
       })
 
@@ -77,22 +115,87 @@ export function TestCheckout() {
       }
 
       const cashfree = await window.Cashfree({ mode: "production" })
-      cashfree.checkout({
+      const result = await cashfree.checkout({
         paymentSessionId: data.payment_session_id,
         redirectTarget: "_modal",
       })
+
+      // Modal closed — verify with server regardless of client-side outcome
+      console.log("[v0] cashfree result", result)
+      await verifyOrder(data.order_id)
     } catch (err) {
       console.log("[v0] test-checkout error", err)
       setError(err instanceof Error ? err.message : "Something went wrong")
+      setStatus("failed")
     } finally {
       setLoading(false)
     }
   }
 
   function close() {
-    if (loading) return
+    if (loading || status === "verifying") return
     setOpen(false)
     setError(null)
+    if (status === "success" || status === "failed") {
+      // Reset modal state once user closes after a final outcome
+      setStatus("idle")
+      setPaidOrder(null)
+    }
+  }
+
+  function tryAgain() {
+    setStatus("idle")
+    setError(null)
+    setPaidOrder(null)
+  }
+
+  async function downloadReceipt() {
+    if (!paidOrder) return
+    const { jsPDF } = await import("jspdf")
+    const doc = new jsPDF()
+
+    doc.setFont("helvetica", "bold")
+    doc.setFontSize(20)
+    doc.text("Payment Receipt", 20, 25)
+
+    doc.setFont("helvetica", "normal")
+    doc.setFontSize(11)
+    doc.setTextColor(100)
+    doc.text("Repsine — Cashfree Test Payment", 20, 33)
+
+    doc.setDrawColor(220)
+    doc.line(20, 40, 190, 40)
+
+    doc.setTextColor(20)
+    doc.setFontSize(12)
+
+    const rows: Array<[string, string]> = [
+      ["Status", "PAID"],
+      ["Order ID", paidOrder.id],
+      ["Amount", `INR ${paidOrder.amount.toFixed(2)}`],
+      ["Email", email],
+      ["WhatsApp", `+91 ${phone}`],
+      ["Date", new Date().toLocaleString("en-IN")],
+    ]
+
+    let y = 52
+    rows.forEach(([label, value]) => {
+      doc.setFont("helvetica", "bold")
+      doc.text(label, 20, y)
+      doc.setFont("helvetica", "normal")
+      doc.text(value, 70, y)
+      y += 9
+    })
+
+    doc.setDrawColor(220)
+    doc.line(20, y + 2, 190, y + 2)
+
+    doc.setFontSize(10)
+    doc.setTextColor(120)
+    doc.text("Thank you for your test payment.", 20, y + 12)
+    doc.text("This is an automatically generated receipt.", 20, y + 18)
+
+    doc.save(`receipt-${paidOrder.id}.pdf`)
   }
 
   return (
@@ -102,22 +205,51 @@ export function TestCheckout() {
         <p className="text-[11px] font-semibold tracking-[0.18em] text-zinc-500 uppercase">
           Cashfree Test
         </p>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900">
-          One-rupee checkout
-        </h1>
+        <h1 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900">Custom checkout</h1>
         <p className="mt-3 text-sm leading-relaxed text-zinc-500">
-          A minimal page to verify your Cashfree payment gateway. Click Buy to enter your details
-          and complete a INR 1 test payment without leaving this page.
+          Enter any amount and verify your Cashfree payment gateway. The checkout opens right here
+          on this page.
         </p>
 
-        <div className="mt-6 flex items-center justify-between rounded-lg bg-zinc-100 px-4 py-3">
+        <div className="mt-6">
+          <label
+            htmlFor="test-amount"
+            className="mb-1.5 block text-xs font-semibold text-zinc-700"
+          >
+            Amount (INR)
+          </label>
+          <div className="flex h-11 overflow-hidden rounded-lg border border-zinc-200 focus-within:border-zinc-900">
+            <span className="flex items-center bg-zinc-50 px-3 text-sm font-semibold text-zinc-700">
+              INR
+            </span>
+            <input
+              id="test-amount"
+              type="number"
+              inputMode="decimal"
+              min="1"
+              step="1"
+              placeholder="1"
+              value={amount}
+              onChange={(e) => {
+                setAmount(e.target.value)
+                if (errors.amount) setErrors((prev) => ({ ...prev, amount: undefined }))
+              }}
+              className="flex-1 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none"
+            />
+          </div>
+          {errors.amount && <p className="mt-1 text-[11px] text-red-600">{errors.amount}</p>}
+        </div>
+
+        <div className="mt-4 flex items-center justify-between rounded-lg bg-zinc-100 px-4 py-3">
           <span className="text-sm text-zinc-700">Test product</span>
-          <span className="text-sm font-semibold text-zinc-900">INR 1.00</span>
+          <span className="text-sm font-semibold text-zinc-900">
+            INR {Number(amount || 0).toFixed(2)}
+          </span>
         </div>
 
         <button
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={openCheckoutModal}
           className="mt-6 inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
         >
           Buy
@@ -145,91 +277,184 @@ export function TestCheckout() {
                   id="test-checkout-title"
                   className="mt-1 text-lg font-bold tracking-tight text-zinc-900"
                 >
-                  Pay INR 1.00
+                  {status === "success"
+                    ? "Payment successful"
+                    : status === "failed"
+                      ? "Payment failed"
+                      : status === "verifying"
+                        ? "Verifying payment…"
+                        : `Pay INR ${Number(amount || 0).toFixed(2)}`}
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={close}
                 aria-label="Close"
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+                disabled={loading || status === "verifying"}
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <form onSubmit={handlePay} className="space-y-4 px-6 py-5">
-              <div>
-                <label
-                  htmlFor="test-email"
-                  className="mb-1.5 block text-xs font-semibold text-zinc-700"
-                >
-                  Email
-                </label>
-                <input
-                  id="test-email"
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-900 focus:outline-none"
-                />
-                {errors.email && <p className="mt-1 text-[11px] text-red-600">{errors.email}</p>}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="test-phone"
-                  className="mb-1.5 block text-xs font-semibold text-zinc-700"
-                >
-                  WhatsApp number
-                </label>
-                <div className="flex h-11 overflow-hidden rounded-lg border border-zinc-200 focus-within:border-zinc-900">
-                  <span className="flex items-center bg-zinc-50 px-3 text-sm font-semibold text-zinc-700">
-                    +91
-                  </span>
+            {/* Idle — collect details */}
+            {status === "idle" && (
+              <form onSubmit={handlePay} className="space-y-4 px-6 py-5">
+                <div>
+                  <label
+                    htmlFor="test-email"
+                    className="mb-1.5 block text-xs font-semibold text-zinc-700"
+                  >
+                    Email
+                  </label>
                   <input
-                    id="test-phone"
-                    type="tel"
-                    inputMode="numeric"
-                    autoComplete="tel-national"
-                    maxLength={10}
-                    placeholder="98765 43210"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                    className="flex-1 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none"
+                    id="test-email"
+                    type="email"
+                    inputMode="email"
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-900 focus:outline-none"
                   />
+                  {errors.email && (
+                    <p className="mt-1 text-[11px] text-red-600">{errors.email}</p>
+                  )}
                 </div>
-                {errors.phone && <p className="mt-1 text-[11px] text-red-600">{errors.phone}</p>}
-              </div>
 
-              {error && (
-                <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
-                  {error}
+                <div>
+                  <label
+                    htmlFor="test-phone"
+                    className="mb-1.5 block text-xs font-semibold text-zinc-700"
+                  >
+                    WhatsApp number
+                  </label>
+                  <div className="flex h-11 overflow-hidden rounded-lg border border-zinc-200 focus-within:border-zinc-900">
+                    <span className="flex items-center bg-zinc-50 px-3 text-sm font-semibold text-zinc-700">
+                      +91
+                    </span>
+                    <input
+                      id="test-phone"
+                      type="tel"
+                      inputMode="numeric"
+                      autoComplete="tel-national"
+                      maxLength={10}
+                      placeholder="98765 43210"
+                      value={phone}
+                      onChange={(e) =>
+                        setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
+                      }
+                      className="flex-1 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none"
+                    />
+                  </div>
+                  {errors.phone && (
+                    <p className="mt-1 text-[11px] text-red-600">{errors.phone}</p>
+                  )}
                 </div>
-              )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Opening checkout…
-                  </>
-                ) : (
-                  "Pay INR 1.00"
+                {error && (
+                  <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+                    {error}
+                  </div>
                 )}
-              </button>
 
-              <p className="text-center text-[11px] text-zinc-500">
-                Secure test payment powered by Cashfree.
-              </p>
-            </form>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Opening checkout…
+                    </>
+                  ) : (
+                    `Pay INR ${Number(amount || 0).toFixed(2)}`
+                  )}
+                </button>
+
+                <p className="text-center text-[11px] text-zinc-500">
+                  Secure test payment powered by Cashfree.
+                </p>
+              </form>
+            )}
+
+            {/* Verifying */}
+            {status === "verifying" && (
+              <div className="flex flex-col items-center gap-3 px-6 py-10 text-center">
+                <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
+                <p className="text-sm text-zinc-600">Confirming payment with Cashfree…</p>
+              </div>
+            )}
+
+            {/* Success */}
+            {status === "success" && paidOrder && (
+              <div className="px-6 py-6">
+                <div className="flex flex-col items-center gap-3 text-center">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                    <CheckCircle2 className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-base font-bold text-zinc-900">
+                    Payment of INR {paidOrder.amount.toFixed(2)} received
+                  </h3>
+                  <p className="text-xs text-zinc-500">
+                    Order ID:{" "}
+                    <span className="font-mono text-zinc-700">{paidOrder.id}</span>
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={downloadReceipt}
+                  className="mt-6 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+                >
+                  <Download className="h-4 w-4" />
+                  Download PDF
+                </button>
+
+                <button
+                  type="button"
+                  onClick={close}
+                  className="mt-2 inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg border border-zinc-200 bg-white text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50"
+                >
+                  Done
+                </button>
+              </div>
+            )}
+
+            {/* Failed */}
+            {status === "failed" && (
+              <div className="px-6 py-6">
+                <div className="flex flex-col items-center gap-3 text-center">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-600">
+                    <XCircle className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-base font-bold text-zinc-900">Payment failed</h3>
+                  <p className="text-xs text-zinc-500">
+                    {error
+                      ? error
+                      : "We could not confirm the payment. No amount has been charged. Please try again."}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={tryAgain}
+                  className="mt-6 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Try again
+                </button>
+
+                <button
+                  type="button"
+                  onClick={close}
+                  className="mt-2 inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg border border-zinc-200 bg-white text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
