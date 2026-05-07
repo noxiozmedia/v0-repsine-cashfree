@@ -24,27 +24,31 @@ export async function POST(request: Request) {
 
     const admin = createAdminClient()
 
-    // 1) Look up the token
+    // 1) Look up the token (magic-link kind only — OTPs use a different endpoint)
     const { data: row, error: lookupErr } = await admin
       .from("auth_tokens")
       .select("id, email, expires_at, used_at")
       .eq("token", token)
+      .eq("kind", "magiclink")
       .maybeSingle()
 
     if (lookupErr || !row) {
-      return NextResponse.json({ error: "Invalid sign-in link" }, { status: 400 })
+      return NextResponse.json(
+        { error: "Invalid sign-in link", code: "invalid" },
+        { status: 400 },
+      )
     }
 
     if (row.used_at) {
       return NextResponse.json(
-        { error: "This sign-in link has already been used" },
+        { error: "This sign-in link has already been used", code: "used" },
         { status: 400 },
       )
     }
 
     if (new Date(row.expires_at).getTime() < Date.now()) {
       return NextResponse.json(
-        { error: "This sign-in link has expired. Please request a new one." },
+        { error: "This sign-in link has expired. Please request a new one.", code: "expired" },
         { status: 400 },
       )
     }
