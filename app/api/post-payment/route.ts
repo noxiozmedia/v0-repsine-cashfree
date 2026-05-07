@@ -8,11 +8,13 @@ const CASHFREE_API_URL = "https://api.cashfree.com/pg/orders"
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { orderId, name, email, phone } = body as {
+    const { orderId, name, email, phone, test, amount } = body as {
       orderId?: string
       name?: string
       email?: string
       phone?: string
+      test?: boolean
+      amount?: number
     }
 
     if (!orderId || !email || !name) {
@@ -23,34 +25,42 @@ export async function POST(request: Request) {
     const secret = process.env.CASHFREE_SECRET_KEY
     const resendKey = process.env.Resend_API_KEY
 
-    if (!appId || !secret) {
-      return NextResponse.json({ error: "Cashfree credentials missing" }, { status: 500 })
-    }
     if (!resendKey) {
       return NextResponse.json({ error: "Resend API key missing" }, { status: 500 })
     }
 
-    // 1) Verify order is actually PAID before granting access
-    const verifyRes = await fetch(`${CASHFREE_API_URL}/${encodeURIComponent(orderId)}`, {
-      method: "GET",
-      headers: {
-        "x-client-id": appId,
-        "x-client-secret": secret,
-        "x-api-version": "2025-01-01",
-      },
-      cache: "no-store",
-    })
-
-    const order = await verifyRes.json()
-    if (!verifyRes.ok || order?.order_status !== "PAID") {
-      return NextResponse.json(
-        { error: "Order is not PAID — access cannot be granted" },
-        { status: 400 },
-      )
-    }
-
-    const orderAmount = Number(order.order_amount) || 0
+    let orderAmount = 0
     const paidAt = new Date().toLocaleString("en-IN")
+
+    if (test) {
+      // Test bypass — skip Cashfree verification entirely.
+      orderAmount = typeof amount === "number" && amount > 0 ? amount : 0
+    } else {
+      if (!appId || !secret) {
+        return NextResponse.json({ error: "Cashfree credentials missing" }, { status: 500 })
+      }
+
+      // 1) Verify order is actually PAID before granting access
+      const verifyRes = await fetch(`${CASHFREE_API_URL}/${encodeURIComponent(orderId)}`, {
+        method: "GET",
+        headers: {
+          "x-client-id": appId,
+          "x-client-secret": secret,
+          "x-api-version": "2025-01-01",
+        },
+        cache: "no-store",
+      })
+
+      const order = await verifyRes.json()
+      if (!verifyRes.ok || order?.order_status !== "PAID") {
+        return NextResponse.json(
+          { error: "Order is not PAID — access cannot be granted" },
+          { status: 400 },
+        )
+      }
+
+      orderAmount = Number(order.order_amount) || 0
+    }
 
     // 2) Create or find Supabase user, then generate magic link
     const admin = createAdminClient()

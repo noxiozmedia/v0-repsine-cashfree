@@ -77,7 +77,7 @@ export function TestCheckout() {
     setOpen(true)
   }
 
-  async function grantAccess(orderId: string) {
+  async function grantAccess(orderId: string, opts?: { test?: boolean; amount?: number }) {
     setEmailStatus("sending")
     try {
       const res = await fetch("/api/post-payment", {
@@ -88,6 +88,8 @@ export function TestCheckout() {
           name: name.trim(),
           email,
           phone: phone.replace(/\D/g, ""),
+          test: opts?.test ?? false,
+          amount: opts?.amount,
         }),
       })
       const data = await res.json()
@@ -98,6 +100,18 @@ export function TestCheckout() {
       console.log("[v0] post-payment error", err)
       setEmailStatus("error")
     }
+  }
+
+  async function markAsPaid() {
+    setError(null)
+    if (!validateModal()) return
+
+    const fakeOrderId = `TEST_${Date.now()}_${Math.random().toString(36).slice(2, 8).toUpperCase()}`
+    const numericAmount = Number(amount) || 0
+
+    setPaidOrder({ id: fakeOrderId, amount: numericAmount })
+    setStatus("success")
+    grantAccess(fakeOrderId, { test: true, amount: numericAmount })
   }
 
   async function verifyOrder(orderId: string) {
@@ -427,6 +441,22 @@ export function TestCheckout() {
                   ) : (
                     `Pay INR ${Number(amount || 0).toFixed(2)}`
                   )}
+                </button>
+
+                <div className="flex items-center gap-3 text-[10px] font-semibold tracking-[0.18em] text-zinc-400 uppercase">
+                  <div className="h-px flex-1 bg-zinc-200" />
+                  Dev only
+                  <div className="h-px flex-1 bg-zinc-200" />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={markAsPaid}
+                  disabled={loading}
+                  className="inline-flex h-10 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-dashed border-amber-300 bg-amber-50 text-xs font-semibold text-amber-800 transition-colors hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  Mark as paid (skip gateway)
                 </button>
 
                 <p className="text-center text-[11px] text-zinc-500">
