@@ -79,20 +79,23 @@ function LoginInner() {
     setError(null)
     setLoading(true)
     try {
-      const res = await fetch("/api/auth/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code }),
+      // Verify the 6-digit OTP directly with Supabase. This creates the session
+      // in the browser with no redirects and no link consumption issues.
+      const supabase = createClient()
+      const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token: code,
+        type: "email",
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data?.error || "Invalid code")
-      
-      // Redirect to the magic link which will create the session
-      if (data.redirectUrl) {
-        window.location.href = data.redirectUrl
-      }
+
+      if (error) throw error
+      if (!data.session) throw new Error("Sign-in failed. Please try again.")
+
+      // Check if password has been set yet — if not, force setup-password.
+      const passwordSet = data.user?.user_metadata?.password_set === true
+      router.push(passwordSet ? "/dashboard" : "/auth/setup-password")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Invalid code")
+      setError(err instanceof Error ? err.message : "Invalid or expired code")
       setLoading(false)
     }
   }

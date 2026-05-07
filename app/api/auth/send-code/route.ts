@@ -17,42 +17,37 @@ export async function POST(request: Request) {
 
     const admin = createAdminClient()
 
-    // Check if user exists - if not, they haven't purchased
-    const { data: existingUser } = await admin.auth.admin.listUsers()
-    const userExists = existingUser?.users?.some(
-      (u) => u.email?.toLowerCase() === email.toLowerCase()
+    // Check if user exists — only paying customers can sign in.
+    const { data: list } = await admin.auth.admin.listUsers()
+    const userExists = list?.users?.some(
+      (u) => u.email?.toLowerCase() === email.toLowerCase(),
     )
 
     if (!userExists) {
       return NextResponse.json(
         { error: "No account found with this email. Please purchase first." },
-        { status: 404 }
+        { status: 404 },
       )
     }
 
-    // Generate 6-digit code
-    const code = Math.floor(100000 + Math.random() * 900000).toString()
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
-
-    // Invalidate any existing codes for this email
-    await admin
-      .from("verification_codes")
-      .delete()
-      .eq("email", email.toLowerCase())
-
-    // Store the new code
-    const { error: insertError } = await admin.from("verification_codes").insert({
-      email: email.toLowerCase(),
-      code,
-      expires_at: expiresAt.toISOString(),
+    // Use admin.generateLink to get a 6-digit OTP that Supabase itself generated
+    // and tracks. This avoids any custom verification table — verifyOtp on the
+    // client will validate against this same code.
+    const origin = new URL(request.url).origin
+    const { data, error } = await admin.auth.admin.generateLink({
+      type: "magiclink",
+      email,
+      options: { redirectTo: `${origin}/auth/callback` },
     })
 
-    if (insertError) {
-      console.log("[v0] Failed to store code:", insertError)
-      return NextResponse.json({ error: "Failed to generate code" }, { status: 500 })
+    if (error || !data?.properties?.email_otp) {
+      console.log("[v0] generateLink error", error)
+      return NextResponse.json({ error: "Could not generate code" }, { status: 500 })
     }
 
-    // Send email via Resend
+    const code = data.properties.email_otp
+
+    // Send the 6-digit code via Resend (no link, just the code)
     const resend = new Resend(resendKey)
     const { error: emailError } = await resend.emails.send({
       from: "Repsine <no-reply@repsine.com>",
@@ -66,10 +61,10 @@ export async function POST(request: Request) {
             Enter this code on the sign-in page to access your Repsine dashboard:
           </p>
           <div style="background: #f4f4f5; border-radius: 12px; padding: 24px; text-align: center; margin: 0 0 24px;">
-            <span style="font-size: 32px; font-weight: 700; letter-spacing: 8px; color: #18181b;">${code}</span>
+            <span style="font-size: 32px; font-weight: 700; letter-spacing: 8px; color: #18181b; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">${code}</span>
           </div>
           <p style="font-size: 12px; color: #a1a1aa; margin: 0; line-height: 1.5;">
-            This code expires in 10 minutes. If you didn't request this, you can safely ignore this email.
+            This code expires in 1 hour. If you didn't request this, you can safely ignore this email.
           </p>
         </div>
       `,
