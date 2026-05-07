@@ -6,18 +6,54 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useState, useEffect, useRef, Suspense } from "react"
 import { Loader2, Mail, Lock, ArrowRight } from "lucide-react"
 
-export default function LoginPage() {
+function LoginInner() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const autoTriggered = useRef(false)
+
   const [mode, setMode] = useState<"magic" | "password">("magic")
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState(searchParams.get("email") || "")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [linkSent, setLinkSent] = useState(false)
+
+  // Auto-send magic link if ?auto=1 is present and email is prefilled
+  useEffect(() => {
+    if (autoTriggered.current) return
+    const shouldAuto = searchParams.get("auto") === "1" && email
+    if (shouldAuto) {
+      autoTriggered.current = true
+      // Slight delay to let UI render, then auto-submit
+      const t = setTimeout(() => {
+        sendMagicLinkAuto()
+      }, 300)
+      return () => clearTimeout(t)
+    }
+  }, [searchParams, email])
+
+  async function sendMagicLinkAuto() {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetch("/api/auth/send-magic-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || "Failed to send link")
+      setLinkSent(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send link")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   async function sendMagicLink(e: React.FormEvent) {
     e.preventDefault()
@@ -173,5 +209,19 @@ export default function LoginPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-svh w-full items-center justify-center bg-background">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      }
+    >
+      <LoginInner />
+    </Suspense>
   )
 }

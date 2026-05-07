@@ -62,10 +62,9 @@ export async function POST(request: Request) {
       orderAmount = Number(order.order_amount) || 0
     }
 
-    // 2) Create or find Supabase user, then generate magic link
+    // 2) Create or find Supabase user
     const admin = createAdminClient()
     const origin = new URL(request.url).origin
-    const redirectTo = `${origin}/auth/callback`
 
     // Try to create the user; if email already exists, that's fine.
     const { error: createErr } = await admin.auth.admin.createUser({
@@ -82,19 +81,8 @@ export async function POST(request: Request) {
       console.log("[v0] createUser error", createErr)
     }
 
-    // Generate a magic link the user can click to land directly in /dashboard
-    const { data: linkData, error: linkErr } = await admin.auth.admin.generateLink({
-      type: "magiclink",
-      email,
-      options: { redirectTo },
-    })
-
-    let magicLink: string | null = null
-    if (linkErr) {
-      console.log("[v0] generateLink error", linkErr)
-    } else {
-      magicLink = linkData?.properties?.action_link ?? null
-    }
+    // No magic link generation here — the checkout will redirect to /auth/login
+    // where the user can request a fresh one-time link that won't be scanner-consumed.
 
     // 3) Build receipt PDF
     const doc = new jsPDF()
@@ -213,7 +201,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       ok: true,
-      magicLink,
       messageId: sent.data?.id ?? null,
     })
   } catch (err) {
