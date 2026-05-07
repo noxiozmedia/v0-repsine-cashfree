@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
+// createClient is still used by the password sign-in flow below
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
@@ -23,16 +24,13 @@ export default function LoginPage() {
     setError(null)
     setLoading(true)
     try {
-      const supabase = createClient()
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo:
-            process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
-            `${window.location.origin}/auth/callback`,
-        },
+      const res = await fetch("/api/auth/send-magic-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       })
-      if (error) throw error
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || "Failed to send link")
       setLinkSent(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to send link")
