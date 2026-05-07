@@ -163,7 +163,7 @@ function LoginInner() {
             </div>
             <h2 className="text-base font-semibold text-foreground">Enter your code</h2>
             <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-              We sent a 6-digit code to <span className="font-medium text-foreground">{email}</span>
+              We sent a verification code to <span className="font-medium text-foreground">{email}</span>
             </p>
 
             <form onSubmit={verifyCode} className="mt-5 space-y-4">
@@ -176,13 +176,13 @@ function LoginInner() {
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
-                  maxLength={6}
+                  maxLength={8}
                   required
                   autoFocus
                   autoComplete="one-time-code"
                   placeholder="000000"
                   value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 8))}
                   className="h-12 text-center text-xl font-semibold tracking-[0.3em]"
                 />
               </div>
@@ -193,7 +193,7 @@ function LoginInner() {
                 </p>
               )}
 
-              <Button type="submit" className="h-11 w-full" disabled={loading || code.length !== 6}>
+              <Button type="submit" className="h-11 w-full" disabled={loading || code.length < 6}>
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
