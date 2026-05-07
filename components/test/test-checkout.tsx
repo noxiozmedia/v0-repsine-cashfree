@@ -29,6 +29,7 @@ export function TestCheckout() {
   const [status, setStatus] = useState<Status>("idle")
   const [emailStatus, setEmailStatus] = useState<EmailStatus>("idle")
   const [paidOrder, setPaidOrder] = useState<{ id: string; amount: number } | null>(null)
+  const [dashboardUrl, setDashboardUrl] = useState<string | null>(null)
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -93,6 +94,7 @@ export function TestCheckout() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || "Could not grant access")
+      if (data.dashboardUrl) setDashboardUrl(data.dashboardUrl)
       setEmailStatus("sent")
     } catch (err) {
       console.log("[v0] post-payment error", err)
@@ -185,6 +187,7 @@ export function TestCheckout() {
       setStatus("idle")
       setEmailStatus("idle")
       setPaidOrder(null)
+      setDashboardUrl(null)
     }
   }
 
@@ -193,6 +196,7 @@ export function TestCheckout() {
     setEmailStatus("idle")
     setError(null)
     setPaidOrder(null)
+    setDashboardUrl(null)
   }
 
   async function downloadReceipt() {
@@ -521,13 +525,20 @@ export function TestCheckout() {
                   )}
                 </div>
 
-                <a
-                  href={`/auth/login?email=${encodeURIComponent(email)}&auto=1`}
-                  className="mt-4 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
-                >
-                  Access your dashboard
-                  <ArrowRight className="h-4 w-4" />
-                </a>
+                {dashboardUrl ? (
+                  <a
+                    href={dashboardUrl}
+                    className="mt-4 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+                  >
+                    Access your dashboard
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                ) : (
+                  <div className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 text-sm font-semibold text-zinc-500">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Preparing dashboard access…
+                  </div>
+                )}
 
                 <button
                   type="button"

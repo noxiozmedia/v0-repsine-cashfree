@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { jsPDF } from "jspdf"
 import { Resend } from "resend"
 import { createAdminClient } from "@/lib/supabase/admin"
+import { randomBytes } from "node:crypto"
 
 const CASHFREE_API_URL = "https://api.cashfree.com/pg/orders"
 
@@ -81,8 +82,20 @@ export async function POST(request: Request) {
       console.log("[v0] createUser error", createErr)
     }
 
-    // No magic link generation here — the checkout will redirect to /auth/login
-    // where the user can request a fresh one-time link that won't be scanner-consumed.
+    // Issue our custom magic-link token. The link points to /auth/verify on
+    // our own domain; we never call Supabase's URL flow, so there's nothing
+    // for email scanners to break and no redirect-allowlist issues.
+    const dashboardToken = randomBytes(32).toString("base64url")
+    const tokenExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24h
+    const { error: tokenErr } = await admin.from("auth_tokens").insert({
+      email,
+      token: dashboardToken,
+      expires_at: tokenExpiresAt,
+    })
+    if (tokenErr) {
+      console.log("[v0] post-payment token insert error", tokenErr)
+    }
+    const dashboardUrl = `${origin}/auth/verify?token=${dashboardToken}`
 
     // 3) Build receipt PDF
     const doc = new jsPDF()
@@ -133,18 +146,17 @@ export async function POST(request: Request) {
     // 4) Send the welcome + receipt email
     const resend = new Resend(resendKey)
 
-    const loginUrl = `${origin}/auth/login`
     const html = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; color: #18181b;">
         <h1 style="font-size: 24px; font-weight: 700; margin: 0 0 8px;">Welcome to Repsine, ${name.split(" ")[0]}!</h1>
         <p style="font-size: 14px; color: #52525b; margin: 0 0 20px; line-height: 1.6;">
-          Your payment was successful and your account is ready. Use the button below to sign in to your dashboard whenever you&apos;re ready.
+          Your payment was successful and your account is ready. Click the button below to access your dashboard. On your first visit you&apos;ll be asked to set a password for future logins.
         </p>
 
         <div style="margin: 0 0 24px;">
-          <a href="${loginUrl}" style="display: inline-block; background: #18181b; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; text-decoration: none;">Sign in to dashboard</a>
+          <a href="${dashboardUrl}" style="display: inline-block; background: #18181b; color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; text-decoration: none;">Access your dashboard</a>
           <p style="font-size: 11px; color: #a1a1aa; margin-top: 12px;">
-            On the sign-in page, enter <span style="color: #18181b;">${email}</span> to receive a fresh one-time link. On your first sign-in, you&apos;ll be asked to set a password for future logins.
+            This single-use sign-in link is valid for 24 hours. After setting your password, log in any time with <span style="color: #18181b;">${email}</span> + your password.
           </p>
         </div>
 
@@ -202,6 +214,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ok: true,
       messageId: sent.data?.id ?? null,
+      dashboardUrl,
     })
   } catch (err) {
     console.log("[v0] post-payment error", err)
