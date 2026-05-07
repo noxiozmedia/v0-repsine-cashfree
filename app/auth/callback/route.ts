@@ -1,25 +1,54 @@
-import { createClient } from '@/lib/supabase/server'
-import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from "@/lib/supabase/server"
+import { type EmailOtpType } from "@supabase/supabase-js"
+import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl
-  const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/dashboard'
+  const code = searchParams.get("code")
+  const tokenHash = searchParams.get("token_hash")
+  const type = searchParams.get("type") as EmailOtpType | null
+  const next = searchParams.get("next") ?? "/dashboard"
 
+  const supabase = await createClient()
+  let exchangeError: string | null = null
+
+  // Path A: PKCE flow (client-initiated signInWithOtp / signInWithPassword OAuth)
+  // Returns ?code=...
   if (code) {
-    const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      // After exchanging the code, check if the user has set a password yet.
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (user && user.user_metadata?.password_set !== true) {
-        return NextResponse.redirect(`${origin}/auth/setup-password`)
-      }
-      return NextResponse.redirect(`${origin}${next}`)
+    if (error) {
+      exchangeError = error.message
+      console.log("[v0] auth callback: exchangeCodeForSession failed", error.message)
     }
   }
+  // Path B: Server-generated magic link via admin.generateLink
+  // Returns ?token_hash=...&type=magiclink
+  else if (tokenHash && type) {
+    const { error } = await supabase.auth.verifyOtp({
+      type,
+      token_hash: tokenHash,
+    })
+    if (error) {
+      exchangeError = error.message
+      console.log("[v0] auth callback: verifyOtp failed", error.message)
+    }
+  } else {
+    exchangeError = "Missing code or token_hash"
+    console.log("[v0] auth callback: no code or token_hash present")
+  }
 
-  return NextResponse.redirect(`${origin}/auth/error`)
+  if (exchangeError) {
+    return NextResponse.redirect(`${origin}/auth/error`)
+  }
+
+  // Session is now set — check whether the user still needs to choose a password.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (user && user.user_metadata?.password_set !== true) {
+    return NextResponse.redirect(`${origin}/auth/setup-password`)
+  }
+
+  return NextResponse.redirect(`${origin}${next}`)
 }
