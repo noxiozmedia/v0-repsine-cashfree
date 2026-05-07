@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { CheckCircle2, Download, Loader2, Mail, RotateCcw, X, XCircle } from "lucide-react"
+import { ArrowRight, CheckCircle2, Download, Loader2, Mail, RotateCcw, X, XCircle } from "lucide-react"
 
 declare global {
   interface Window {
@@ -29,6 +29,7 @@ export function TestCheckout() {
   const [status, setStatus] = useState<Status>("idle")
   const [emailStatus, setEmailStatus] = useState<EmailStatus>("idle")
   const [paidOrder, setPaidOrder] = useState<{ id: string; amount: number } | null>(null)
+  const [magicLink, setMagicLink] = useState<string | null>(null)
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -76,10 +77,10 @@ export function TestCheckout() {
     setOpen(true)
   }
 
-  async function sendReceipt(orderId: string) {
+  async function grantAccess(orderId: string) {
     setEmailStatus("sending")
     try {
-      const res = await fetch("/api/send-receipt", {
+      const res = await fetch("/api/post-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -89,10 +90,12 @@ export function TestCheckout() {
           phone: phone.replace(/\D/g, ""),
         }),
       })
-      if (!res.ok) throw new Error("Could not send email")
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || "Could not grant access")
+      if (data.magicLink) setMagicLink(data.magicLink)
       setEmailStatus("sent")
     } catch (err) {
-      console.log("[v0] send receipt error", err)
+      console.log("[v0] post-payment error", err)
       setEmailStatus("error")
     }
   }
@@ -107,8 +110,8 @@ export function TestCheckout() {
       if (data?.order_status === "PAID") {
         setPaidOrder({ id: data.order_id, amount: data.order_amount })
         setStatus("success")
-        // Fire the email send in the background
-        sendReceipt(data.order_id)
+        // Fire the post-payment flow in the background
+        grantAccess(data.order_id)
       } else {
         setStatus("failed")
       }
@@ -170,6 +173,7 @@ export function TestCheckout() {
       setStatus("idle")
       setEmailStatus("idle")
       setPaidOrder(null)
+      setMagicLink(null)
     }
   }
 
@@ -178,6 +182,7 @@ export function TestCheckout() {
     setEmailStatus("idle")
     setError(null)
     setPaidOrder(null)
+    setMagicLink(null)
   }
 
   async function downloadReceipt() {
@@ -490,21 +495,36 @@ export function TestCheckout() {
                   )}
                 </div>
 
+                {magicLink ? (
+                  <a
+                    href={magicLink}
+                    className="mt-4 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+                  >
+                    Access your dashboard
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                ) : (
+                  <div className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 text-sm font-semibold text-zinc-500">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Preparing dashboard access…
+                  </div>
+                )}
+
                 <button
                   type="button"
                   onClick={downloadReceipt}
-                  className="mt-4 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-zinc-900 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+                  className="mt-2 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50"
                 >
                   <Download className="h-4 w-4" />
-                  Download PDF
+                  Download receipt
                 </button>
 
                 <button
                   type="button"
                   onClick={close}
-                  className="mt-2 inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-lg border border-zinc-200 bg-white text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50"
+                  className="mt-2 inline-flex h-9 w-full cursor-pointer items-center justify-center rounded-lg text-xs font-medium text-zinc-500 transition-colors hover:text-zinc-900"
                 >
-                  Done
+                  Close
                 </button>
               </div>
             )}
