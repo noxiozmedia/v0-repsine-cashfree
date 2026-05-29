@@ -30,8 +30,8 @@ export function TemplateWorkspace({ template }: { template: Template }) {
 
   return (
     <div className="flex flex-col gap-10">
-      {/* TOP — preview (left) + how to use (right), matched heights */}
-      <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-stretch">
+      {/* TOP — preview (left) + how to use (right), matched heights, kept within the viewport */}
+      <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-stretch">
       {/* LEFT — variants + preview */}
       <div className="flex min-w-0 flex-col">
         <h2 className="text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">Variants</h2>
@@ -65,13 +65,13 @@ export function TemplateWorkspace({ template }: { template: Template }) {
           })}
         </div>
 
-        {/* Preview — always square (1:1), fills the full width of the left column */}
-        <div className="relative mt-5 aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted">
+        {/* Preview — always square (1:1); height-capped so the top section stays within the viewport */}
+        <div className="relative mt-5 aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted lg:h-[clamp(320px,56vh,560px)] lg:w-auto">
           <Image
             src={active.image || "/placeholder.svg"}
             alt={`${active.label} variant`}
             fill
-            sizes="(min-width: 1024px) 60vw, 100vw"
+            sizes="(min-width: 1024px) 56vh, 100vw"
             className="object-cover"
           />
         </div>
@@ -109,7 +109,7 @@ export function TemplateWorkspace({ template }: { template: Template }) {
       {/* Tutorial — full width, below the preview/how-to row */}
       <div>
         <h2 className="text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">Tutorial</h2>
-        <div className="mt-3 aspect-video w-full max-w-3xl overflow-hidden rounded-2xl border border-border bg-muted">
+        <div className="mt-3 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-muted">
           <iframe
             src={template.videoEmbedUrl}
             title={`${template.title} tutorial`}
