@@ -65,20 +65,16 @@ export function TemplateWorkspace({ template }: { template: Template }) {
           })}
         </div>
 
-        {/* Preview — always square (1:1); frames adjusted manually in editing */}
-        <div className="relative mt-5 aspect-square w-full max-w-sm overflow-hidden rounded-2xl border border-border bg-muted">
+        {/* Preview — always square (1:1), fills the full width of the left column */}
+        <div className="relative mt-5 aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted">
           <Image
             src={active.image || "/placeholder.svg"}
             alt={`${active.label} variant`}
             fill
-            sizes="(min-width: 1024px) 24rem, 100vw"
+            sizes="(min-width: 1024px) 60vw, 100vw"
             className="object-cover"
           />
         </div>
-
-        <p className="mt-2 text-xs text-muted-foreground">
-          {active.label} · {active.size}
-        </p>
 
         {/* Canva button — mobile only (kept near the preview) */}
         <CanvaButton className="mt-5 w-full lg:hidden" />
