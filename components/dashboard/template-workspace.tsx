@@ -13,8 +13,6 @@ export function TemplateWorkspace({ template }: { template: Template }) {
 
   if (!active) return null
 
-  const isStory = active.ratio === "9:16"
-
   const CanvaButton = ({ className }: { className?: string }) => (
     <a
       href={active.canvaUrl}
@@ -31,8 +29,10 @@ export function TemplateWorkspace({ template }: { template: Template }) {
   )
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-stretch">
-      {/* LEFT — variants + preview + tutorial */}
+    <div className="flex flex-col gap-10">
+      {/* TOP — preview (left) + how to use (right), matched heights */}
+      <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-stretch">
+      {/* LEFT — variants + preview */}
       <div className="flex min-w-0 flex-col">
         <h2 className="text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">Variants</h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -65,13 +65,8 @@ export function TemplateWorkspace({ template }: { template: Template }) {
           })}
         </div>
 
-        {/* Preview */}
-        <div
-          className={cn(
-            "relative mt-5 w-full overflow-hidden rounded-2xl border border-border bg-muted",
-            isStory ? "aspect-[9/16] max-w-[300px]" : "aspect-[4/5] max-w-sm",
-          )}
-        >
+        {/* Preview — always square (1:1); frames adjusted manually in editing */}
+        <div className="relative mt-5 aspect-square w-full max-w-sm overflow-hidden rounded-2xl border border-border bg-muted">
           <Image
             src={active.image || "/placeholder.svg"}
             alt={`${active.label} variant`}
@@ -87,20 +82,6 @@ export function TemplateWorkspace({ template }: { template: Template }) {
 
         {/* Canva button — mobile only (kept near the preview) */}
         <CanvaButton className="mt-5 w-full lg:hidden" />
-
-        {/* Tutorial */}
-        <div className="mt-10">
-          <h2 className="text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">Tutorial</h2>
-          <div className="mt-3 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-muted">
-            <iframe
-              src={template.videoEmbedUrl}
-              title={`${template.title} tutorial`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="h-full w-full"
-            />
-          </div>
-        </div>
       </div>
 
       {/* RIGHT — how to use (stretches to match left, button pinned to bottom) */}
@@ -127,6 +108,21 @@ export function TemplateWorkspace({ template }: { template: Template }) {
           <CanvaButton className="w-full" />
         </div>
       </aside>
+      </div>
+
+      {/* Tutorial — full width, below the preview/how-to row */}
+      <div>
+        <h2 className="text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">Tutorial</h2>
+        <div className="mt-3 aspect-video w-full max-w-3xl overflow-hidden rounded-2xl border border-border bg-muted">
+          <iframe
+            src={template.videoEmbedUrl}
+            title={`${template.title} tutorial`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="h-full w-full"
+          />
+        </div>
+      </div>
     </div>
   )
 }
