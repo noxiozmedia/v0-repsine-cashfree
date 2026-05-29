@@ -7,6 +7,7 @@ import { captions } from "@/lib/content/captions"
 import { adCreatives } from "@/lib/content/ads"
 import { scripts } from "@/lib/content/scripts"
 import { createClient } from "@/lib/supabase/server"
+import { DEMO_USER } from "@/lib/auth/preview"
 
 export default async function DashboardHome() {
   const supabase = await createClient()
@@ -17,7 +18,7 @@ export default async function DashboardHome() {
   const firstName =
     (user?.user_metadata?.full_name as string | undefined)?.split(" ")[0] ||
     user?.email?.split("@")[0] ||
-    "there"
+    DEMO_USER.fullName.split(" ")[0]
 
   const stats = [
     { label: "Templates", value: templates.length, href: "/dashboard/templates" },

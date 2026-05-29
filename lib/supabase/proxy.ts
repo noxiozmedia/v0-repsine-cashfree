@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { isDashboardPreview } from '@/lib/auth/preview'
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -41,8 +42,12 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Preview/demo mode: let the dashboard render without a real session so the
+  // UI can be designed and edited. Disabled on the production site.
+  const previewMode = isDashboardPreview()
+
   // Protect dashboard routes
-  if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
+  if (!previewMode && request.nextUrl.pathname.startsWith('/dashboard') && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
     return NextResponse.redirect(url)
@@ -52,6 +57,7 @@ export async function updateSession(request: NextRequest) {
   // setup-password screen on first visit (except the setup page itself and
   // auth-related routes).
   if (
+    !previewMode &&
     user &&
     user.user_metadata?.password_set !== true &&
     !request.nextUrl.pathname.startsWith('/auth') &&
