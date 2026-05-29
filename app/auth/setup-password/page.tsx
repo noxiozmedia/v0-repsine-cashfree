@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Loader2, KeyRound } from "lucide-react"
+import { Loader2 } from "lucide-react"
+import { RepsineLogo } from "@/components/repsine-logo"
 
 export default function SetupPasswordPage() {
   const router = useRouter()
@@ -62,9 +63,7 @@ export default function SetupPasswordPage() {
     <div className="flex min-h-svh w-full items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-            <KeyRound className="h-5 w-5" />
-          </div>
+          <RepsineLogo size={48} className="mx-auto mb-4 h-12 w-12 rounded-2xl" />
           <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">Set your password</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Create a password so you can sign in faster next time.

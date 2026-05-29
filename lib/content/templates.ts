@@ -2,13 +2,15 @@ export type TemplateVariant = {
   id: "story" | "carousel" | "post"
   label: string
   size: string
+  ratio: "4:5" | "9:16"
   image: string
   canvaUrl: string
 }
 
 export type Template = {
   slug: string
-  category: "testimonial" | "before-after" | "promotional" | "educational" | "quote"
+  category: "testimonial" | "before-after" | "faq" | "problem-pain"
+  categoryLabel: string
   title: string
   description: string
   cover: string
@@ -17,21 +19,35 @@ export type Template = {
   variants: TemplateVariant[]
 }
 
+export type LockedTemplate = {
+  title: string
+  categoryLabel: string
+  description: string
+  cover: string
+}
+
 export const templateCategories = [
   { key: "testimonial" as const, label: "Testimonial" },
   { key: "before-after" as const, label: "Before / After" },
-  { key: "promotional" as const, label: "Promotional" },
-  { key: "educational" as const, label: "Educational" },
-  { key: "quote" as const, label: "Quote" },
+  { key: "faq" as const, label: "FAQ" },
+  { key: "problem-pain" as const, label: "Problem / Pain" },
 ]
+
+// Shared size presets
+const POST = { id: "post" as const, label: "Post", size: "1080 × 1350", ratio: "4:5" as const }
+const STORY = { id: "story" as const, label: "Story", size: "1080 × 1920", ratio: "9:16" as const }
+const CAROUSEL = { id: "carousel" as const, label: "Carousel", size: "1080 × 1350", ratio: "4:5" as const }
+
+const PLACEHOLDER_CANVA = "https://www.canva.com/design/your-template-link"
 
 export const templates: Template[] = [
   {
-    slug: "patient-testimonial-glow",
+    slug: "testimonial",
     category: "testimonial",
-    title: "Patient Testimonial — Glow",
+    categoryLabel: "Testimonial",
+    title: "Testimonial",
     description:
-      "Soft beige & blush testimonial layout designed to look credible without feeling salesy. Works beautifully on Reels and feed.",
+      "Credible patient testimonial layouts that build trust without feeling salesy. Available as a feed post and a story.",
     cover: "/dashboard/templates/testimonial.jpg",
     videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     instructions: [
@@ -39,179 +55,117 @@ export const templates: Template[] = [
       "Replace the patient quote with a real client review (keep it under 25 words).",
       "Swap the headshot — use a high-resolution, well-lit portrait, ideally the patient's actual photo with consent.",
       "Update the treatment label (e.g. 'Botox · 1 session').",
-      "Export as PNG (post) / MP4 (story) and post with the matching caption from the Captions section.",
+      "Export as PNG (post) or MP4 (story) and pair it with a caption from the Captions section.",
     ],
     variants: [
-      {
-        id: "story",
-        label: "Story",
-        size: "1080 × 1920",
-        image: "/dashboard/templates/testimonial.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-story",
-      },
-      {
-        id: "carousel",
-        label: "Carousel",
-        size: "1080 × 1080 · 6 slides",
-        image: "/dashboard/templates/testimonial.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-carousel",
-      },
-      {
-        id: "post",
-        label: "Post",
-        size: "1080 × 1080",
-        image: "/dashboard/templates/testimonial.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-post",
-      },
+      { ...POST, image: "/dashboard/templates/testimonial.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-testimonial-post` },
+      { ...STORY, image: "/dashboard/templates/testimonial.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-testimonial-story` },
     ],
   },
   {
-    slug: "before-after-skin",
+    slug: "before-after",
     category: "before-after",
-    title: "Before / After — Skin Reveal",
+    categoryLabel: "Before / After",
+    title: "Before / After",
     description:
-      "A high-conversion split-screen reveal with a clean swipe transition. Ideal for HydraFacial, chemical peel and laser results.",
+      "High-conversion split-screen reveals with a clean transition. Ideal for HydraFacial, chemical peel and laser results. Post, story and carousel.",
     cover: "/dashboard/templates/before-after.jpg",
     videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     instructions: [
       "Open the template in Canva and replace the placeholder photos — use the same lighting and angle for both shots.",
       "Adjust the 'Before / After' label colours to your brand if needed.",
-      "Add the treatment name + number of sessions in the small footer line.",
+      "Add the treatment name and number of sessions in the small footer line.",
       "Always disclose 'Individual results may vary' as a small caption — required by most aesthetic boards.",
       "Export and post during peak hours (7-9 PM IST) for best engagement.",
     ],
     variants: [
+      { ...POST, image: "/dashboard/templates/before-after.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-post` },
+      { ...STORY, image: "/dashboard/templates/before-after.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-story` },
       {
-        id: "story",
-        label: "Story",
-        size: "1080 × 1920",
+        ...CAROUSEL,
+        size: "1080 × 1350 · 4 slides",
         image: "/dashboard/templates/before-after.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-story",
-      },
-      {
-        id: "carousel",
-        label: "Carousel",
-        size: "1080 × 1080 · 4 slides",
-        image: "/dashboard/templates/before-after.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-carousel",
-      },
-      {
-        id: "post",
-        label: "Post",
-        size: "1080 × 1080",
-        image: "/dashboard/templates/before-after.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-post",
+        canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-carousel`,
       },
     ],
   },
   {
-    slug: "promo-festive-offer",
-    category: "promotional",
-    title: "Promotional — Festive Offer",
+    slug: "faq",
+    category: "faq",
+    categoryLabel: "FAQ",
+    title: "FAQ",
     description:
-      "An urgency-led festive promo template with countdown placeholder. Use for Diwali, New Year, Valentine's, monsoon specials.",
-    cover: "/dashboard/templates/promo.jpg",
-    videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    instructions: [
-      "Edit the offer headline (e.g. '20% off all facials this Diwali').",
-      "Set a real expiry date in the badge — never leave 'limited time' vague.",
-      "Add your clinic name and one line about the treatment included.",
-      "Keep the call-to-action short: 'DM to book' or 'Tap link in bio'.",
-      "Cross-post the carousel + run the same creative as a paid Reels ad.",
-    ],
-    variants: [
-      {
-        id: "story",
-        label: "Story",
-        size: "1080 × 1920",
-        image: "/dashboard/templates/promo.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-story",
-      },
-      {
-        id: "carousel",
-        label: "Carousel",
-        size: "1080 × 1080 · 5 slides",
-        image: "/dashboard/templates/promo.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-carousel",
-      },
-      {
-        id: "post",
-        label: "Post",
-        size: "1080 × 1080",
-        image: "/dashboard/templates/promo.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-post",
-      },
-    ],
-  },
-  {
-    slug: "edu-treatment-explainer",
-    category: "educational",
-    title: "Educational — Treatment Explainer",
-    description:
-      "A 5-slide explainer that demystifies a procedure (eg. Botox, fillers, microneedling) — drives saves and DMs.",
+      "A swipeable FAQ carousel that answers the questions patients always DM about — drives saves and starts conversations.",
     cover: "/dashboard/templates/educational.jpg",
     videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     instructions: [
-      "Pick one treatment per carousel — never combine two in one post.",
-      "Slide 1: a curiosity-driven hook ('What actually happens during a Botox session?').",
-      "Slides 2-4: step-by-step with simple language, avoid jargon.",
-      "Slide 5: 'DM us to book a consultation' with your handle.",
-      "Use the matching caption from the Captions section to maximise saves.",
+      "Pick 4-5 of the most common questions your front desk gets asked.",
+      "Slide 1: a hook ('5 questions everyone asks before their first facial').",
+      "One question + a short, jargon-free answer per slide.",
+      "Final slide: 'Still have questions? DM us' with your handle.",
+      "Pair with the matching caption from the Captions section to maximise saves.",
     ],
     variants: [
       {
-        id: "story",
-        label: "Story",
-        size: "1080 × 1920",
+        ...CAROUSEL,
+        size: "1080 × 1350 · 5 slides",
         image: "/dashboard/templates/educational.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-story",
-      },
-      {
-        id: "carousel",
-        label: "Carousel",
-        size: "1080 × 1080 · 5 slides",
-        image: "/dashboard/templates/educational.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-carousel",
-      },
-      {
-        id: "post",
-        label: "Post",
-        size: "1080 × 1080",
-        image: "/dashboard/templates/educational.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-post",
+        canvaUrl: `${PLACEHOLDER_CANVA}-faq-carousel`,
       },
     ],
   },
   {
-    slug: "quote-confidence",
-    category: "quote",
-    title: "Quote — Confidence Series",
+    slug: "problem-pain",
+    category: "problem-pain",
+    categoryLabel: "Problem / Pain",
+    title: "Problem / Pain",
     description:
-      "Minimal typography quote layouts that build emotional connection and brand recall. Drop these between promos.",
+      "A problem-agitate-solve carousel that speaks directly to a patient's pain point, then positions your treatment as the fix.",
     cover: "/dashboard/templates/quote.jpg",
     videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     instructions: [
-      "Pick one quote per post — keep total length under 90 characters.",
-      "Avoid clichés ('beauty is in the eye of the beholder'). Aim for something specific to skincare/self-care.",
-      "Sign off with your clinic name in small text bottom-right.",
-      "Best paired with a soft pastel background — 1 colour palette per month builds recognisable feed aesthetics.",
+      "Slide 1: name the exact problem your patient feels ('Still breaking out at 30?').",
+      "Slides 2-3: agitate gently — why it happens and how it affects confidence.",
+      "Slide 4: introduce your treatment as the solution, briefly.",
+      "Final slide: a clear call-to-action ('DM 'CLEAR' to book a consult').",
+      "Keep the tone empathetic, never shaming — pair with a caption from the Captions section.",
     ],
     variants: [
       {
-        id: "story",
-        label: "Story",
-        size: "1080 × 1920",
+        ...CAROUSEL,
+        size: "1080 × 1350 · 5 slides",
         image: "/dashboard/templates/quote.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-story",
-      },
-      {
-        id: "post",
-        label: "Post",
-        size: "1080 × 1080",
-        image: "/dashboard/templates/quote.jpg",
-        canvaUrl: "https://www.canva.com/design/your-template-link-post",
+        canvaUrl: `${PLACEHOLDER_CANVA}-problempain-carousel`,
       },
     ],
+  },
+]
+
+// Bonus templates — shown blurred + locked, unlocking in the next update.
+export const lockedTemplates: LockedTemplate[] = [
+  {
+    title: "Treatment Awareness",
+    categoryLabel: "Awareness",
+    description: "Educate followers about a specific treatment and what to expect.",
+    cover: "/dashboard/templates/educational.jpg",
+  },
+  {
+    title: "Promotional Offers",
+    categoryLabel: "Promotional",
+    description: "Urgency-led offer creatives for festivals and seasonal pushes.",
+    cover: "/dashboard/templates/promo.jpg",
+  },
+  {
+    title: "Myth Busting",
+    categoryLabel: "Educational",
+    description: "Debunk common skincare and aesthetic myths your patients believe.",
+    cover: "/dashboard/templates/quote.jpg",
+  },
+  {
+    title: "Ad Creatives",
+    categoryLabel: "Paid Ads",
+    description: "Scroll-stopping creatives built specifically for paid Reels and feed ads.",
+    cover: "/dashboard/templates/before-after.jpg",
   },
 ]
 

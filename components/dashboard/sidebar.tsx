@@ -2,10 +2,11 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Sparkles, LogOut } from "lucide-react"
+import { LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { navItems } from "./nav-items"
 import { ThemeToggle } from "./theme-toggle"
+import { RepsineLogo } from "@/components/repsine-logo"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
@@ -20,11 +21,9 @@ export function DashboardSidebar({ email }: { email?: string }) {
   }
 
   return (
-    <aside className="hidden h-screen w-64 flex-shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
+    <aside className="sticky top-0 hidden h-screen w-64 flex-shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
       <div className="flex h-16 items-center gap-2 border-b border-sidebar-border px-6">
-        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-          <Sparkles className="h-4 w-4" />
-        </div>
+        <RepsineLogo size={32} className="h-8 w-8" />
         <span className="font-display text-base font-semibold tracking-tight text-sidebar-foreground">
           Repsine
         </span>

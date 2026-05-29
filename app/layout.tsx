@@ -21,21 +21,8 @@ export const metadata: Metadata = {
     "Pay once and get lifetime access to the Canva Mastery course by Repsine. Learn Canva from beginner to advanced with hands-on projects, templates and certification.",
   generator: "v0.app",
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+    icon: "/repsine-logo.jpg",
+    apple: "/repsine-logo.jpg",
   },
 }
 

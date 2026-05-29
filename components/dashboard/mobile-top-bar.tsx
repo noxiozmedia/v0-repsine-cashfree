@@ -1,7 +1,8 @@
 "use client"
 
-import { Sparkles, LogOut } from "lucide-react"
+import { LogOut } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
+import { RepsineLogo } from "@/components/repsine-logo"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
@@ -17,9 +18,7 @@ export function DashboardMobileTopBar() {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-background/85 px-4 backdrop-blur-lg lg:hidden">
       <div className="flex items-center gap-2">
-        <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
-          <Sparkles className="h-3.5 w-3.5" />
-        </div>
+        <RepsineLogo size={28} className="h-7 w-7" />
         <span className="font-display text-sm font-semibold tracking-tight text-foreground">Repsine</span>
       </div>
       <div className="flex items-center gap-2">

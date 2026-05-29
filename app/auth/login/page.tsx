@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ArrowRight, CheckCircle2, KeyRound, Loader2, Mail, Sparkles } from "lucide-react"
+import { RepsineLogo } from "@/components/repsine-logo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -156,6 +157,7 @@ function LoginInner() {
     <div className="flex min-h-svh w-full items-center justify-center bg-background p-6">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
+          <RepsineLogo size={48} className="mx-auto mb-4 h-12 w-12 rounded-xl" />
           <h1 className="font-display text-2xl font-semibold text-balance text-foreground">
             Sign in to Repsine
           </h1>
