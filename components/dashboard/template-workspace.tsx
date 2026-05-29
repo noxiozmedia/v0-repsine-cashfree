@@ -19,7 +19,7 @@ export function TemplateWorkspace({ template }: { template: Template }) {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground px-5 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5",
+        "group inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground px-5 text-sm font-semibold text-background transition-colors hover:bg-primary hover:text-primary-foreground",
         className,
       )}
     >
@@ -30,10 +30,8 @@ export function TemplateWorkspace({ template }: { template: Template }) {
 
   return (
     <div className="flex flex-col gap-10">
-      {/* TOP — preview (left) + how to use (right), matched heights, kept within the viewport */}
-      <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-stretch">
-      {/* LEFT — variants + preview */}
-      <div className="flex min-w-0 flex-col">
+      {/* Variants — full width, above the preview/how-to row */}
+      <div>
         <h2 className="text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">Variants</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Pick a format. Each variant is sized for the platform it&apos;s designed for.
@@ -64,46 +62,56 @@ export function TemplateWorkspace({ template }: { template: Template }) {
             )
           })}
         </div>
-
-        {/* Preview — always square (1:1); height-capped so the top section stays within the viewport */}
-        <div className="relative mt-5 aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted lg:h-[clamp(320px,56vh,560px)] lg:w-auto">
-          <Image
-            src={active.image || "/placeholder.svg"}
-            alt={`${active.label} variant`}
-            fill
-            sizes="(min-width: 1024px) 56vh, 100vw"
-            className="object-cover"
-          />
-        </div>
-
-        {/* Canva button — mobile only (kept near the preview) */}
-        <CanvaButton className="mt-5 w-full lg:hidden" />
       </div>
 
-      {/* RIGHT — how to use (stretches to match left, button pinned to bottom) */}
-      <aside className="flex flex-col rounded-2xl border border-border bg-card p-5">
-        <h2 className="text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">How to use</h2>
-        <ol className="mt-3 flex flex-col gap-3">
-          {template.instructions.map((step, i) => (
-            <li key={i} className="flex gap-3 text-sm leading-relaxed text-foreground/85">
-              <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary/15 text-[11px] font-semibold text-primary">
-                {i + 1}
-              </span>
-              <span>{step}</span>
-            </li>
-          ))}
-        </ol>
+      {/* TOP — preview (left) + how to use (right), both start at the same top, matched heights */}
+      <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-stretch">
+        {/* LEFT — preview */}
+        <div className="flex min-w-0 flex-col">
+          {/* Preview — always square (1:1); height-capped so the top section stays within the viewport */}
+          <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted lg:h-[clamp(320px,56vh,560px)] lg:w-auto">
+            <Image
+              src={active.image || "/placeholder.svg"}
+              alt={`${active.label} variant`}
+              fill
+              sizes="(min-width: 1024px) 56vh, 100vw"
+              className="object-cover"
+            />
+          </div>
 
-        <div className="mt-5 flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2 text-xs text-primary">
-          <CheckCircle2 className="h-3.5 w-3.5" />
-          You can duplicate this template unlimited times.
+          {/* Canva button — mobile only (kept near the preview) */}
+          <CanvaButton className="mt-5 w-full lg:hidden" />
         </div>
 
-        {/* Canva button — desktop only, pinned to the bottom of this section */}
-        <div className="mt-auto hidden pt-6 lg:block">
-          <CanvaButton className="w-full" />
-        </div>
-      </aside>
+        {/* RIGHT — how to use (stretches to match left, note + button pinned to bottom) */}
+        <aside className="flex flex-col rounded-2xl border border-border bg-card p-5">
+          <h2 className="text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">How to use</h2>
+          <ol className="mt-3 flex flex-col gap-3">
+            {template.instructions.map((step, i) => (
+              <li key={i} className="flex gap-3 text-sm leading-relaxed text-foreground/85">
+                <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary/15 text-[11px] font-semibold text-primary">
+                  {i + 1}
+                </span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
+
+          {/* Note — mobile only (desktop shows it pinned at the bottom with the button) */}
+          <div className="mt-5 flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2 text-xs text-primary lg:hidden">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            You can duplicate this template unlimited times.
+          </div>
+
+          {/* Note + Canva button — desktop only, pinned to the bottom of this section */}
+          <div className="mt-auto hidden flex-col gap-4 pt-6 lg:flex">
+            <div className="flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2 text-xs text-primary">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              You can duplicate this template unlimited times.
+            </div>
+            <CanvaButton className="w-full" />
+          </div>
+        </aside>
       </div>
 
       {/* Tutorial — full width, below the preview/how-to row */}
