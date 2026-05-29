@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import { isDashboardPreview } from '@/lib/auth/preview'
+import { isPreviewEnv, PREVIEW_COOKIE } from '@/lib/auth/preview'
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -43,11 +43,21 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // Preview/demo mode: let the dashboard render without a real session so the
-  // UI can be designed and edited. Disabled on the production site.
-  const previewMode = isDashboardPreview()
+  // UI can be designed and edited. Active in dev, when DASHBOARD_PREVIEW is set,
+  // or when the visitor came through /dashboard-test (which sets a cookie).
+  const previewMode =
+    isPreviewEnv() || request.cookies.get(PREVIEW_COOKIE)?.value === 'true'
+
+  // The /dashboard-test entry sets the cookie and redirects — always let it through.
+  const isTestEntry = request.nextUrl.pathname.startsWith('/dashboard-test')
 
   // Protect dashboard routes
-  if (!previewMode && request.nextUrl.pathname.startsWith('/dashboard') && !user) {
+  if (
+    !previewMode &&
+    !isTestEntry &&
+    request.nextUrl.pathname.startsWith('/dashboard') &&
+    !user
+  ) {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
     return NextResponse.redirect(url)
@@ -58,6 +68,7 @@ export async function updateSession(request: NextRequest) {
   // auth-related routes).
   if (
     !previewMode &&
+    !isTestEntry &&
     user &&
     user.user_metadata?.password_set !== true &&
     !request.nextUrl.pathname.startsWith('/auth') &&

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
+import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
-import { isDashboardPreview, DEMO_USER } from "@/lib/auth/preview"
+import { isPreviewEnv, PREVIEW_COOKIE, DEMO_USER } from "@/lib/auth/preview"
 import { DashboardThemeProvider } from "@/components/dashboard/theme-provider"
 import { DashboardSidebar } from "@/components/dashboard/sidebar"
 import { DashboardBottomNav } from "@/components/dashboard/bottom-nav"
@@ -14,7 +15,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   // In preview/demo mode, render with a stand-in identity so the dashboard is
   // editable without a real session. Production still requires a real user.
-  if (!user && !isDashboardPreview()) {
+  const cookieStore = await cookies()
+  const previewMode = isPreviewEnv() || cookieStore.get(PREVIEW_COOKIE)?.value === "true"
+
+  if (!user && !previewMode) {
     redirect("/auth/login")
   }
 
