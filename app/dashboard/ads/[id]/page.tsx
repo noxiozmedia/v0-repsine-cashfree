@@ -2,7 +2,7 @@ import { notFound } from "next/navigation"
 import { Target } from "lucide-react"
 import { adCreatives } from "@/lib/content/ads"
 import { SectionHeader } from "@/components/dashboard/section-header"
-import { VariantTabs } from "@/components/dashboard/variant-tabs"
+import { AdVariantTabs } from "@/components/dashboard/ad-variant-tabs"
 import { CopyButton } from "@/components/dashboard/copy-button"
 
 export default async function AdDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -30,7 +30,7 @@ export default async function AdDetailPage({ params }: { params: Promise<{ id: s
               Pick a placement. Each variant is sized for its native ad slot.
             </p>
             <div className="mt-4">
-              <VariantTabs variants={[...ad.variants]} />
+              <AdVariantTabs variants={[...ad.variants]} />
             </div>
 
             <div className="mt-10">
