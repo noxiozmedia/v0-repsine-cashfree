@@ -103,7 +103,7 @@ export const templates: Template[] = [
     title: "FAQ",
     description:
       "A swipeable FAQ carousel that answers the questions patients always DM about — drives saves and starts conversations.",
-    cover: "/dashboard/templates/educational.jpg",
+    cover: "/dashboard/templates/faq-1.jpg",
     videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     instructions: [
       "Pick 4-5 of the most common questions your front desk gets asked.",
@@ -116,7 +116,14 @@ export const templates: Template[] = [
       {
         ...CAROUSEL,
         size: "1080 × 1350 · 5 slides",
-        image: "/dashboard/templates/educational.jpg",
+        image: "/dashboard/templates/faq-1.jpg",
+        slides: [
+          "/dashboard/templates/faq-1.jpg",
+          "/dashboard/templates/faq-2.jpg",
+          "/dashboard/templates/faq-3.jpg",
+          "/dashboard/templates/faq-4.jpg",
+          "/dashboard/templates/faq-5.jpg",
+        ],
         canvaUrl: `${PLACEHOLDER_CANVA}-faq-carousel`,
       },
     ],
