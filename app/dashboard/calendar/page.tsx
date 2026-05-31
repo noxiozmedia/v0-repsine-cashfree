@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ChevronDown, ChevronLeft } from "lucide-react"
+import { ChevronDown, ChevronLeft, Sparkles } from "lucide-react"
 import { calendar } from "@/lib/content/calendar"
+import { templates } from "@/lib/content/templates"
 import { cn } from "@/lib/utils"
 
 const typeColor: Record<string, string> = {
@@ -44,6 +45,9 @@ export default function CalendarPage() {
         <ol className="flex flex-col gap-2">
           {calendar.map((day) => {
             const isOpen = openDay === day.day
+            const suggested = day.templateSlug
+              ? templates.find((t) => t.slug === day.templateSlug)
+              : null
             return (
               <li
                 key={day.day}
@@ -100,7 +104,15 @@ export default function CalendarPage() {
                       </p>
                       <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">{day.cta}</p>
 
-
+                      {suggested && (
+                        <Link
+                          href={`/dashboard/templates/${suggested.slug}`}
+                          className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
+                        >
+                          <Sparkles className="h-3 w-3 flex-shrink-0" />
+                          {suggested.title}
+                        </Link>
+                      )}
                     </div>
                   </>
                 )}
