@@ -80,8 +80,8 @@ export const templates: Template[] = [
       "Export and post during peak hours (7-9 PM IST) for best engagement.",
     ],
     variants: [
-      { ...POST,  image: "/dashboard/templates/before-after-post.jpg",  canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-post` },
-      { ...STORY, image: "/dashboard/templates/before-after-story.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-story` },
+      { ...POST,  image: "/dashboard/templates/before-after-post.jpg",  canvaUrl: "https://canva.link/5fhcy046owbybrm" },
+      { ...STORY, image: "/dashboard/templates/before-after-story.jpg", canvaUrl: "https://canva.link/ts714425y58zr5n" },
       {
         ...CAROUSEL,
         size: "1080 × 1350 · 4 slides",
@@ -92,7 +92,7 @@ export const templates: Template[] = [
           "/dashboard/templates/before-after-c3.jpg",
           "/dashboard/templates/before-after-c4.jpg",
         ],
-        canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-carousel`,
+        canvaUrl: "https://canva.link/b3er528k92tddoz",
       },
     ],
   },
@@ -124,7 +124,7 @@ export const templates: Template[] = [
           "/dashboard/templates/faq-4.jpg",
           "/dashboard/templates/faq-5.jpg",
         ],
-        canvaUrl: `${PLACEHOLDER_CANVA}-faq-carousel`,
+        canvaUrl: "https://canva.link/kqll11o0akafkpl",
       },
     ],
   },
