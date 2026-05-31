@@ -11,7 +11,7 @@ export default function CaptionsPage() {
         description="Copy-and-paste Instagram captions, organized by content type. Tap copy, paste into your post, swap a few details — done."
       />
 
-      <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10">
         {captionCategories.map((cat) => {
           const items = captions.filter((c) => c.category === cat.key)
           if (items.length === 0) return null

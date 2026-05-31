@@ -36,7 +36,7 @@ export default function ScriptsPage() {
         description="Battle-tested scripts to convert DMs and WhatsApp leads into booked consultations. Replace [bracketed] placeholders before sending."
       />
 
-      <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10">
         {scriptCategories.map((cat) => {
           const items = scripts.filter((s) => s.category === cat.key)
           if (items.length === 0) return null

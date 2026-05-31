@@ -20,7 +20,7 @@ export default function CalendarPage() {
   return (
     <>
       <div className="border-b border-border bg-background/60">
-        <div className="mx-auto flex max-w-4xl flex-col gap-3 px-4 py-5 sm:px-6 lg:px-10 lg:py-8">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 sm:px-6 lg:px-10 lg:py-8">
           <Link
             href="/dashboard"
             className="inline-flex w-fit items-center gap-1 text-xs font-medium text-foreground/60 transition-colors hover:text-foreground lg:hidden"
@@ -41,7 +41,7 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10">
         <ol className="flex flex-col gap-2">
           {calendar.map((day) => {
             const isOpen = openDay === day.day
