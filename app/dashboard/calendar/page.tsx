@@ -80,6 +80,7 @@ export default function CalendarPage() {
                       </span>
                       <p className="text-sm font-semibold text-foreground">{day.title}</p>
                     </div>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{day.hook}</p>
                   </div>
                   <ChevronDown
                     className={cn(
