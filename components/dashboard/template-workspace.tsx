@@ -15,11 +15,11 @@ export function TemplateWorkspace({ template }: { template: Template }) {
   if (!active) return null
 
   const isCarousel = active.id === "carousel" && Array.isArray(active.slides) && active.slides.length > 0
-  const slides = isCarousel ? active.slides! : [active.image]
-  const currentSlide = slides[slideIndex] ?? active.image
+  const slides = active.slides ?? []
+  const slideCount = slides.length
 
-  function prevSlide() { setSlideIndex((i) => (i - 1 + slides.length) % slides.length) }
-  function nextSlide() { setSlideIndex((i) => (i + 1) % slides.length) }
+  function prevSlide() { setSlideIndex((i) => (i - 1 + slideCount) % slideCount) }
+  function nextSlide() { setSlideIndex((i) => (i + 1) % slideCount) }
 
   // Reset slide index when variant changes
   function handleVariantChange(id: typeof activeId) {
@@ -82,32 +82,45 @@ export function TemplateWorkspace({ template }: { template: Template }) {
       <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-stretch">
         {/* LEFT — preview */}
         <div className="flex min-w-0 flex-col">
-          {/* Preview — always square (1:1); carousel shows slide nav overlaid on the image */}
-          <div className="group relative aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted lg:h-[clamp(320px,56vh,560px)] lg:w-auto">
-            <Image
-              src={currentSlide || "/placeholder.svg"}
-              alt={`${active.label} variant — slide ${slideIndex + 1}`}
-              fill
-              sizes="(min-width: 1024px) 56vh, 100vw"
-              className="object-cover transition-opacity duration-200"
-            />
+          {/* Preview — always square (1:1) */}
+          <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted lg:h-[clamp(320px,56vh,560px)] lg:w-auto">
 
-            {/* Carousel prev/next — only shown when this variant has slides */}
-            {isCarousel && (
+            {isCarousel ? (
               <>
+                {/* Sliding strip — all slides laid out side by side, CSS translate moves between them */}
+                <div
+                  className="flex h-full transition-transform duration-300 ease-in-out"
+                  style={{ width: `${slides.length * 100}%`, transform: `translateX(-${(slideIndex / slides.length) * 100}%)` }}
+                >
+                  {slides.map((src, i) => (
+                    <div key={src} className="relative h-full flex-shrink-0" style={{ width: `${100 / slides.length}%` }}>
+                      <Image
+                        src={src}
+                        alt={`Slide ${i + 1}`}
+                        fill
+                        sizes="(min-width: 1024px) 56vh, 100vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Prev button — always visible */}
                 <button
                   type="button"
                   onClick={prevSlide}
                   aria-label="Previous slide"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/40 text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-black/60"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
+
+                {/* Next button — always visible */}
                 <button
                   type="button"
                   onClick={nextSlide}
                   aria-label="Next slide"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/40 text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-black/60"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
                 >
                   <ChevronRight className="h-5 w-5" />
                 </button>
@@ -121,13 +134,21 @@ export function TemplateWorkspace({ template }: { template: Template }) {
                       onClick={() => setSlideIndex(i)}
                       aria-label={`Go to slide ${i + 1}`}
                       className={cn(
-                        "h-1.5 rounded-full transition-all",
+                        "h-1.5 rounded-full transition-all duration-200",
                         i === slideIndex ? "w-5 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80",
                       )}
                     />
                   ))}
                 </div>
               </>
+            ) : (
+              <Image
+                src={active.image || "/placeholder.svg"}
+                alt={`${active.label} variant`}
+                fill
+                sizes="(min-width: 1024px) 56vh, 100vw"
+                className="object-cover"
+              />
             )}
           </div>
 
