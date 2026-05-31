@@ -105,22 +105,18 @@ export default function CalendarPage() {
                       <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">{day.cta}</p>
 
                       {suggested && (
-                        <Link
-                          href={`/dashboard/templates/${suggested.slug}`}
-                          className="mt-4 inline-flex w-full items-center gap-3 rounded-lg border border-primary/30 bg-primary/10 p-3 transition-colors hover:bg-primary/15 sm:w-auto"
-                        >
-                          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-primary/20 text-primary">
-                            <Sparkles className="h-3.5 w-3.5" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-[10px] font-semibold tracking-wider text-primary uppercase">
-                              Suggested template
-                            </p>
-                            <p className="truncate text-xs font-semibold text-foreground">
-                              {suggested.title}
-                            </p>
-                          </div>
-                        </Link>
+                        <div className="mt-4">
+                          <p className="text-[10px] font-semibold tracking-[0.18em] text-foreground/60 uppercase">
+                            Use template
+                          </p>
+                          <Link
+                            href={`/dashboard/templates/${suggested.slug}`}
+                            className="mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
+                          >
+                            <Sparkles className="h-3 w-3 flex-shrink-0" />
+                            {suggested.title}
+                          </Link>
+                        </div>
                       )}
                     </div>
                   </>
