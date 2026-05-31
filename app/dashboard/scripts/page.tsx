@@ -31,10 +31,56 @@ function ChannelBadge({ channel }: { channel: "WhatsApp" | "Instagram DM" | "Bot
   )
 }
 
+function LangToggle({
+  lang,
+  onChange,
+}: {
+  lang: "en" | "hi"
+  onChange: (l: "en" | "hi") => void
+}) {
+  return (
+    <div className="flex items-center gap-0 overflow-hidden rounded-md border border-border text-[10px] font-semibold">
+      <button
+        type="button"
+        onClick={() => onChange("en")}
+        className={cn(
+          "px-2.5 py-1 transition-colors",
+          lang === "en"
+            ? "bg-primary text-primary-foreground"
+            : "bg-card text-foreground/60 hover:text-foreground",
+        )}
+      >
+        EN
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange("hi")}
+        className={cn(
+          "px-2.5 py-1 transition-colors",
+          lang === "hi"
+            ? "bg-primary text-primary-foreground"
+            : "bg-card text-foreground/60 hover:text-foreground",
+        )}
+      >
+        Hinglish
+      </button>
+    </div>
+  )
+}
+
 export default function ScriptsPage() {
   const [activeCategory, setActiveCategory] = useState<(typeof scriptCategories)[number]["key"]>(scriptCategories[0].key)
+  const [langs, setLangs] = useState<Record<string, "en" | "hi">>({})
 
   const items = scripts.filter((s) => s.category === activeCategory)
+
+  function getLang(id: string): "en" | "hi" {
+    return langs[id] ?? "en"
+  }
+
+  function setLang(id: string, l: "en" | "hi") {
+    setLangs((prev) => ({ ...prev, [id]: l }))
+  }
 
   return (
     <>
@@ -66,25 +112,32 @@ export default function ScriptsPage() {
 
         {/* Script cards */}
         <div className="flex flex-col gap-3">
-          {items.map((s) => (
-            <article
-              key={s.id}
-              className="overflow-hidden rounded-2xl border border-border bg-card"
-            >
-              <header className="flex flex-col gap-2 border-b border-border/60 bg-muted/30 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-2">
-                  <ChannelBadge channel={s.channel} />
-                  <h3 className="text-xs font-semibold text-foreground">{s.title}</h3>
+          {items.map((s) => {
+            const lang = getLang(s.id)
+            const displayText = lang === "hi" ? s.hinglish : s.body
+            return (
+              <article
+                key={s.id}
+                className="overflow-hidden rounded-2xl border border-border bg-card"
+              >
+                <header className="flex flex-col gap-2 border-b border-border/60 bg-muted/30 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-2">
+                    <ChannelBadge channel={s.channel} />
+                    <h3 className="text-xs font-semibold text-foreground">{s.title}</h3>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CopyButton text={displayText} label="Copy script" />
+                    <LangToggle lang={lang} onChange={(l) => setLang(s.id, l)} />
+                  </div>
+                </header>
+                <div className="px-4 py-4">
+                  <p className="whitespace-pre-line text-sm leading-relaxed text-foreground/90">
+                    {displayText}
+                  </p>
                 </div>
-                <CopyButton text={s.body} label="Copy script" />
-              </header>
-              <div className="px-4 py-4">
-                <p className="text-sm leading-relaxed whitespace-pre-line text-foreground/90">
-                  {s.body}
-                </p>
-              </div>
-            </article>
-          ))}
+              </article>
+            )
+          })}
         </div>
       </div>
     </>

@@ -4,6 +4,7 @@ export type Script = {
   channel: "WhatsApp" | "Instagram DM" | "Both"
   title: string
   body: string
+  hinglish: string
 }
 
 export const scriptCategories = [
@@ -32,6 +33,15 @@ I'd love to help you with [skin concern they mentioned]. To suggest the right tr
 3. Anything you've tried before that didn't work
 
 Once I have these, I'll share 2-3 options that could genuinely help.`,
+    hinglish: `Hey [name]! Message karne ke liye bahut shukriya 💜
+
+Aapki [skin concern] mein help karna chahenge. Sahi treatment suggest karne ke liye thoda batayein:
+
+1. Aapki age range kya hai?
+2. Koi skincare routine follow karte hain?
+3. Pehle kuch try kiya jo kaam nahi aaya?
+
+Yeh pata hone ke baad main 2-3 achhe options share karunga/karungi.`,
   },
   {
     id: "fc-2",
@@ -47,6 +57,15 @@ We'd love to understand your goals before recommending a treatment. Could you sh
 3. A photo of the area, if you're comfortable
 
 Looking forward to helping you 🌸`,
+    hinglish: `Hi [name], [clinic name] mein message karne ke liye dhanyavaad.
+
+Treatment suggest karne se pehle thoda samajhna chahenge. Kya bata sakte hain:
+
+1. Main skin concern kya hai?
+2. Ek baar ka treatment chahiye ya thoda lamba plan?
+3. Agar comfortable hain toh affected area ki photo share karein
+
+Aapki help karne ka intezaar rahega 🌸`,
   },
   {
     id: "fc-3",
@@ -58,6 +77,11 @@ Looking forward to helping you 🌸`,
 For [concern], we'd actually recommend a treatment over a product — here's why: topicals address the surface, while our protocols work at the root.
 
 Want me to share what that would look like for your skin type?`,
+    hinglish: `Hey [name]! Story pe achha question poocha!
+
+[Concern] ke liye hum product se zyada treatment recommend karenge — reason yeh hai: product sirf upar se kaam karta hai, hamare protocols root se theek karte hain.
+
+Aapki skin type ke hisaab se main detail share karoon?`,
   },
   {
     id: "fc-4",
@@ -73,6 +97,15 @@ As promised, here's a quick summary of what we discussed:
 • Starting price: ₹[X]
 
 Whenever you're ready to take the next step, just reply here and we'll book you in.`,
+    hinglish: `Hi [name], aaj clinic mein milke achha laga!
+
+Jaisa promise kiya tha, yeh raha jo humne discuss kiya:
+• Concern: [concern]
+• Suggested treatment: [treatment]
+• Kitne sessions: [X]
+• Starting price: ₹[X]
+
+Jab bhi ready ho jaayein, bas yahan reply karein aur hum booking kar denge.`,
   },
 
   // ─── Qualifying ──────────────────────────────────────────────
@@ -89,6 +122,14 @@ For [concern], we have:
 • A premium plan (₹Z) — 8 sessions + homecare, full reset
 
 Which one feels right for where you are right now?`,
+    hinglish: `Bilkul samajh aata hai, [name].
+
+[Concern] ke liye hamare paas yeh options hain:
+• Starter plan (₹X) — ek session, halke results
+• Core plan (₹Y) — 4 sessions, clearly visible results
+• Premium plan (₹Z) — 8 sessions + homecare, complete transformation
+
+Abhi ke hisaab se kaunsa sahi lagta hai?`,
   },
   {
     id: "qual-2",
@@ -103,6 +144,14 @@ If it's:
 • 6+ months: we'd build a custom protocol
 
 Knowing this helps me suggest something realistic.`,
+    hinglish: `Ek quick question — aap kitne time mein result dekhna chahte hain?
+
+Agar:
+• 4 weeks mein: [treatment A] se start karein
+• 3 months mein: [treatment B] zyada lasting results deta hai
+• 6+ months: ek custom protocol banayenge
+
+Yeh pata hone se main realistic suggestion de sakta/sakti hoon.`,
   },
   {
     id: "qual-3",
@@ -112,6 +161,9 @@ Knowing this helps me suggest something realistic.`,
     body: `Before I suggest anything, quick question — have you tried any treatments for [concern] before?
 
 This helps me avoid recommending something that hasn't worked and find what will actually move the needle for your skin.`,
+    hinglish: `Kuch suggest karne se pehle — kya aapne pehle [concern] ke liye koi treatment try kiya hai?
+
+Isse main woh cheez suggest karne se bach sakta/sakti hoon jo kaam nahi aayi, aur jo actually aapki skin ke liye kaam karega woh dhundh sakta/sakti hoon.`,
   },
   {
     id: "qual-4",
@@ -125,6 +177,13 @@ This helps me avoid recommending something that hasn't worked and find what will
 • Are you currently on any medication (especially for acne or hormones)?
 
 Once I have these, I can tailor the suggestion properly.`,
+    hinglish: `Sahi treatment suggest karne ke liye, thoda skin ke baare mein bataiye?
+
+• Skin oily, dry, combination ya sensitive hai?
+• Kisi skincare ingredient se allergy hai?
+• Koi medication le rahe hain abhi (khaaskar acne ya hormones ke liye)?
+
+Yeh pata hone ke baad suggestion properly tailor kar sakta/sakti hoon.`,
   },
   {
     id: "qual-5",
@@ -137,6 +196,12 @@ Once I have these, I can tailor the suggestion properly.`,
 2. In-clinic consult (₹[X], redeemable against your treatment) — better if you want a hands-on skin assessment
 
 Which feels right for where you are right now?`,
+    hinglish: `Hum aapki do taraf se help kar sakte hain:
+
+1. Virtual consult (free, 15 min) — agar abhi sirf options explore karna chahte hain
+2. In-clinic consult (₹[X], treatment mein adjust ho jaata hai) — agar properly skin assessment chahiye
+
+Abhi ke hisaab se kaunsa theek lagta hai?`,
   },
 
   // ─── Booking & Scheduling ────────────────────────────────────
@@ -154,6 +219,15 @@ Wednesday 11:00 AM
 Thursday 6:30 PM
 
 Which works best for you?`,
+    hinglish: `Perfect! Aapne jo share kiya usske hisaab se, ek consultation sabse best next step hoga.
+
+Abhi yeh slots available hain:
+
+Tuesday 4:00 PM
+Wednesday 11:00 AM
+Thursday 6:30 PM
+
+Kaunsa aapke liye convenient rahega?`,
   },
   {
     id: "book-2",
@@ -165,6 +239,11 @@ Which works best for you?`,
 Clinic Address: [address]
 
 Please arrive 10 minutes early. If you need to reschedule, just reply here.`,
+    hinglish: `[Date/time] ke liye sab set ho gaya hai!
+
+Clinic Address: [address]
+
+Kripaya 10 minute pehle aa jaayein. Reschedule karna ho toh bas yahan reply karein.`,
   },
   {
     id: "book-3",
@@ -174,6 +253,9 @@ Please arrive 10 minutes early. If you need to reschedule, just reply here.`,
     body: `Looking forward to seeing you tomorrow at [time].
 
 If you have any questions before your appointment, feel free to message us.`,
+    hinglish: `Kal [time] pe milne ka intezaar hai!
+
+Appointment se pehle koi bhi sawaal ho toh message karein, bilkul free ho ke.`,
   },
   {
     id: "book-4",
@@ -183,6 +265,9 @@ If you have any questions before your appointment, feel free to message us.`,
     body: `Hi [name], we missed you today. No worries — things come up.
 
 Would you like me to help find another slot this week?`,
+    hinglish: `Hi [name], aaj aap nahi aa paaye — koi baat nahi, sab hota hai.
+
+Is hafte koi aur slot dhundha jayein?`,
   },
 
   // ─── Objection handling ──────────────────────────────────────
@@ -199,6 +284,14 @@ A few things to consider:
 • We can split the payment across 2-3 EMIs if that helps.
 
 Want me to share a payment option that makes it easier?`,
+    hinglish: `Bilkul sahi baat hai, [name] — yeh ek investment hai.
+
+Kuch cheezein dhyan mein rakhein:
+• Jo temporary cheezein try ki hain unse paise bachenge long-term mein.
+• Results 6-12 months tak rehte hain, toh per month ka cost itna bhi zyada nahi.
+• 2-3 EMIs mein bhi split kar sakte hain agar easy lage.
+
+Koi payment option bataaoon jo convenient rahe?`,
   },
   {
     id: "obj-2",
@@ -213,6 +306,14 @@ A few reassurances:
 • You can stop anytime, no questions asked.
 
 Want to start with a free 15-minute consult — no obligation to book?`,
+    hinglish: `Yeh bilkul normal hai — pehli baar aane wale zyaadatar aisa hi feel karte hain.
+
+Thodi reassurance:
+• Doctor pehle har step explain karte hain.
+• 30 min pehle numbing cream lagayi jaati hai — zyaadatar clients ko bahut kam lagta hai.
+• Kabhi bhi ruk sakte hain, koi sawaal nahi.
+
+Pehle ek free 15-minute consult se start karein — booking ka koi pressure nahi?`,
   },
   {
     id: "obj-3",
@@ -226,6 +327,13 @@ Two things that might help while you decide:
 2. A quick FAQ on [treatment]: [link]
 
 I'll check back in a few days. No pressure at all.`,
+    hinglish: `Bilkul — apna time lo.
+
+Decide karte waqt yeh do cheezein helpful ho sakti hain:
+1. Hamare before/after results: [link]
+2. [Treatment] ke baare mein quick FAQ: [link]
+
+Kuch dino mein follow up karoonga/karungi. Koi pressure nahi.`,
   },
   {
     id: "obj-4",
@@ -240,6 +348,14 @@ A few things worth checking with any clinic:
 • Do they offer a patch test before the full session?
 
 Happy to answer all of these for our clinic so you can compare properly.`,
+    hinglish: `Compare karna bilkul sahi hai — main bhi karta/karti.
+
+Kisi bhi clinic mein yeh zaroor check karein:
+• Treatment doctor karte hain ya technician?
+• Kaunsa device/product brand use hota hai?
+• Full session se pehle patch test milta hai?
+
+Hamare baare mein yeh sab answers dene ko taiyaar hoon taaki aap properly compare kar sakein.`,
   },
   {
     id: "obj-5",
@@ -251,6 +367,11 @@ Happy to answer all of these for our clinic so you can compare properly.`,
 The honest truth: for [specific concern], products maintain results but treatments create them.
 
 If you'd like, I can suggest a basic homecare routine to start with while you consider the treatment option?`,
+    hinglish: `Samajh aata hai — products mild concerns mein genuinely help karte hain.
+
+Honest baat yeh hai: [specific concern] ke liye, products results maintain karte hain par treatments results banate hain.
+
+Agar chahein toh ek basic homecare routine suggest kar sakta/sakti hoon shuruaat ke liye, jab tak treatment ke baare mein soch rahe hain?`,
   },
 
   // ─── Follow-up ───────────────────────────────────────────────
@@ -264,6 +385,11 @@ If you'd like, I can suggest a basic homecare routine to start with while you co
 If now isn't the right time, no worries at all — happy to help whenever you're ready.
 
 If you have any questions or need a different option, just say the word.`,
+    hinglish: `Hi [name], bas ek baar aapke DM ke baare mein follow up kar raha/rahi tha/thi 🌸
+
+Agar abhi sahi time nahi hai, koi baat nahi — jab bhi ready hoon, help karne ko taiyaar hoon.
+
+Koi sawaal ho ya koi aur option chahiye toh bas batayein.`,
   },
   {
     id: "fu-2",
@@ -275,6 +401,11 @@ If you have any questions or need a different option, just say the word.`,
 Wanted to share — we have a few open slots for [treatment they were interested in] this week. If you'd like to grab one, I can hold it for you for 24h.
 
 No pressure either way 💜`,
+    hinglish: `Hey [name], umeed hai sab theek hai!
+
+Share karna tha — is hafte [treatment] ke kuch slots available hain. Agar lena chahein toh 24 ghante ke liye hold kar sakta/sakti hoon.
+
+Koi pressure nahi 💜`,
   },
   {
     id: "fu-3",
@@ -288,6 +419,13 @@ This client had a very similar concern to yours — [brief description of result
 Here's the post: [link]
 
 Whenever you're ready to chat, I'm here.`,
+    hinglish: `Hi [name]! Aaj Instagram pe yeh result share kiya toh aapki yaad aayi.
+
+Is client ka concern aapke jaisa hi tha — [brief description of result].
+
+Yeh raha post: [link]
+
+Jab bhi baat karni ho, main yahan hoon.`,
   },
   {
     id: "fu-5",
@@ -299,6 +437,11 @@ Whenever you're ready to chat, I'm here.`,
 I thought of you first.
 
 Want me to hold it for 24 hours while you decide?`,
+    hinglish: `Hi [name], jaldi se bata deta/deti hoon — is [week/month] [treatment] ke liye sirf ek slot bacha hai discounted rate pe (₹[X] instead of ₹[Y]).
+
+Aapka pehle socha.
+
+24 ghante ke liye hold karoon jab tak aap decide karein?`,
   },
   {
     id: "fu-6",
@@ -308,6 +451,9 @@ Want me to hold it for 24 hours while you decide?`,
     body: `Absolutely — here's a recent client with a similar concern: [gallery link]
 
 Results vary from person to person, but this gives you a realistic idea of what may be possible.`,
+    hinglish: `Bilkul — yeh dekho ek recent client jo aapke jaisi concern thi: [gallery link]
+
+Har kisi ke results alag hote hain, par isse ek realistic idea milega ki kya possible hai.`,
   },
 
   // ─── Post-visit ──────────────────────────────────────────────
@@ -324,6 +470,14 @@ Quick aftercare reminders:
 • SPF 50 every morning, no excuses
 
 If anything feels off, message us anytime — we're here.`,
+    hinglish: `Aaj humpar trust karne ke liye bahut shukriya, [name] 🌸
+
+Quick aftercare yaad rakhein:
+• 24 ghante direct dhoop se bachein
+• 3 din tak koi harsh exfoliant nahi
+• Har subah SPF 50 — koi excuse nahi
+
+Kuch bhi odd lage toh kabhi bhi message karein — hum yahan hain.`,
   },
   {
     id: "post-2",
@@ -335,6 +489,11 @@ If anything feels off, message us anytime — we're here.`,
 How is your skin feeling? Any redness, dryness, or anything you want to share?
 
 Also — if you're loving the results, we'd be so grateful for a quick 1-line review. It genuinely helps us reach more people who could use the same care.`,
+    hinglish: `Hi [name], treatment ko ek hapta ho gaya 💜
+
+Skin kaisi feel ho rahi hai? Koi redness, dryness ya kuch aur share karna hai?
+
+Aur — agar results achhe lag rahe hain, ek choti si 1-line review bahut help karegi. Isse aur logon tak pahunchne mein madad milti hai.`,
   },
   {
     id: "post-3",
@@ -349,6 +508,14 @@ Also — if you're loving the results, we'd be so grateful for a quick 1-line re
 • Don't pick or exfoliate the area
 
 Feel free to send photos if you notice anything unusual. We're always here.`,
+    hinglish: `Hi [name], agli 72 ghante ke liye quick homecare yaad dilana tha:
+
+• Treated area clean aur moisturised rakhein
+• Direct dhoop se bachein — bahar jaayein toh hat + SPF zaroor
+• 48 ghante gym ya steam room nahi
+• Area ko touch ya exfoliate mat karein
+
+Kuch unusual lage toh photo bhej dein. Hum hamesha yahan hain.`,
   },
   {
     id: "post-4",
@@ -360,6 +527,11 @@ Feel free to send photos if you notice anything unusual. We're always here.`,
 Based on how you're progressing, your next session should ideally be in [X] weeks to keep the results compounding.
 
 Should I check available slots for you?`,
+    hinglish: `Hi [name]! Aap apne recommended [treatment] plan ke aadhe tak pahunch gaye hain.
+
+Aapki progress ke hisaab se, results maintain rakhne ke liye agli session [X] weeks mein honi chahiye.
+
+Aapke liye available slots check karoon?`,
   },
   {
     id: "post-5",
@@ -371,6 +543,11 @@ Should I check available slots for you?`,
 Just checking in — how has your skin been holding up?
 
 If you'd like a top-up or a new treatment to build on your results, I'd love to help you plan the next step.`,
+    hinglish: `Hi [name], last visit ko lagbhag 3 mahine ho gaye 🌸
+
+Bas check karna tha — skin kaisi chal rahi hai?
+
+Agar top-up chahiye ya results pe build karne ke liye koi naya treatment, next step plan karne mein khushi hogi.`,
   },
   {
     id: "post-6",
@@ -380,6 +557,9 @@ If you'd like a top-up or a new treatment to build on your results, I'd love to 
     body: `If you enjoyed your experience with us, we'd be so grateful for a quick Google review: [link]
 
 It helps more people discover the clinic and means a lot to our team.`,
+    hinglish: `Agar aapka experience achha raha, toh ek quick Google review bahut helpful hogi: [link]
+
+Isse zyada log clinic tak pahunch paate hain aur hamare team ko bahut achha lagta hai.`,
   },
 
   // ─── Bonus scripts (lower priority) ─────────────────────────
@@ -393,6 +573,11 @@ It helps more people discover the clinic and means a lot to our team.`,
 [Summer/Monsoon/Winter] is actually a great time to address [concern] because [brief reason].
 
 Would you like me to share what a quick 2-session protocol would look like for you?`,
+    hinglish: `Hey [name] — season badalne ke saath skin ki zarooratein bhi badal jaati hain.
+
+[Summer/Monsoon/Winter] mein actually [concern] treat karna best hota hai kyunki [brief reason].
+
+Aapke liye ek quick 2-session protocol share karoon?`,
   },
   {
     id: "bonus-2",
@@ -404,5 +589,10 @@ Would you like me to share what a quick 2-session protocol would look like for y
 We already know a bit about what you're looking for, so we can make your first consult very targeted.
 
 Would [day] or [day] work for a quick 15-minute call?`,
+    hinglish: `Hi [name]! [Referring client ka naam] ne bataya ki aap [concern] ke liye help dhundh rahe hain — bahut achha laga ki aapne reach out kiya.
+
+Aap kya dhundh rahe hain yeh thoda pata hai, toh pehla consult bahut targeted ho sakta hai.
+
+[Day] ya [day] mein ek quick 15-minute call ke liye kaam karega?`,
   },
 ]
