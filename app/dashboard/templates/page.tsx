@@ -57,16 +57,21 @@ export default function TemplatesPage() {
 
         {/* Bonus / locked templates */}
         <div className="mt-12">
-          <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="font-display text-lg font-semibold text-foreground">Bonus templates</h2>
               <p className="mt-0.5 text-sm text-muted-foreground">
                 Unlocking in the next update — sit tight, these are on the way.
               </p>
             </div>
-            <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-[11px] font-semibold text-primary">
-              Unlocks in next weekly update!
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                Free for you — no extra charge
+              </span>
+              <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-[11px] font-semibold text-primary">
+                Unlocks in next weekly update!
+              </span>
+            </div>
           </div>
 
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

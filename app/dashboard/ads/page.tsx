@@ -13,13 +13,18 @@ export default function AdsPage() {
       />
 
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
             Ad creatives are coming soon — sit tight.
           </p>
-          <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-[11px] font-semibold text-primary">
-            Unlocks in next weekly update!
-          </span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+              Free for you — no extra charge
+            </span>
+            <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-[11px] font-semibold text-primary">
+              Unlocks in next weekly update!
+            </span>
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {adCreatives.map((a) => (
