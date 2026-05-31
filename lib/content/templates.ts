@@ -3,7 +3,8 @@ export type TemplateVariant = {
   label: string
   size: string
   ratio: "4:5" | "9:16"
-  image: string
+  image: string       // cover / preview image
+  slides?: string[]   // carousel only: ordered list of all slide images
   canvaUrl: string
 }
 
@@ -34,9 +35,9 @@ export const templateCategories = [
 ]
 
 // Shared size presets
-const POST = { id: "post" as const, label: "Post", size: "1080 × 1350", ratio: "4:5" as const }
-const STORY = { id: "story" as const, label: "Story", size: "1080 × 1920", ratio: "9:16" as const }
-const CAROUSEL = { id: "carousel" as const, label: "Carousel", size: "1080 × 1350", ratio: "4:5" as const }
+const POST     = { id: "post"     as const, label: "Post",     size: "1080 × 1350",        ratio: "4:5"  as const }
+const STORY    = { id: "story"    as const, label: "Story",    size: "1080 × 1920",        ratio: "9:16" as const }
+const CAROUSEL = { id: "carousel" as const, label: "Carousel", size: "1080 × 1350",        ratio: "4:5"  as const }
 
 const PLACEHOLDER_CANVA = "https://www.canva.com/design/your-template-link"
 
@@ -58,7 +59,7 @@ export const templates: Template[] = [
       "Export as PNG (post) or MP4 (story) and pair it with a caption from the Captions section.",
     ],
     variants: [
-      { ...POST, image: "/dashboard/templates/testimonial.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-testimonial-post` },
+      { ...POST,  image: "/dashboard/templates/testimonial.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-testimonial-post` },
       { ...STORY, image: "/dashboard/templates/testimonial.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-testimonial-story` },
     ],
   },
@@ -69,7 +70,7 @@ export const templates: Template[] = [
     title: "Before / After",
     description:
       "High-conversion split-screen reveals with a clean transition. Ideal for HydraFacial, chemical peel and laser results. Post, story and carousel.",
-    cover: "/dashboard/templates/before-after.jpg",
+    cover: "/dashboard/templates/before-after-post.jpg",
     videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     instructions: [
       "Open the template in Canva and replace the placeholder photos — use the same lighting and angle for both shots.",
@@ -79,12 +80,18 @@ export const templates: Template[] = [
       "Export and post during peak hours (7-9 PM IST) for best engagement.",
     ],
     variants: [
-      { ...POST, image: "/dashboard/templates/before-after.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-post` },
-      { ...STORY, image: "/dashboard/templates/before-after.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-story` },
+      { ...POST,  image: "/dashboard/templates/before-after-post.jpg",  canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-post` },
+      { ...STORY, image: "/dashboard/templates/before-after-story.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-story` },
       {
         ...CAROUSEL,
         size: "1080 × 1350 · 4 slides",
-        image: "/dashboard/templates/before-after.jpg",
+        image: "/dashboard/templates/before-after-post.jpg",
+        slides: [
+          "/dashboard/templates/before-after-c1.jpg",
+          "/dashboard/templates/before-after-c2.jpg",
+          "/dashboard/templates/before-after-c3.jpg",
+          "/dashboard/templates/before-after-c4.jpg",
+        ],
         canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-carousel`,
       },
     ],
@@ -165,7 +172,7 @@ export const lockedTemplates: LockedTemplate[] = [
     title: "Ad Creatives",
     categoryLabel: "Paid Ads",
     description: "Scroll-stopping creatives built specifically for paid Reels and feed ads.",
-    cover: "/dashboard/templates/before-after.jpg",
+    cover: "/dashboard/templates/before-after-post.jpg",
   },
 ]
 
