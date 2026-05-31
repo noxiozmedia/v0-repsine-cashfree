@@ -49,7 +49,7 @@ export const templates: Template[] = [
     title: "Testimonial",
     description:
       "Credible patient testimonial layouts that build trust without feeling salesy. Available as a feed post and a story.",
-    cover: "/dashboard/templates/testimonial.jpg",
+    cover: "/dashboard/templates/testimonial-post.jpg",
     videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     instructions: [
       "Click 'Edit in Canva' and duplicate the file to your account.",
@@ -59,8 +59,8 @@ export const templates: Template[] = [
       "Export as PNG (post) or MP4 (story) and pair it with a caption from the Captions section.",
     ],
     variants: [
-      { ...POST,  image: "/dashboard/templates/testimonial.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-testimonial-post` },
-      { ...STORY, image: "/dashboard/templates/testimonial.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-testimonial-story` },
+      { ...POST,  image: "/dashboard/templates/testimonial-post.jpg",  canvaUrl: "https://canva.link/nnfovvjszf8bqon" },
+      { ...STORY, image: "/dashboard/templates/testimonial-story.jpg", canvaUrl: "https://canva.link/w9orwtwvrciokhw" },
     ],
   },
   {
@@ -135,7 +135,7 @@ export const templates: Template[] = [
     title: "Problem / Pain",
     description:
       "A problem-agitate-solve carousel that speaks directly to a patient's pain point, then positions your treatment as the fix.",
-    cover: "/dashboard/templates/quote.jpg",
+    cover: "/dashboard/templates/pain-1.jpg",
     videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     instructions: [
       "Slide 1: name the exact problem your patient feels ('Still breaking out at 30?').",
@@ -148,8 +148,15 @@ export const templates: Template[] = [
       {
         ...CAROUSEL,
         size: "1080 × 1350 · 5 slides",
-        image: "/dashboard/templates/quote.jpg",
-        canvaUrl: `${PLACEHOLDER_CANVA}-problempain-carousel`,
+        image: "/dashboard/templates/pain-1.jpg",
+        slides: [
+          "/dashboard/templates/pain-1.jpg",
+          "/dashboard/templates/pain-2.jpg",
+          "/dashboard/templates/pain-3.jpg",
+          "/dashboard/templates/pain-4.jpg",
+          "/dashboard/templates/pain-5.jpg",
+        ],
+        canvaUrl: "https://canva.link/rsr5b0rabnsdn8y",
       },
     ],
   },
