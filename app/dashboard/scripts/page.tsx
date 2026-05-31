@@ -32,7 +32,7 @@ function ChannelBadge({ channel }: { channel: "WhatsApp" | "Instagram DM" | "Bot
 }
 
 export default function ScriptsPage() {
-  const [activeCategory, setActiveCategory] = useState(scriptCategories[0].key)
+  const [activeCategory, setActiveCategory] = useState<(typeof scriptCategories)[number]["key"]>(scriptCategories[0].key)
 
   const items = scripts.filter((s) => s.category === activeCategory)
 

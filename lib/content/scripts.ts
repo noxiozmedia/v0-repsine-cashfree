@@ -1,6 +1,6 @@
 export type Script = {
   id: string
-  category: "first-contact" | "qualifying" | "objection" | "follow-up" | "post-visit"
+  category: "first-contact" | "qualifying" | "booking" | "objection" | "follow-up" | "post-visit" | "bonus"
   channel: "WhatsApp" | "Instagram DM" | "Both"
   title: string
   body: string
@@ -9,12 +9,15 @@ export type Script = {
 export const scriptCategories = [
   { key: "first-contact" as const, label: "First contact" },
   { key: "qualifying" as const, label: "Qualifying" },
+  { key: "booking" as const, label: "Booking & Scheduling" },
   { key: "objection" as const, label: "Objection handling" },
   { key: "follow-up" as const, label: "Follow-up" },
   { key: "post-visit" as const, label: "Post visit" },
+  { key: "bonus" as const, label: "Bonus scripts" },
 ]
 
 export const scripts: Script[] = [
+  // ─── First contact ───────────────────────────────────────────
   {
     id: "fc-1",
     category: "first-contact",
@@ -59,17 +62,6 @@ Want me to share what that would look like for your skin type?`,
   {
     id: "fc-4",
     category: "first-contact",
-    channel: "Both",
-    title: "Referral intro",
-    body: `Hi [name]! [referring client's name] mentioned you might be looking for help with [concern] — so glad you reached out.
-
-We already know a bit about what you're looking for, so we can make your first consult very targeted.
-
-Would [day] or [day] work for a quick 15-minute call?`,
-  },
-  {
-    id: "fc-5",
-    category: "first-contact",
     channel: "WhatsApp",
     title: "After a walk-in inquiry",
     body: `Hi [name], lovely meeting you at the clinic today!
@@ -82,6 +74,8 @@ As promised, here's a quick summary of what we discussed:
 
 Whenever you're ready to take the next step, just reply here and we'll book you in.`,
   },
+
+  // ─── Qualifying ──────────────────────────────────────────────
   {
     id: "qual-1",
     category: "qualifying",
@@ -144,6 +138,54 @@ Once I have these, I can tailor the suggestion properly.`,
 
 Which feels right for where you are right now?`,
   },
+
+  // ─── Booking & Scheduling ────────────────────────────────────
+  {
+    id: "book-1",
+    category: "booking",
+    channel: "Both",
+    title: "Consultation booking",
+    body: `Great! Based on what you've shared, I think a consultation would be the best next step.
+
+We currently have:
+
+Tuesday 4:00 PM
+Wednesday 11:00 AM
+Thursday 6:30 PM
+
+Which works best for you?`,
+  },
+  {
+    id: "book-2",
+    category: "booking",
+    channel: "Both",
+    title: "Appointment confirmation",
+    body: `You're all set for [date/time].
+
+Clinic Address: [address]
+
+Please arrive 10 minutes early. If you need to reschedule, just reply here.`,
+  },
+  {
+    id: "book-3",
+    category: "booking",
+    channel: "Both",
+    title: "Consultation reminder",
+    body: `Looking forward to seeing you tomorrow at [time].
+
+If you have any questions before your appointment, feel free to message us.`,
+  },
+  {
+    id: "book-4",
+    category: "booking",
+    channel: "Both",
+    title: "No-show recovery",
+    body: `Hi [name], we missed you today. No worries — things come up.
+
+Would you like me to help find another slot this week?`,
+  },
+
+  // ─── Objection handling ──────────────────────────────────────
   {
     id: "obj-1",
     category: "objection",
@@ -151,10 +193,10 @@ Which feels right for where you are right now?`,
     title: "When price feels high",
     body: `Totally fair, [name] — it's a real investment.
 
-A few honest things to consider:
-• You'll save on temporary fixes (creams, serums that don't work).
-• Most clients see results that last 6-12 months — making the per-month cost much lower than it looks.
-• We can split the payment across 2-3 EMIs if helpful.
+A few things to consider:
+• You'll save on temporary fixes that don't work long-term.
+• Results typically last 6-12 months, so the per-month cost is lower than it looks.
+• We can split the payment across 2-3 EMIs if that helps.
 
 Want me to share a payment option that makes it easier?`,
   },
@@ -163,24 +205,24 @@ Want me to share a payment option that makes it easier?`,
     category: "objection",
     channel: "Both",
     title: "When they're nervous about the procedure",
-    body: `It's completely normal to feel that way — most of our first-time clients do.
+    body: `That's completely normal — most first-timers feel the same way.
 
-A few things that might help:
-• Our doctor walks you through every step before starting.
-• Numbing cream is applied 30 mins before — most clients say they feel barely anything.
-• You can stop anytime if uncomfortable, no questions asked.
+A few reassurances:
+• The doctor walks you through every step beforehand.
+• Numbing cream is applied 30 mins before — most clients feel barely anything.
+• You can stop anytime, no questions asked.
 
-Would you feel better doing a free 15-minute consult first, with no obligation to book?`,
+Want to start with a free 15-minute consult — no obligation to book?`,
   },
   {
     id: "obj-3",
     category: "objection",
     channel: "Both",
     title: "When they want to think about it",
-    body: `Absolutely, take your time — this is your skin and your decision.
+    body: `Of course — take your time.
 
-While you think it over, two things that might help:
-1. Our before/after gallery — real clients, no filters: [link]
+Two things that might help while you decide:
+1. Our before/after gallery: [link]
 2. A quick FAQ on [treatment]: [link]
 
 I'll check back in a few days. No pressure at all.`,
@@ -204,12 +246,14 @@ Happy to answer all of these for our clinic so you can compare properly.`,
     category: "objection",
     channel: "Both",
     title: "When they say they'll try products first",
-    body: `That makes sense — and products can genuinely help with mild concerns.
+    body: `That makes sense — products can genuinely help with mild concerns.
 
-The honest truth: for [specific concern], products alone rarely create the change you're hoping for. They maintain results, but treatments create them.
+The honest truth: for [specific concern], products maintain results but treatments create them.
 
 If you'd like, I can suggest a basic homecare routine to start with while you consider the treatment option?`,
   },
+
+  // ─── Follow-up ───────────────────────────────────────────────
   {
     id: "fu-1",
     category: "follow-up",
@@ -246,17 +290,6 @@ Here's the post: [link]
 Whenever you're ready to chat, I'm here.`,
   },
   {
-    id: "fu-4",
-    category: "follow-up",
-    channel: "Both",
-    title: "Seasonal nudge",
-    body: `Hey [name] — as the season changes, so do our skin's needs.
-
-[Summer/Monsoon/Winter] is actually a great time to address [concern] because [brief reason].
-
-Would you like me to share what a quick 2-session protocol would look like for you?`,
-  },
-  {
     id: "fu-5",
     category: "follow-up",
     channel: "Both",
@@ -267,6 +300,17 @@ I thought of you first.
 
 Want me to hold it for 24 hours while you decide?`,
   },
+  {
+    id: "fu-6",
+    category: "follow-up",
+    channel: "Both",
+    title: "Before/After gallery share",
+    body: `Absolutely — here's a recent client with a similar concern: [gallery link]
+
+Results vary from person to person, but this gives you a realistic idea of what may be possible.`,
+  },
+
+  // ─── Post-visit ──────────────────────────────────────────────
   {
     id: "post-1",
     category: "post-visit",
@@ -327,5 +371,38 @@ Should I check available slots for you?`,
 Just checking in — how has your skin been holding up?
 
 If you'd like a top-up or a new treatment to build on your results, I'd love to help you plan the next step.`,
+  },
+  {
+    id: "post-6",
+    category: "post-visit",
+    channel: "Both",
+    title: "Review request",
+    body: `If you enjoyed your experience with us, we'd be so grateful for a quick Google review: [link]
+
+It helps more people discover the clinic and means a lot to our team.`,
+  },
+
+  // ─── Bonus scripts (lower priority) ─────────────────────────
+  {
+    id: "bonus-1",
+    category: "bonus",
+    channel: "Both",
+    title: "Seasonal nudge",
+    body: `Hey [name] — as the season changes, so do our skin's needs.
+
+[Summer/Monsoon/Winter] is actually a great time to address [concern] because [brief reason].
+
+Would you like me to share what a quick 2-session protocol would look like for you?`,
+  },
+  {
+    id: "bonus-2",
+    category: "bonus",
+    channel: "Both",
+    title: "Referral intro",
+    body: `Hi [name]! [referring client's name] mentioned you might be looking for help with [concern] — so glad you reached out.
+
+We already know a bit about what you're looking for, so we can make your first consult very targeted.
+
+Would [day] or [day] work for a quick 15-minute call?`,
   },
 ]
