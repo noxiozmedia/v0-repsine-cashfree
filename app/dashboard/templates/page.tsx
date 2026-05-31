@@ -22,7 +22,7 @@ export default function TemplatesPage() {
               href={`/dashboard/templates/${t.slug}`}
               className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/40"
             >
-              <div className="relative aspect-square w-full overflow-hidden bg-muted">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
                 <Image
                   src={t.cover || "/placeholder.svg"}
                   alt={t.title}
@@ -77,7 +77,7 @@ export default function TemplatesPage() {
                 aria-disabled="true"
                 className="relative flex select-none flex-col overflow-hidden rounded-2xl border border-border bg-card"
               >
-                <div className="relative aspect-square w-full overflow-hidden bg-muted">
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
                   <Image
                     src={t.cover || "/placeholder.svg"}
                     alt=""

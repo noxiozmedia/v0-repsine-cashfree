@@ -2,30 +2,16 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { CheckCircle2, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
+import { CheckCircle2, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Template } from "@/lib/content/templates"
 
 export function TemplateWorkspace({ template }: { template: Template }) {
   const variants = template.variants
   const [activeId, setActiveId] = useState(variants[0]?.id)
-  const [slideIndex, setSlideIndex] = useState(0)
   const active = variants.find((v) => v.id === activeId) ?? variants[0]
 
   if (!active) return null
-
-  // slideCount is derived from the carousel variant specifically so prev/next always wrap correctly
-  const carouselVariant = variants.find((v) => v.id === "carousel")
-  const slideCount = carouselVariant?.slides?.length ?? 0
-
-  function prevSlide() { setSlideIndex((i) => (i - 1 + slideCount) % slideCount) }
-  function nextSlide() { setSlideIndex((i) => (i + 1) % slideCount) }
-
-  // Reset slide index when variant changes
-  function handleVariantChange(id: typeof activeId) {
-    setActiveId(id)
-    setSlideIndex(0)
-  }
 
   const CanvaButton = ({ className }: { className?: string }) => (
     <a
@@ -60,7 +46,7 @@ export function TemplateWorkspace({ template }: { template: Template }) {
                 type="button"
                 role="tab"
                 aria-selected={isActive}
-                onClick={() => handleVariantChange(v.id)}
+                onClick={() => setActiveId(v.id)}
                 className={cn(
                   "flex h-9 cursor-pointer items-center gap-2 rounded-lg border px-3 text-xs font-semibold transition-colors",
                   isActive
@@ -82,108 +68,15 @@ export function TemplateWorkspace({ template }: { template: Template }) {
       <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-stretch">
         {/* LEFT — preview */}
         <div className="flex min-w-0 flex-col">
-          {/* Preview container — all variant images are rendered in the DOM simultaneously
-              (stacked via absolute positioning). Switching variants/slides is a pure CSS
-              opacity/translate change — zero network wait after first page paint. */}
+          {/* Preview — always square (1:1); height-capped so the top section stays within the viewport */}
           <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted lg:h-[clamp(320px,56vh,560px)] lg:w-auto">
-
-            {/* Non-carousel variants — all stacked, active one shown via opacity */}
-            {variants.map((v) => {
-              if (v.id === "carousel") return null
-              return (
-                <div
-                  key={v.id}
-                  className={cn(
-                    "absolute inset-0 transition-opacity duration-150",
-                    activeId === v.id ? "opacity-100" : "opacity-0 pointer-events-none",
-                  )}
-                >
-                  <Image
-                    src={v.image}
-                    alt={`${v.label} variant`}
-                    fill
-                    sizes="(min-width: 1024px) 56vh, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-              )
-            })}
-
-            {/* Carousel variant — sliding strip, rendered when carousel tab is active */}
-            {variants.map((v) => {
-              if (v.id !== "carousel" || !v.slides?.length) return null
-              const carouselSlides = v.slides
-              return (
-                <div
-                  key="carousel"
-                  className={cn(
-                    "absolute inset-0 transition-opacity duration-150",
-                    activeId === "carousel" ? "opacity-100" : "opacity-0 pointer-events-none",
-                  )}
-                >
-                  {/* Sliding strip */}
-                  <div
-                    className="flex h-full transition-transform duration-300 ease-in-out"
-                    style={{
-                      width: `${carouselSlides.length * 100}%`,
-                      transform: `translateX(-${(slideIndex / carouselSlides.length) * 100}%)`,
-                    }}
-                  >
-                    {carouselSlides.map((src, i) => (
-                      <div
-                        key={src}
-                        className="relative h-full flex-shrink-0"
-                        style={{ width: `${100 / carouselSlides.length}%` }}
-                      >
-                        <Image
-                          src={src}
-                          alt={`Slide ${i + 1}`}
-                          fill
-                          sizes="(min-width: 1024px) 56vh, 100vw"
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Prev button */}
-                  <button
-                    type="button"
-                    onClick={prevSlide}
-                    aria-label="Previous slide"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                  </button>
-
-                  {/* Next button */}
-                  <button
-                    type="button"
-                    onClick={nextSlide}
-                    aria-label="Next slide"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
-                  >
-                    <ChevronRight className="h-5 w-5" />
-                  </button>
-
-                  {/* Dot indicators */}
-                  <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-                    {carouselSlides.map((_, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        onClick={() => setSlideIndex(i)}
-                        aria-label={`Go to slide ${i + 1}`}
-                        className={cn(
-                          "h-1.5 rounded-full transition-all duration-200",
-                          i === slideIndex ? "w-5 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80",
-                        )}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
+            <Image
+              src={active.image || "/placeholder.svg"}
+              alt={`${active.label} variant`}
+              fill
+              sizes="(min-width: 1024px) 56vh, 100vw"
+              className="object-cover"
+            />
           </div>
 
           {/* Canva button — mobile only (kept near the preview) */}
