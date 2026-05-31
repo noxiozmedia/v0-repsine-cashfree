@@ -79,7 +79,7 @@ export const templates: Template[] = [
       "Export and post during peak hours (7-9 PM IST) for best engagement.",
     ],
     variants: [
-      { ...POST, image: "/dashboard/templates/before-after.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-post` },
+      { ...POST, image: "/dashboard/templates/before-after-post.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-post` },
       { ...STORY, image: "/dashboard/templates/before-after.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-story` },
       {
         ...CAROUSEL,
