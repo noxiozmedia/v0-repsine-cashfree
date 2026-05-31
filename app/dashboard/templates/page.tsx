@@ -64,9 +64,8 @@ export default function TemplatesPage() {
                 Unlocking in the next update — sit tight, these are on the way.
               </p>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-3 py-1 text-[11px] font-semibold text-muted-foreground">
-              <Lock className="h-3 w-3" />
-              Locked
+            <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-[11px] font-semibold text-primary">
+              Unlocks in next weekly update!
             </span>
           </div>
 

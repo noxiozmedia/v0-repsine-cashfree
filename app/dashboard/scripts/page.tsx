@@ -1,7 +1,11 @@
+"use client"
+
+import { useState } from "react"
 import { Instagram, MessageCircle } from "lucide-react"
 import { scripts, scriptCategories } from "@/lib/content/scripts"
 import { CopyButton } from "@/components/dashboard/copy-button"
 import { SectionHeader } from "@/components/dashboard/section-header"
+import { cn } from "@/lib/utils"
 
 function ChannelBadge({ channel }: { channel: "WhatsApp" | "Instagram DM" | "Both" }) {
   if (channel === "WhatsApp") {
@@ -28,6 +32,10 @@ function ChannelBadge({ channel }: { channel: "WhatsApp" | "Instagram DM" | "Bot
 }
 
 export default function ScriptsPage() {
+  const [activeCategory, setActiveCategory] = useState(scriptCategories[0].key)
+
+  const items = scripts.filter((s) => s.category === activeCategory)
+
   return (
     <>
       <SectionHeader
@@ -37,41 +45,47 @@ export default function ScriptsPage() {
       />
 
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10">
-        {scriptCategories.map((cat) => {
-          const items = scripts.filter((s) => s.category === cat.key)
-          if (items.length === 0) return null
-          return (
-            <section key={cat.key} className="mb-10">
-              <div className="mb-3 flex items-baseline justify-between">
-                <h2 className="font-display text-base font-semibold text-foreground">{cat.label}</h2>
-                <span className="text-[10px] font-medium tracking-wider text-foreground/50 uppercase">
-                  {items.length} scripts
-                </span>
+        {/* Category filter */}
+        <div className="mb-6 flex flex-wrap gap-2">
+          {scriptCategories.map((cat) => (
+            <button
+              key={cat.key}
+              type="button"
+              onClick={() => setActiveCategory(cat.key)}
+              className={cn(
+                "rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",
+                activeCategory === cat.key
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-foreground/70 hover:border-primary/50 hover:text-foreground",
+              )}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Script cards */}
+        <div className="flex flex-col gap-3">
+          {items.map((s) => (
+            <article
+              key={s.id}
+              className="overflow-hidden rounded-2xl border border-border bg-card"
+            >
+              <header className="flex flex-col gap-2 border-b border-border/60 bg-muted/30 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-2">
+                  <ChannelBadge channel={s.channel} />
+                  <h3 className="text-xs font-semibold text-foreground">{s.title}</h3>
+                </div>
+                <CopyButton text={s.body} label="Copy script" />
+              </header>
+              <div className="px-4 py-4">
+                <p className="text-sm leading-relaxed whitespace-pre-line text-foreground/90">
+                  {s.body}
+                </p>
               </div>
-              <div className="flex flex-col gap-3">
-                {items.map((s) => (
-                  <article
-                    key={s.id}
-                    className="overflow-hidden rounded-2xl border border-border bg-card"
-                  >
-                    <header className="flex flex-col gap-2 border-b border-border/60 bg-muted/30 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex items-center gap-2">
-                        <ChannelBadge channel={s.channel} />
-                        <h3 className="text-xs font-semibold text-foreground">{s.title}</h3>
-                      </div>
-                      <CopyButton text={s.body} label="Copy script" />
-                    </header>
-                    <div className="px-4 py-4">
-                      <p className="text-sm leading-relaxed whitespace-pre-line text-foreground/90">
-                        {s.body}
-                      </p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )
-        })}
+            </article>
+          ))}
+        </div>
       </div>
     </>
   )

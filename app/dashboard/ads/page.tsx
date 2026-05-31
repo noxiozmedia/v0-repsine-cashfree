@@ -1,6 +1,5 @@
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { Lock } from "lucide-react"
 import { adCreatives } from "@/lib/content/ads"
 import { SectionHeader } from "@/components/dashboard/section-header"
 
@@ -14,45 +13,48 @@ export default function AdsPage() {
       />
 
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm text-muted-foreground">
+            Ad creatives are coming soon — sit tight.
+          </p>
+          <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-[11px] font-semibold text-primary">
+            Unlocks in next weekly update!
+          </span>
+        </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {adCreatives.map((a) => (
-            <Link
+            <div
               key={a.slug}
-              href={`/dashboard/ads/${a.slug}`}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/40"
+              aria-disabled="true"
+              className="relative flex select-none flex-col overflow-hidden rounded-2xl border border-border bg-card"
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+              <div className="relative aspect-square w-full overflow-hidden bg-muted">
                 <Image
                   src={a.cover || "/placeholder.svg"}
-                  alt={a.title}
+                  alt=""
+                  aria-hidden="true"
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="scale-110 object-cover blur-md"
                 />
-                <div className="absolute right-3 top-3 rounded-full border border-white/20 bg-black/40 px-2.5 py-1 text-[10px] font-semibold tracking-wider text-white uppercase backdrop-blur">
-                  {a.category}
-                </div>
+                <div className="absolute inset-0 bg-background/40" />
               </div>
               <div className="flex flex-1 flex-col gap-1.5 p-4">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="font-display text-base font-semibold text-foreground">{a.title}</h3>
-                  <ArrowUpRight className="h-4 w-4 flex-shrink-0 text-foreground/40 transition-colors group-hover:text-primary" />
-                </div>
+                <h3 className="font-display text-base font-semibold text-foreground">{a.title}</h3>
                 <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                   {a.description}
                 </p>
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {a.variants.map((v) => (
-                    <span
-                      key={v.id}
-                      className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-foreground/70"
-                    >
-                      {v.label}
-                    </span>
-                  ))}
-                </div>
               </div>
-            </Link>
+              {/* Lock overlay */}
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur">
+                  <Lock className="h-4 w-4" />
+                </span>
+                <span className="rounded-full bg-foreground px-3 py-1 text-[10px] font-semibold tracking-wide text-background uppercase">
+                  Next update
+                </span>
+              </div>
+            </div>
           ))}
         </div>
       </div>

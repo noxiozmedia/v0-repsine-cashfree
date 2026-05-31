@@ -46,6 +46,43 @@ We'd love to understand your goals before recommending a treatment. Could you sh
 Looking forward to helping you 🌸`,
   },
   {
+    id: "fc-3",
+    category: "first-contact",
+    channel: "Instagram DM",
+    title: "Story reply — product question",
+    body: `Hey [name]! Great question on our story.
+
+For [concern], we'd actually recommend a treatment over a product — here's why: topicals address the surface, while our protocols work at the root.
+
+Want me to share what that would look like for your skin type?`,
+  },
+  {
+    id: "fc-4",
+    category: "first-contact",
+    channel: "Both",
+    title: "Referral intro",
+    body: `Hi [name]! [referring client's name] mentioned you might be looking for help with [concern] — so glad you reached out.
+
+We already know a bit about what you're looking for, so we can make your first consult very targeted.
+
+Would [day] or [day] work for a quick 15-minute call?`,
+  },
+  {
+    id: "fc-5",
+    category: "first-contact",
+    channel: "WhatsApp",
+    title: "After a walk-in inquiry",
+    body: `Hi [name], lovely meeting you at the clinic today!
+
+As promised, here's a quick summary of what we discussed:
+• Concern: [concern]
+• Suggested treatment: [treatment]
+• Estimated sessions: [X]
+• Starting price: ₹[X]
+
+Whenever you're ready to take the next step, just reply here and we'll book you in.`,
+  },
+  {
     id: "qual-1",
     category: "qualifying",
     channel: "Both",
@@ -72,6 +109,40 @@ If it's:
 • 6+ months: we'd build a custom protocol
 
 Knowing this helps me suggest something realistic.`,
+  },
+  {
+    id: "qual-3",
+    category: "qualifying",
+    channel: "Both",
+    title: "Previous treatment check",
+    body: `Before I suggest anything, quick question — have you tried any treatments for [concern] before?
+
+This helps me avoid recommending something that hasn't worked and find what will actually move the needle for your skin.`,
+  },
+  {
+    id: "qual-4",
+    category: "qualifying",
+    channel: "WhatsApp",
+    title: "Skin type check",
+    body: `To make sure we recommend the right treatment, could you tell me a bit about your skin?
+
+• Is it oily, dry, combination, or sensitive?
+• Any known allergies to skincare ingredients?
+• Are you currently on any medication (especially for acne or hormones)?
+
+Once I have these, I can tailor the suggestion properly.`,
+  },
+  {
+    id: "qual-5",
+    category: "qualifying",
+    channel: "Both",
+    title: "In-person vs. virtual check",
+    body: `We can help you in two ways:
+
+1. Virtual consult (free, 15 min) — great if you're exploring options
+2. In-clinic consult (₹[X], redeemable against your treatment) — better if you want a hands-on skin assessment
+
+Which feels right for where you are right now?`,
   },
   {
     id: "obj-1",
@@ -102,6 +173,44 @@ A few things that might help:
 Would you feel better doing a free 15-minute consult first, with no obligation to book?`,
   },
   {
+    id: "obj-3",
+    category: "objection",
+    channel: "Both",
+    title: "When they want to think about it",
+    body: `Absolutely, take your time — this is your skin and your decision.
+
+While you think it over, two things that might help:
+1. Our before/after gallery — real clients, no filters: [link]
+2. A quick FAQ on [treatment]: [link]
+
+I'll check back in a few days. No pressure at all.`,
+  },
+  {
+    id: "obj-4",
+    category: "objection",
+    channel: "Both",
+    title: "When they found a cheaper option elsewhere",
+    body: `That's completely fair to compare — I'd do the same.
+
+A few things worth checking with any clinic:
+• Is the doctor performing the treatment or a technician?
+• What device/product brand do they use?
+• Do they offer a patch test before the full session?
+
+Happy to answer all of these for our clinic so you can compare properly.`,
+  },
+  {
+    id: "obj-5",
+    category: "objection",
+    channel: "Both",
+    title: "When they say they'll try products first",
+    body: `That makes sense — and products can genuinely help with mild concerns.
+
+The honest truth: for [specific concern], products alone rarely create the change you're hoping for. They maintain results, but treatments create them.
+
+If you'd like, I can suggest a basic homecare routine to start with while you consider the treatment option?`,
+  },
+  {
     id: "fu-1",
     category: "follow-up",
     channel: "Both",
@@ -122,6 +231,41 @@ If you have any questions or need a different option, just say the word.`,
 Wanted to share — we have a few open slots for [treatment they were interested in] this week. If you'd like to grab one, I can hold it for you for 24h.
 
 No pressure either way 💜`,
+  },
+  {
+    id: "fu-3",
+    category: "follow-up",
+    channel: "WhatsApp",
+    title: "Sharing a result post",
+    body: `Hi [name]! Thought of you when we shared this result on our Instagram today.
+
+This client had a very similar concern to yours — [brief description of result].
+
+Here's the post: [link]
+
+Whenever you're ready to chat, I'm here.`,
+  },
+  {
+    id: "fu-4",
+    category: "follow-up",
+    channel: "Both",
+    title: "Seasonal nudge",
+    body: `Hey [name] — as the season changes, so do our skin's needs.
+
+[Summer/Monsoon/Winter] is actually a great time to address [concern] because [brief reason].
+
+Would you like me to share what a quick 2-session protocol would look like for you?`,
+  },
+  {
+    id: "fu-5",
+    category: "follow-up",
+    channel: "Both",
+    title: "Last-slot urgency",
+    body: `Hi [name], quick heads-up — we have one slot left for [treatment] this [week/month] at a discounted rate (₹[X] instead of ₹[Y]).
+
+I thought of you first.
+
+Want me to hold it for 24 hours while you decide?`,
   },
   {
     id: "post-1",
@@ -147,5 +291,41 @@ If anything feels off, message us anytime — we're here.`,
 How is your skin feeling? Any redness, dryness, or anything you want to share?
 
 Also — if you're loving the results, we'd be so grateful for a quick 1-line review. It genuinely helps us reach more people who could use the same care.`,
+  },
+  {
+    id: "post-3",
+    category: "post-visit",
+    channel: "Both",
+    title: "Homecare reminder",
+    body: `Hi [name], quick homecare reminder for the next 72 hours:
+
+• Keep the treated area clean and moisturised
+• Avoid direct sun exposure — hat + SPF if you're going out
+• No gym or steam room for 48h
+• Don't pick or exfoliate the area
+
+Feel free to send photos if you notice anything unusual. We're always here.`,
+  },
+  {
+    id: "post-4",
+    category: "post-visit",
+    channel: "Both",
+    title: "Next session nudge",
+    body: `Hi [name]! You're about halfway through your recommended [treatment] plan.
+
+Based on how you're progressing, your next session should ideally be in [X] weeks to keep the results compounding.
+
+Should I check available slots for you?`,
+  },
+  {
+    id: "post-5",
+    category: "post-visit",
+    channel: "Both",
+    title: "Rebooking after 3 months",
+    body: `Hi [name], it's been about 3 months since your last visit 🌸
+
+Just checking in — how has your skin been holding up?
+
+If you'd like a top-up or a new treatment to build on your results, I'd love to help you plan the next step.`,
   },
 ]
