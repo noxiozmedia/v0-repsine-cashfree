@@ -69,18 +69,17 @@ export default function CalendarPage() {
                     <span className="-mt-0.5 text-sm font-bold text-foreground">{day.day}</span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                       <span
                         className={cn(
-                          "rounded-md px-1.5 py-0.5 text-[10px] font-semibold",
+                          "flex-shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-semibold",
                           typeColor[day.type],
                         )}
                       >
                         {day.type}
                       </span>
-                      <p className="truncate text-sm font-semibold text-foreground">{day.title}</p>
+                      <p className="text-sm font-semibold text-foreground">{day.title}</p>
                     </div>
-                    <p className="mt-0.5 truncate text-xs text-muted-foreground">{day.hook}</p>
                   </div>
                   <ChevronDown
                     className={cn(
