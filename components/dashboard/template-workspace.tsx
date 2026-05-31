@@ -63,8 +63,8 @@ export function TemplateWorkspace({ template }: { template: Template }) {
                 className={cn(
                   "flex h-9 cursor-pointer items-center gap-2 rounded-lg border px-3 text-xs font-semibold transition-colors",
                   isActive
-                    ? "border-primary/60 bg-primary/10 text-primary"
-                    : "border-border bg-card text-foreground/70 hover:border-border hover:bg-card hover:text-foreground",
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-foreground/70 hover:border-primary hover:bg-primary/10 hover:text-primary",
                 )}
               >
                 {v.label}
