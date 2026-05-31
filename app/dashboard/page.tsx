@@ -4,7 +4,6 @@ import { navItems } from "@/components/dashboard/nav-items"
 import { templates } from "@/lib/content/templates"
 import { calendar } from "@/lib/content/calendar"
 import { captions } from "@/lib/content/captions"
-import { adCreatives } from "@/lib/content/ads"
 import { scripts } from "@/lib/content/scripts"
 import { createClient } from "@/lib/supabase/server"
 import { DEMO_USER } from "@/lib/auth/preview"
@@ -21,11 +20,10 @@ export default async function DashboardHome() {
     DEMO_USER.fullName.split(" ")[0]
 
   const stats = [
-    { label: "Templates", value: templates.length, href: "/dashboard/templates" },
+    { label: "Templates", value: "10+", href: "/dashboard/templates" },
     { label: "Calendar days", value: calendar.length, href: "/dashboard/calendar" },
     { label: "Captions", value: captions.length, href: "/dashboard/captions" },
     { label: "DM scripts", value: scripts.length, href: "/dashboard/scripts" },
-    { label: "Ad creatives", value: adCreatives.length, href: "/dashboard/ads" },
   ]
 
   return (

@@ -44,7 +44,7 @@ export default function TemplatesPage() {
                   {t.variants.map((v) => (
                     <span
                       key={v.id}
-                      className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-foreground/70"
+                      className="chip-shimmer rounded-md border bg-primary/5 px-2 py-0.5 text-[10px] font-semibold text-primary"
                     >
                       {v.label} · {v.ratio}
                     </span>

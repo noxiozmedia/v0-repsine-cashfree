@@ -81,7 +81,7 @@ export const templates: Template[] = [
     ],
     variants: [
       { ...POST,  image: "/dashboard/templates/before-after-post.jpg",  canvaUrl: "https://canva.link/5fhcy046owbybrm" },
-      { ...STORY, image: "/dashboard/templates/before-after-story.jpg", canvaUrl: "https://canva.link/ts714425y58zr5n" },
+      { ...STORY, image: "/dashboard/templates/before-after-story.jpg", canvaUrl: "https://canva.link/b25ipvk0t0fwucz" },
       {
         ...CAROUSEL,
         size: "1080 × 1350 · 4 slides",
