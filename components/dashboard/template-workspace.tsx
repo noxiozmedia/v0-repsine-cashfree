@@ -2,16 +2,30 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { CheckCircle2, ExternalLink } from "lucide-react"
+import { CheckCircle2, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Template } from "@/lib/content/templates"
 
 export function TemplateWorkspace({ template }: { template: Template }) {
   const variants = template.variants
   const [activeId, setActiveId] = useState(variants[0]?.id)
+  const [slideIndex, setSlideIndex] = useState(0)
   const active = variants.find((v) => v.id === activeId) ?? variants[0]
 
   if (!active) return null
+
+  const isCarousel = active.id === "carousel" && Array.isArray(active.slides) && active.slides.length > 0
+  const slides = isCarousel ? active.slides! : [active.image]
+  const currentSlide = slides[slideIndex] ?? active.image
+
+  function prevSlide() { setSlideIndex((i) => (i - 1 + slides.length) % slides.length) }
+  function nextSlide() { setSlideIndex((i) => (i + 1) % slides.length) }
+
+  // Reset slide index when variant changes
+  function handleVariantChange(id: typeof activeId) {
+    setActiveId(id)
+    setSlideIndex(0)
+  }
 
   const CanvaButton = ({ className }: { className?: string }) => (
     <a
@@ -46,7 +60,7 @@ export function TemplateWorkspace({ template }: { template: Template }) {
                 type="button"
                 role="tab"
                 aria-selected={isActive}
-                onClick={() => setActiveId(v.id)}
+                onClick={() => handleVariantChange(v.id)}
                 className={cn(
                   "flex h-9 cursor-pointer items-center gap-2 rounded-lg border px-3 text-xs font-semibold transition-colors",
                   isActive
@@ -68,15 +82,53 @@ export function TemplateWorkspace({ template }: { template: Template }) {
       <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-stretch">
         {/* LEFT — preview */}
         <div className="flex min-w-0 flex-col">
-          {/* Preview — always square (1:1); height-capped so the top section stays within the viewport */}
-          <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted lg:h-[clamp(320px,56vh,560px)] lg:w-auto">
+          {/* Preview — always square (1:1); carousel shows slide nav overlaid on the image */}
+          <div className="group relative aspect-square w-full overflow-hidden rounded-2xl border border-border bg-muted lg:h-[clamp(320px,56vh,560px)] lg:w-auto">
             <Image
-              src={active.image || "/placeholder.svg"}
-              alt={`${active.label} variant`}
+              src={currentSlide || "/placeholder.svg"}
+              alt={`${active.label} variant — slide ${slideIndex + 1}`}
               fill
               sizes="(min-width: 1024px) 56vh, 100vw"
-              className="object-cover"
+              className="object-cover transition-opacity duration-200"
             />
+
+            {/* Carousel prev/next — only shown when this variant has slides */}
+            {isCarousel && (
+              <>
+                <button
+                  type="button"
+                  onClick={prevSlide}
+                  aria-label="Previous slide"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/40 text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-black/60"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={nextSlide}
+                  aria-label="Next slide"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/40 text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-black/60"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+
+                {/* Dot indicators */}
+                <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+                  {slides.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setSlideIndex(i)}
+                      aria-label={`Go to slide ${i + 1}`}
+                      className={cn(
+                        "h-1.5 rounded-full transition-all",
+                        i === slideIndex ? "w-5 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80",
+                      )}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Canva button — mobile only (kept near the preview) */}

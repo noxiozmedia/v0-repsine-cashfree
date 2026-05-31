@@ -3,7 +3,8 @@ export type TemplateVariant = {
   label: string
   size: string
   ratio: "4:5" | "9:16"
-  image: string
+  image: string       // cover / preview image (used as slide[0] for non-carousel)
+  slides?: string[]   // carousel only: ordered list of all slide images
   canvaUrl: string
 }
 
@@ -80,11 +81,17 @@ export const templates: Template[] = [
     ],
     variants: [
       { ...POST, image: "/dashboard/templates/before-after-post.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-post` },
-      { ...STORY, image: "/dashboard/templates/before-after.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-story` },
+      { ...STORY, image: "/dashboard/templates/before-after-story.jpg", canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-story` },
       {
         ...CAROUSEL,
         size: "1080 × 1350 · 4 slides",
-        image: "/dashboard/templates/before-after.jpg",
+        image: "/dashboard/templates/before-after-post.jpg",
+        slides: [
+          "/dashboard/templates/before-after-c1.jpg",
+          "/dashboard/templates/before-after-c2.jpg",
+          "/dashboard/templates/before-after-c3.jpg",
+          "/dashboard/templates/before-after-c4.jpg",
+        ],
         canvaUrl: `${PLACEHOLDER_CANVA}-beforeafter-carousel`,
       },
     ],
