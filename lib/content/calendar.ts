@@ -35,6 +35,7 @@ export const calendar: CalendarDay[] = [
     hook: "Answer one common question clearly.",
     details:
       "Pick one question clients ask often — like how many sessions are needed, whether the treatment is painful, or if it suits Indian skin tones. Keep the answer short and useful.",
+    templateSlug: "faq",
     cta: "Save this post if you found it helpful.",
   },
   {
@@ -102,6 +103,7 @@ export const calendar: CalendarDay[] = [
     hook: "Answer the most asked question.",
     details:
       "Choose one question from yesterday's story and answer it in a simple carousel. Focus on clarity and trust.",
+    templateSlug: "faq",
     cta: "Save this for later.",
   },
   {
@@ -159,6 +161,7 @@ export const calendar: CalendarDay[] = [
     hook: "Answer a safety or aftercare question.",
     details:
       "Pick a practical question that helps reduce hesitation. Make the answer calm, short, and reassuring.",
+    templateSlug: "faq",
     cta: "Save this post before your visit.",
   },
   {
@@ -235,6 +238,7 @@ export const calendar: CalendarDay[] = [
     hook: "Answer one more booking or treatment question.",
     details:
       "Use the carousel to clear hesitation and make the clinic feel approachable.",
+    templateSlug: "faq",
     cta: "Save this if you are considering treatment.",
   },
   {
@@ -283,6 +287,7 @@ export const calendar: CalendarDay[] = [
     hook: "Answer one final useful question.",
     details:
       "Choose a question that helps close the month with trust and clarity.",
+    templateSlug: "faq",
     cta: "Save this and share it with someone who needs it.",
   },
   {
