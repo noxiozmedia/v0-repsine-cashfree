@@ -195,18 +195,17 @@
 }
 
 .chip-shimmer {
-  border: 1.5px solid transparent !important;
+  border: 2px solid transparent !important;
   background:
-    linear-gradient(oklch(0.62 0.26 285 / 0.05), oklch(0.62 0.26 285 / 0.05)) padding-box,
     linear-gradient(var(--card), var(--card)) padding-box,
     linear-gradient(
       90deg,
-      oklch(0.62 0.22 285 / 0.55) 0%,
-      oklch(0.62 0.22 285 / 0.55) 35%,
-      oklch(0.8 0.3 285) 50%,
-      oklch(0.62 0.22 285 / 0.55) 65%,
-      oklch(0.62 0.22 285 / 0.55) 100%
+      oklch(0.5 0.16 285) 0%,
+      oklch(0.5 0.16 285) 38%,
+      oklch(0.85 0.32 285) 50%,
+      oklch(0.5 0.16 285) 62%,
+      oklch(0.5 0.16 285) 100%
     ) border-box;
-  background-size: 200% 100%;
-  animation: shimmer-slide 2.5s linear infinite;
+  background-size: 250% 100%;
+  animation: shimmer-slide 2s linear infinite;
 }
