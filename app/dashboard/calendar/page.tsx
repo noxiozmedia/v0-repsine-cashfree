@@ -93,7 +93,6 @@ export default function CalendarPage() {
                   <>
                     <div className="mx-3 border-t border-border/60 sm:mx-4" />
                     <div className="p-4 sm:p-5">
-                      <p className="mb-3 font-display text-base font-semibold text-foreground">{day.title}</p>
                       <p className="text-[10px] font-semibold tracking-[0.18em] text-foreground/60 uppercase">
                         Brief
                       </p>
