@@ -70,7 +70,7 @@ export const templates: Template[] = [
     title: "Before / After",
     description:
       "High-conversion split-screen reveals with a clean transition. Ideal for HydraFacial, chemical peel and laser results. Post, story and carousel.",
-    cover: "/dashboard/templates/before-after.jpg",
+    cover: "/dashboard/templates/before-after-post.jpg",
     videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     instructions: [
       "Open the template in Canva and replace the placeholder photos — use the same lighting and angle for both shots.",
