@@ -91,20 +91,19 @@ export default function TemplatesPage() {
                     className="scale-110 object-cover blur-md"
                   />
                   <div className="absolute inset-0 bg-background/40" />
+                  {/* Lock overlay — scoped to image only */}
+                  <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-center">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur">
+                      <Lock className="h-4 w-4" />
+                    </span>
+                    <span className="rounded-full bg-foreground px-3 py-1 text-[10px] font-semibold tracking-wide text-background uppercase">
+                      Next update
+                    </span>
+                  </div>
                 </div>
                 <div className="flex flex-1 flex-col gap-1.5 p-4">
                   <h3 className="font-display text-base font-semibold text-foreground">{t.title}</h3>
                   <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{t.description}</p>
-                </div>
-
-                {/* Lock overlay */}
-                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/80 text-foreground backdrop-blur">
-                    <Lock className="h-4 w-4" />
-                  </span>
-                  <span className="rounded-full bg-foreground px-3 py-1 text-[10px] font-semibold tracking-wide text-background uppercase">
-                    Next update
-                  </span>
                 </div>
               </div>
             ))}
