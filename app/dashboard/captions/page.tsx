@@ -20,6 +20,11 @@ export default function CaptionsPage() {
       />
 
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10">
+        {/* Framework notice */}
+        <p className="mb-5 text-xs text-muted-foreground">
+          All captions are built as frameworks. Replace placeholders with your clinic details before posting.
+        </p>
+
         {/* Category filter */}
         <div className="mb-6 flex flex-wrap gap-2">
           {captionCategories.map((cat) => (
@@ -53,6 +58,9 @@ export default function CaptionsPage() {
                   <CopyButton text={fullText} label="Copy caption" />
                 </header>
                 <div className="px-4 py-4">
+                  {c.note && (
+                    <p className="mb-3 text-[11px] italic text-muted-foreground">{c.note}</p>
+                  )}
                   <p className="text-sm leading-relaxed whitespace-pre-line text-foreground/90">
                     {c.body}
                   </p>
