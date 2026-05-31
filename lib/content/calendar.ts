@@ -16,7 +16,7 @@ export const calendar: CalendarDay[] = [
     hook: "Open with a common concern your audience feels.",
     details:
       "Use the Problem/Pain template. Start with a pain point your audience relates to — acne coming back, dark spots not fading, or products not working anymore. Make the first line impossible to scroll past.",
-    templateSlug: "problem-pain-carousel",
+    templateSlug: "problem-pain",
     cta: "DM us if this sounds familiar — we can help.",
   },
   {
@@ -44,7 +44,7 @@ export const calendar: CalendarDay[] = [
     hook: "Real result. Real client.",
     details:
       "Use the Before/After template. Show a genuine result with a short caption and a clear disclaimer: 'Individual results may vary.' Focus the caption on the patient's journey, not just the visual.",
-    templateSlug: "before-after-skin",
+    templateSlug: "before-after",
     cta: "Comment 'RESULT' for the full treatment breakdown.",
   },
   {
@@ -54,7 +54,7 @@ export const calendar: CalendarDay[] = [
     hook: "Real words from a real client.",
     details:
       "Use the Testimonial Post template. Focus on comfort, confidence, or trust — not just the result. A client feeling safe and cared for is more powerful than any before/after.",
-    templateSlug: "testimonial-post",
+    templateSlug: "testimonial",
     cta: "DM 'BOOK' to start your own journey.",
   },
   {
@@ -82,7 +82,7 @@ export const calendar: CalendarDay[] = [
     hook: "Stubborn marks. Recurring breakouts. Sound familiar?",
     details:
       "Use the Problem/Pain template again with a different angle — stubborn acne marks, recurring pigmentation, or rough texture. Each pain point speaks to a different segment of your audience.",
-    templateSlug: "problem-pain-carousel",
+    templateSlug: "problem-pain",
     cta: "Tell us your concern in the comments.",
   },
   {
@@ -110,7 +110,7 @@ export const calendar: CalendarDay[] = [
     hook: "A different story. A different result.",
     details:
       "Use the Before/After template with a different transformation story. Vary the concern — if Day 4 was pigmentation, make this one acne or texture. Each new story speaks to a new person.",
-    templateSlug: "before-after-skin",
+    templateSlug: "before-after",
     cta: "DM us to find out which treatment is right for you.",
   },
   {
@@ -120,7 +120,7 @@ export const calendar: CalendarDay[] = [
     hook: "First visit. Last hesitation.",
     details:
       "Use the Testimonial Post template. This can be a first-time client story — someone who was nervous, then amazed. Or a long-term client who has seen consistent results over months.",
-    templateSlug: "testimonial-post",
+    templateSlug: "testimonial",
     cta: "DM 'FIRST' if you've been thinking about coming in.",
   },
   {
@@ -148,7 +148,7 @@ export const calendar: CalendarDay[] = [
     hook: "Products tried. Confidence lost. Sound familiar?",
     details:
       "Use the Problem/Pain template. This time shift to the emotional angle — losing confidence, feeling frustrated after trying everything, or giving up on skincare. Emotional copy converts.",
-    templateSlug: "problem-pain-carousel",
+    templateSlug: "problem-pain",
     cta: "You haven't found the right solution yet. DM us.",
   },
   {
@@ -176,7 +176,7 @@ export const calendar: CalendarDay[] = [
     hook: "Strong visual. Simple caption.",
     details:
       "Use the Before/After template. This one should have your strongest visual result. Keep the caption simple — let the image do the work. One sentence of context, one CTA.",
-    templateSlug: "before-after-skin",
+    templateSlug: "before-after",
     cta: "Comment your concern below — we'll tag the right treatment.",
   },
   {
@@ -186,7 +186,7 @@ export const calendar: CalendarDay[] = [
     hook: "She almost didn't book. Then she did.",
     details:
       "Use the Testimonial Post template. Highlight trust, comfort, or the client's experience at the clinic — not the treatment itself. People buy from people they trust.",
-    templateSlug: "testimonial-post",
+    templateSlug: "testimonial",
     cta: "DM us if you're on the fence — we'll answer every question.",
   },
   {
@@ -214,7 +214,7 @@ export const calendar: CalendarDay[] = [
     hook: "You've tried everything. Nothing's worked. Here's why.",
     details:
       "Use the Problem/Pain template. This angle addresses the 'tried everything' frustration — surface-level products can't fix root causes. Lead into why a professional treatment changes the result.",
-    templateSlug: "problem-pain-carousel",
+    templateSlug: "problem-pain",
     cta: "DM 'WHY' and we'll explain what's actually happening with your skin.",
   },
   {
@@ -242,7 +242,7 @@ export const calendar: CalendarDay[] = [
     hook: "Another story. Another result.",
     details:
       "Use the Before/After template with a fresh transformation. If you've shown acne and pigmentation this month, this one could be texture, dullness, or under-eye concerns.",
-    templateSlug: "before-after-skin",
+    templateSlug: "before-after",
     cta: "DM 'RESULT' for a free 15-minute skin consult.",
   },
   {
@@ -252,7 +252,7 @@ export const calendar: CalendarDay[] = [
     hook: "Short review. Big impact.",
     details:
       "Use the Testimonial Post template. This one can be short and emotional — a one-liner review paired with a strong photo. Sometimes the shortest testimonial is the most powerful.",
-    templateSlug: "testimonial-post",
+    templateSlug: "testimonial",
     cta: "DM 'BOOK' to become our next success story.",
   },
   {
