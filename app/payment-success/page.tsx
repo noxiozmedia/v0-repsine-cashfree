@@ -17,8 +17,8 @@ export default async function PaymentSuccess({
           Payment Successful!
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-          Thank you for enrolling in the Canva Mastery course. Your payment has been received and
-          your course access link has been sent to your email.
+          Thank you for your purchase of the Repsine Instagram Kit. Your payment has been received and
+          your access link has been sent to your email.
         </p>
         {params.order_id && (
           <p className="mt-6 text-sm text-muted-foreground">

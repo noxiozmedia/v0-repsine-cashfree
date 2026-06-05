@@ -5,7 +5,7 @@ import { ContactForm } from "@/components/repsine/contact-form"
 export const metadata = {
   title: "Contact | Repsine",
   description:
-    "Get in touch with the Repsine team for course support, questions, or feedback about Canva Mastery.",
+    "Get in touch with the Repsine team for support, questions, or feedback about the Repsine Instagram Kit.",
 }
 
 const contactDetails = [
