@@ -25,19 +25,15 @@ function GoogleIcon({ className }: { className?: string }) {
 
 export function SocialProof() {
   return (
-    <div className="flex items-center gap-2.5">
-      <GoogleIcon className="h-7 w-7 flex-shrink-0" />
-      <div className="flex flex-col">
-        <div className="flex items-center gap-1">
-          <span className="text-sm font-semibold text-foreground">4.9</span>
-          <div className="flex items-center gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-            ))}
-          </div>
-        </div>
-        <p className="text-xs text-muted-foreground">Trusted by 2K+ clinics on Google</p>
+    <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-sm">
+      <GoogleIcon className="h-4 w-4 flex-shrink-0" />
+      <div className="flex items-center gap-1">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />
+        ))}
       </div>
+      <span className="text-xs font-semibold text-foreground">4.9</span>
+      <span className="text-xs text-muted-foreground">· 2K+ clinics</span>
     </div>
   )
 }
