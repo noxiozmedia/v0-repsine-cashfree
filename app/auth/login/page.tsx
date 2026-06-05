@@ -7,6 +7,7 @@ import { ArrowRight, CheckCircle2, KeyRound, Loader2, Mail, Sparkles } from "luc
 import { RepsineLogo } from "@/components/repsine-logo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/supabase/client"
 
@@ -231,9 +232,8 @@ function LoginInner() {
                     Forgot?
                   </button>
                 </div>
-                <Input
+                <PasswordInput
                   id="password"
-                  type="password"
                   required
                   autoComplete="current-password"
                   value={password}

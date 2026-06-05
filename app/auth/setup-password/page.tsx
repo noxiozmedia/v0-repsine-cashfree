@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -82,9 +83,8 @@ export default function SetupPasswordPage() {
               <Label htmlFor="password" className="text-xs font-semibold">
                 New password
               </Label>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 required
                 minLength={8}
                 autoComplete="new-password"
@@ -99,9 +99,8 @@ export default function SetupPasswordPage() {
               <Label htmlFor="confirm" className="text-xs font-semibold">
                 Confirm password
               </Label>
-              <Input
+              <PasswordInput
                 id="confirm"
-                type="password"
                 required
                 minLength={8}
                 autoComplete="new-password"
