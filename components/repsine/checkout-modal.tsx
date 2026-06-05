@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import { X, Lock, Loader2, CheckCircle2, ShieldCheck, ArrowRight, RotateCcw } from "lucide-react"
 
-const PRICE = 999
-const ORIGINAL_PRICE = 4999
+  const PRICE = 1
+  const ORIGINAL_PRICE = 4999
+  // Toggle to show the dev "skip payment" button. Disabled while testing live payments.
+  const SHOW_DEV_BYPASS = false
 
 declare global {
   interface Window {
@@ -330,14 +332,16 @@ export function CheckoutModal({ open, onClose }: Props) {
                 )}
               </button>
 
-              <button
-                type="button"
-                onClick={devBypass}
-                disabled={busy}
-                className="inline-flex h-9 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-dashed border-amber-500/60 bg-amber-500/10 text-xs font-semibold text-amber-700 transition-colors hover:bg-amber-500/20 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                DEV: Skip payment &amp; grant access
-              </button>
+              {SHOW_DEV_BYPASS && (
+                <button
+                  type="button"
+                  onClick={devBypass}
+                  disabled={busy}
+                  className="inline-flex h-9 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-dashed border-amber-500/60 bg-amber-500/10 text-xs font-semibold text-amber-700 transition-colors hover:bg-amber-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  DEV: Skip payment &amp; grant access
+                </button>
+              )}
 
               <div className="flex flex-col items-start gap-2 border-t border-border/60 pt-4">
                 <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
