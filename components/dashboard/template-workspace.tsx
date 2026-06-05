@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { CheckCircle2, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
+import { CheckCircle2, ChevronLeft, ChevronRight, ExternalLink, PlayCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Template } from "@/lib/content/templates"
 
@@ -217,7 +217,24 @@ export function TemplateWorkspace({ template }: { template: Template }) {
         </aside>
       </div>
 
-      {/* Tutorial section hidden until videos are ready */}
+      {/* Request Tutorial */}
+      <div className="flex flex-col items-start gap-2 rounded-2xl border border-dashed border-border bg-card px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold text-foreground">Want a step-by-step tutorial?</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Request a video tutorial for this template and we&apos;ll add it for you.
+          </p>
+        </div>
+        <a
+          href={`https://wa.me/916295747270?text=${encodeURIComponent(`Hi! I'd like to request a tutorial for the "${template.title}" template on Repsine.`)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
+        >
+          <PlayCircle className="h-3.5 w-3.5 text-primary" />
+          Request Tutorial
+        </a>
+      </div>
     </div>
   )
 }
