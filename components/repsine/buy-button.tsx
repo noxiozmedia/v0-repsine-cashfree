@@ -8,10 +8,29 @@ import { CheckoutModal } from "./checkout-modal"
 type BuyButtonProps = {
   label?: string
   className?: string
+  variant?: "default" | "plain"
 }
 
-export function BuyButton({ label = "BUY Now", className }: BuyButtonProps) {
+export function BuyButton({ label = "BUY Now", className, variant = "default" }: BuyButtonProps) {
   const [open, setOpen] = useState(false)
+
+  if (variant === "plain") {
+    return (
+      <>
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className={cn(
+            "inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-foreground px-5 text-sm font-semibold text-background transition-colors hover:bg-foreground/90",
+            className,
+          )}
+        >
+          {label}
+        </button>
+        <CheckoutModal open={open} onClose={() => setOpen(false)} />
+      </>
+    )
+  }
 
   return (
     <>

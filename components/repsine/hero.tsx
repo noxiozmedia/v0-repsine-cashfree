@@ -15,32 +15,44 @@ export function Hero() {
       <div className="relative">
         <SiteHeader />
 
-        <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 pt-14 pb-10 sm:px-6 sm:pt-20 lg:pt-24">
-          {/* Badge */}
-          <span className="mb-6 inline-flex items-center rounded-full border border-border bg-card/70 px-4 py-1.5 text-[11px] font-semibold tracking-[0.16em] text-foreground/70 uppercase backdrop-blur">
-            Instagram Kit For Aesthetic Clinics
-          </span>
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-x-12 px-4 pt-10 pb-24 sm:px-6 sm:pt-14 sm:pb-16 lg:grid-cols-2 lg:items-center lg:pt-20 lg:pb-24">
+          {/* Social proof */}
+          <div className="order-1 flex justify-center lg:col-start-1 lg:row-start-1 lg:justify-start">
+            <SocialProof />
+          </div>
 
           {/* Headline */}
-          <h1 className="max-w-3xl text-center font-display text-4xl leading-[1.08] font-semibold tracking-tight text-balance text-foreground sm:text-5xl lg:text-6xl">
+          <h1 className="order-2 mt-6 text-center font-display text-4xl leading-[1.08] font-semibold tracking-tight text-balance text-foreground sm:text-5xl lg:col-start-1 lg:row-start-2 lg:mt-5 lg:max-w-xl lg:text-left lg:text-[3.4rem]">
             Have an Instagram patients can trust — without adding more work to your day
           </h1>
 
           {/* Subhead */}
-          <p className="mt-5 max-w-2xl text-center text-sm leading-relaxed text-pretty text-muted-foreground sm:text-base">
+          <p className="order-3 mt-5 text-center text-sm leading-relaxed text-pretty text-muted-foreground sm:text-base lg:col-start-1 lg:row-start-3 lg:max-w-xl lg:text-left">
             Stop wondering what to post. Get ready-to-use templates, captions, WhatsApp scripts and content
-            plans designed specifically for aesthetic clinics — so your Instagram looks active, professional
-            and trustworthy before patients ever contact you.
+            plans designed specifically for aesthetic clinics — so your Instagram looks active, professional and
+            trustworthy before patients ever contact you.
           </p>
 
-          {/* CTA + social proof */}
-          <div className="mt-8 flex flex-col items-center gap-5 sm:flex-row sm:gap-6">
+          {/* Mockup PNG — no background. After subtext on mobile, right side on desktop */}
+          <div className="order-4 mt-8 w-full lg:col-start-2 lg:row-span-5 lg:row-start-1 lg:mt-0 lg:self-center">
+            <Image
+              src="/images/utf.png"
+              alt="Repsine ready-to-post Instagram templates shown on phone, laptop and tablet"
+              width={4992}
+              height={2640}
+              priority
+              sizes="(max-width: 1024px) 100vw, 600px"
+              className="h-auto w-full object-contain"
+            />
+          </div>
+
+          {/* CTA — inline on desktop only (sticky bar on mobile) */}
+          <div className="order-5 hidden sm:flex sm:justify-center lg:col-start-1 lg:row-start-4 lg:mt-8 lg:justify-start">
             <BuyButton label="Get Instant Access — ₹999" />
-            <SocialProof />
           </div>
 
           {/* Check points */}
-          <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          <ul className="order-6 mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:col-start-1 lg:row-start-5 lg:mt-6 lg:justify-start">
             {checkPoints.map((point) => (
               <li key={point} className="flex items-center gap-2 text-sm font-medium text-foreground/80">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-primary">
@@ -50,23 +62,12 @@ export function Hero() {
               </li>
             ))}
           </ul>
-
-          {/* Hero image */}
-          <div className="relative mt-12 w-full sm:mt-14">
-            <div className="absolute -inset-4 rounded-[2rem] bg-primary/10 blur-2xl" aria-hidden="true" />
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-2xl shadow-primary/10">
-              <Image
-                src="/images/utf.jpg"
-                alt="Repsine ready-to-post Instagram templates shown on phone, laptop and tablet"
-                width={2560}
-                height={1280}
-                priority
-                sizes="(max-width: 1024px) 100vw, 1024px"
-                className="h-auto w-full object-cover"
-              />
-            </div>
-          </div>
         </div>
+      </div>
+
+      {/* Mobile sticky CTA */}
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border/60 bg-background/90 px-4 py-3 backdrop-blur-md sm:hidden">
+        <BuyButton label="Get Instant Access — ₹999" className="w-full justify-center" />
       </div>
     </section>
   )

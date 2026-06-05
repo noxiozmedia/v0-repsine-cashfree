@@ -47,19 +47,16 @@ export function SuccessCta() {
               </div>
             </div>
 
-            {/* Image */}
+            {/* Image — transparent mockup */}
             <div className="relative">
-              <div className="absolute -inset-3 rounded-2xl bg-primary/10 blur-2xl" aria-hidden="true" />
-              <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-primary/10">
-                <Image
-                  src="/images/utf.jpg"
-                  alt="Repsine Instagram kit shown across phone, laptop and tablet"
-                  width={2560}
-                  height={1280}
-                  sizes="(max-width: 1024px) 100vw, 512px"
-                  className="h-auto w-full object-cover"
-                />
-              </div>
+              <Image
+                src="/images/utf.png"
+                alt="Repsine Instagram kit shown across phone, laptop and tablet"
+                width={4992}
+                height={2640}
+                sizes="(max-width: 1024px) 100vw, 512px"
+                className="h-auto w-full object-contain"
+              />
             </div>
           </div>
         </div>
