@@ -23,7 +23,7 @@ export function Hero() {
 
           {/* Headline */}
           <h1 className="order-2 mt-6 text-center font-display text-4xl leading-[1.08] font-semibold tracking-tight text-balance text-foreground sm:text-5xl lg:col-start-1 lg:row-start-2 lg:mt-5 lg:max-w-xl lg:text-left lg:text-[3.4rem]">
-            Have an Instagram patients can trust — without adding more work to your day
+            Have an Instagram patients can trust - <em>without adding more work to your day</em>
           </h1>
 
           {/* Subhead */}
@@ -48,7 +48,7 @@ export function Hero() {
 
           {/* CTA — inline on desktop only (sticky bar on mobile) */}
           <div className="order-5 hidden sm:flex sm:justify-center lg:col-start-1 lg:row-start-4 lg:mt-8 lg:justify-start">
-            <BuyButton label="Get Instant Access — ₹999" />
+            <BuyButton label="Get Instant Access - ₹999" />
           </div>
 
           {/* Check points */}
@@ -67,7 +67,7 @@ export function Hero() {
 
       {/* Mobile sticky CTA */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border/60 bg-background/90 px-4 py-3 backdrop-blur-md sm:hidden">
-        <BuyButton label="Get Instant Access — ₹999" className="w-full justify-center" />
+        <BuyButton label="Get Instant Access - ₹999" className="w-full justify-center" />
       </div>
     </section>
   )
