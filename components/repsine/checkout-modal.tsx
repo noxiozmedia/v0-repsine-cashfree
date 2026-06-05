@@ -7,7 +7,7 @@ import { X, Lock, Loader2, CheckCircle2, ShieldCheck, ArrowRight, RotateCcw } fr
   const PRICE = 999
   const ORIGINAL_PRICE = 1999
   // Toggle to show the dev "skip payment" button. Disabled while testing live payments.
-  const SHOW_DEV_BYPASS = true
+  const SHOW_DEV_BYPASS = false
 
 declare global {
   interface Window {
