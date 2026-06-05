@@ -18,20 +18,24 @@ const features = [
     alt: "Day-by-day content calendar with post ideas for an aesthetic clinic",
   },
   {
-    tag: "Scripts",
-    title: "WhatsApp & DM Scripts",
-    description:
-      "Know exactly what to say when patients ask about pricing, treatments or bookings — without awkward guesswork.",
-    image: "/images/wp-scripts.jpg",
-    alt: "WhatsApp chat script for replying to a patient about acne scars",
-  },
-  {
     tag: "Captions",
     title: "Captions",
     description:
       "Skip the blank page. Get ready-to-use captions that educate, build trust and encourage patients to take action.",
     image: "/images/caption.avif",
     alt: "Ready-to-use Instagram caption with hashtags for a skincare clinic",
+    // On mobile: visually pushed after Scripts (order-4). On desktop: natural grid position.
+    mobileOrder: "order-4 md:order-none",
+  },
+  {
+    tag: "Scripts",
+    title: "WhatsApp & DM Scripts",
+    description:
+      "Know exactly what to say when patients ask about pricing, treatments or bookings — without awkward guesswork.",
+    image: "/images/wp-scripts.jpg",
+    alt: "WhatsApp chat script for replying to a patient about acne scars",
+    // On mobile: visually pulled before Captions (order-3). On desktop: natural grid position.
+    mobileOrder: "order-3 md:order-none",
   },
 ]
 
@@ -52,7 +56,7 @@ export function Features() {
           {features.map((feature) => (
             <article
               key={feature.title}
-              className="group flex flex-col rounded-2xl border border-border bg-card p-3 transition-shadow hover:shadow-xl hover:shadow-primary/5"
+              className={`group flex flex-col rounded-2xl border border-border bg-card p-3 transition-shadow hover:shadow-xl hover:shadow-primary/5${"mobileOrder" in feature ? ` ${feature.mobileOrder}` : ""}`}
             >
               <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-secondary ring-1 ring-border/60">
                 <Image
