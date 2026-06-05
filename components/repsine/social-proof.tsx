@@ -2,12 +2,12 @@ import { Star } from "lucide-react"
 
 export function SocialProof() {
   return (
-    <div className="inline-flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-2.5 shadow-md shadow-primary/10">
+    <div className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 shadow-md shadow-primary/10">
       {/* Google "G" logo — multicolor SVG */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 48 48"
-        className="h-8 w-8 flex-shrink-0"
+        className="h-6 w-6 flex-shrink-0"
         aria-label="Google"
       >
         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -19,15 +19,15 @@ export function SocialProof() {
 
       {/* Right: rating + stars + label */}
       <div className="flex flex-col gap-0.5">
-        <div className="flex items-center gap-1.5">
-          <span className="text-sm font-bold leading-none text-foreground">4.9</span>
-          <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-1">
+          <span className="text-xs font-bold leading-none text-foreground">4.9</span>
+          <div className="flex items-center gap-px">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+              <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />
             ))}
           </div>
         </div>
-        <p className="text-[11px] leading-none text-muted-foreground">Trusted by 2K+ clinics on Google</p>
+        <p className="text-[10px] leading-none text-muted-foreground">Trusted by 136+ Clinics on Google</p>
       </div>
     </div>
   )
