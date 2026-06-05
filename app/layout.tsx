@@ -16,9 +16,9 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: "Repsine — Canva Mastery: Beginner To Advanced",
+  title: "Repsine — Instagram Kit for Aesthetic Clinics",
   description:
-    "Pay once and get lifetime access to the Canva Mastery course by Repsine. Learn Canva from beginner to advanced with hands-on projects, templates and certification.",
+    "Ready-to-use Instagram templates, captions, WhatsApp scripts and content calendars built specifically for aesthetic clinics. Pay once, get lifetime access plus free weekly updates.",
   generator: "v0.app",
   icons: {
     icon: "/repsine-logo.jpg",

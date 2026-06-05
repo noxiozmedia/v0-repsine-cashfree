@@ -1,38 +1,65 @@
+import Image from "next/image"
+import { Check } from "lucide-react"
 import { BuyButton } from "./buy-button"
 import { SocialProof } from "./social-proof"
 
+const points = [
+  "Stay Consistent On Instagram",
+  "Build Trust Before Patients Contact You",
+  "No Designer Or Agency Required",
+]
+
 export function SuccessCta() {
   return (
-    <section id="enroll" className="relative">
-      <div className="mx-auto w-full max-w-5xl px-4 pb-20 sm:px-6 sm:pb-28">
-        <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card/40 px-6 py-14 sm:px-10 sm:py-20">
-          <div className="absolute inset-0 cta-glow opacity-90" aria-hidden="true" />
-          <div
-            className="absolute inset-0 opacity-[0.05]"
-            style={{
-              backgroundImage:
-                "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
-              backgroundSize: "32px 32px",
-            }}
-            aria-hidden="true"
-          />
+    <section id="enroll" className="relative border-t border-border/60">
+      <div className="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-card">
+          <div className="absolute inset-0 cream-glow opacity-80" aria-hidden="true" />
 
-          <div className="relative flex flex-col items-start text-left sm:items-center sm:text-center">
-            <span className="inline-flex items-center rounded-full border border-border/60 bg-background/60 px-4 py-1.5 text-[11px] font-semibold tracking-[0.18em] text-foreground/80 uppercase backdrop-blur">
-              Guarantee
-            </span>
-            <h2 className="mt-4 font-display text-3xl leading-tight font-bold tracking-tight text-balance text-foreground sm:text-5xl">
-              Your Success, Guaranteed.
-            </h2>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-pretty text-muted-foreground sm:text-base">
-              At <span className="font-semibold text-foreground">Repsine</span>, we are committed to making
-              Canva easy and practical for you. With expert guidance, hands-on projects and lifetime
-              access — success is just a step away.
-            </p>
+          <div className="relative grid grid-cols-1 items-center gap-10 p-6 sm:p-10 lg:grid-cols-2 lg:p-14">
+            {/* Copy */}
+            <div className="flex flex-col items-start text-left">
+              <span className="inline-flex items-center rounded-full border border-border bg-background/60 px-4 py-1.5 text-[11px] font-semibold tracking-[0.16em] text-foreground/70 uppercase backdrop-blur">
+                Get Started Today
+              </span>
+              <h2 className="mt-4 font-display text-3xl leading-tight font-semibold tracking-tight text-balance text-foreground sm:text-4xl">
+                Give Your Clinic The Instagram It Deserves
+              </h2>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-pretty text-muted-foreground sm:text-base">
+                Everything you need to stay active, professional and trustworthy — without hiring an agency
+                or spending hours creating content.
+              </p>
 
-            <div className="mt-8 flex flex-col items-center gap-5 sm:flex-row sm:gap-6">
-              <BuyButton />
-              <SocialProof />
+              <ul className="mt-6 flex flex-col gap-3">
+                {points.map((point) => (
+                  <li key={point} className="flex items-center gap-3 text-sm font-medium text-foreground/85">
+                    <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+                      <Check className="h-3 w-3" strokeWidth={3} />
+                    </span>
+                    {point}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">
+                <BuyButton label="Get Instant Access — ₹999" />
+                <SocialProof />
+              </div>
+            </div>
+
+            {/* Image */}
+            <div className="relative">
+              <div className="absolute -inset-3 rounded-2xl bg-primary/10 blur-2xl" aria-hidden="true" />
+              <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-primary/10">
+                <Image
+                  src="/images/utf.jpg"
+                  alt="Repsine Instagram kit shown across phone, laptop and tablet"
+                  width={2560}
+                  height={1280}
+                  sizes="(max-width: 1024px) 100vw, 512px"
+                  className="h-auto w-full object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>

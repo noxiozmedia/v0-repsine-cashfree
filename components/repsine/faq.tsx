@@ -9,24 +9,36 @@ import {
 
 const faqs = [
   {
-    q: "Who is this course for?",
-    a: "This course is for absolute beginners, social media managers, freelancers, students, small business owners and anyone who wants to design beautiful graphics and brand assets using Canva — no prior design experience needed.",
+    q: "Do I need Canva experience?",
+    a: "No. Every template is designed to be edited in Canva with simple drag-and-drop changes.",
   },
   {
-    q: "Do I need any special software to start?",
-    a: "No special software is required. You only need a free Canva account and a stable internet connection. We will guide you through Canva Pro features and alternatives where needed.",
+    q: "How long does it take to customize a template?",
+    a: "Most templates can be customized and posted in under 10 minutes.",
   },
   {
-    q: "Will I get a certificate after completing the course?",
-    a: "Yes. Once you finish all the modules and the final project, you will receive an industry-recognized certificate of completion that you can add to your resume and LinkedIn.",
+    q: "Are these templates made specifically for aesthetic clinics?",
+    a: "Yes. Every template, caption, script and content plan is designed specifically for aesthetic clinics and medspas.",
   },
   {
-    q: "Can I access the course content after completion?",
-    a: "Absolutely. You get lifetime access to all the lessons, templates and future updates — so you can revisit the course any time you need a refresher.",
+    q: "What exactly is included in the kit?",
+    a: "You'll get Instagram Templates, ready-to-use Captions, WhatsApp & DM Scripts, a Content Calendar and free Weekly Updates.",
   },
   {
-    q: "What if I have questions or need help during the course?",
-    a: "You will have access to our private community and dedicated support channel where mentors and fellow students respond to your questions and review your designs.",
+    q: "Is this a subscription?",
+    a: "No. Pay once and get lifetime access, including free weekly updates.",
+  },
+  {
+    q: "Will I receive future templates?",
+    a: "Yes. New templates and resources are added regularly at no extra cost.",
+  },
+  {
+    q: "Can I use this for multiple clinic locations?",
+    a: "Your purchase covers a single clinic. For multiple locations, reach out to us and we'll sort out the right license for you.",
+  },
+  {
+    q: "What if I don't know what to post?",
+    a: "That's exactly why the kit includes a content calendar, ready-made templates and captions — so you always know what to post next.",
   },
 ]
 
@@ -38,8 +50,8 @@ export function Faq() {
           <span className="inline-flex items-center rounded-full border border-border/60 bg-card/60 px-4 py-1.5 text-[11px] font-semibold tracking-[0.18em] text-foreground/80 uppercase">
             FAQ
           </span>
-          <h2 className="mt-4 font-display text-3xl leading-tight font-bold tracking-tight text-balance text-foreground sm:text-4xl">
-            Maybe We Have An Answer
+          <h2 className="mt-4 font-display text-3xl leading-tight font-semibold tracking-tight text-balance text-foreground sm:text-4xl">
+            Questions? We&apos;ve Got Answers
           </h2>
         </div>
 

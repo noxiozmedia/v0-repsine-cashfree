@@ -22,7 +22,7 @@ export function SiteHeader() {
         Repsine
       </a>
 
-      <BuyButton label="Enroll now" />
+      <BuyButton label="Get Access" />
       </div>
     </header>
   )

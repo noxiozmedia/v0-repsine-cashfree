@@ -1,16 +1,16 @@
 import { Hero } from "@/components/repsine/hero"
-import { TrustedBy } from "@/components/repsine/trusted-by"
-import { WhatsIncluded } from "@/components/repsine/whats-included"
+import { Features } from "@/components/repsine/features"
+import { HowItWorks } from "@/components/repsine/how-it-works"
 import { Faq } from "@/components/repsine/faq"
 import { SuccessCta } from "@/components/repsine/success-cta"
 import { SiteFooter } from "@/components/repsine/footer"
 
 export default function Page() {
   return (
-    <main className="relative min-h-screen bg-background text-foreground">
+    <main className="repsine-cream relative min-h-screen bg-background text-foreground">
       <Hero />
-      <TrustedBy />
-      <WhatsIncluded />
+      <Features />
+      <HowItWorks />
       <Faq />
       <SuccessCta />
       <SiteFooter />

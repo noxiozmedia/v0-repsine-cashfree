@@ -166,6 +166,39 @@
   --sidebar-ring: oklch(0.5 0.24 285);
 }
 
+/* Scoped premium cream theme — only activates inside .repsine-cream
+   so it stays isolated to the marketing home page. */
+.repsine-cream {
+  --background: oklch(0.952 0.018 78);
+  --foreground: oklch(0.26 0.028 52);
+  --card: oklch(0.987 0.009 82);
+  --card-foreground: oklch(0.26 0.028 52);
+  --popover: oklch(0.987 0.009 82);
+  --popover-foreground: oklch(0.26 0.028 52);
+  --primary: oklch(0.44 0.062 50);
+  --primary-foreground: oklch(0.97 0.012 82);
+  --secondary: oklch(0.915 0.022 72);
+  --secondary-foreground: oklch(0.3 0.03 52);
+  --muted: oklch(0.925 0.018 74);
+  --muted-foreground: oklch(0.5 0.03 55);
+  --accent: oklch(0.55 0.07 52);
+  --accent-foreground: oklch(0.97 0.012 82);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.885 0.02 70);
+  --input: oklch(0.885 0.02 70);
+  --ring: oklch(0.44 0.062 50);
+  --radius: 1rem;
+}
+
+/* Cream glow backgrounds for hero + CTA */
+.cream-glow {
+  background:
+    radial-gradient(60% 55% at 12% 25%, oklch(0.78 0.06 60 / 0.55) 0%, transparent 62%),
+    radial-gradient(55% 50% at 88% 20%, oklch(0.7 0.07 45 / 0.4) 0%, transparent 60%),
+    radial-gradient(80% 65% at 50% 110%, oklch(0.62 0.07 48 / 0.18) 0%, transparent 70%);
+}
+
 @theme inline {
   --font-sans: var(--font-inter), 'Geist Fallback';
   --font-display: 'FH Total Display', var(--font-space-grotesk), 'Geist Fallback';

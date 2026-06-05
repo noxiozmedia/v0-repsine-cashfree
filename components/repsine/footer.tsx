@@ -13,8 +13,8 @@ export function SiteFooter() {
   return (
     <footer className="relative border-t border-border/40">
       <div className="mx-auto w-full max-w-5xl px-4 py-14 sm:px-6 sm:py-20">
-        <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-          Canva Mastery by Repsine
+        <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+          Instagram Kit for Aesthetic Clinics by Repsine
         </h2>
 
         <ul className="mt-8 divide-y divide-border/60 border-y border-border/60">
