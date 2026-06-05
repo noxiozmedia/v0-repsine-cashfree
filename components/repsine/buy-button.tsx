@@ -46,8 +46,8 @@ export function BuyButton({ label = "BUY Now", className, variant = "default" }:
         <span className="relative mr-3 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-primary transition-transform duration-300">
           <ChevronRight className="h-4 w-4 text-primary-foreground" />
         </span>
-        {/* Label */}
-        <span className="tracking-wide">
+        {/* Label — flex-1 + text-center so it centers in the remaining space */}
+        <span className="flex-1 text-center tracking-wide">
           {label}
         </span>
       </button>

@@ -67,7 +67,7 @@ export function Hero() {
 
       {/* Mobile sticky CTA */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border/60 bg-background/90 px-4 py-3 backdrop-blur-md sm:hidden">
-        <BuyButton label="Get Instant Access - ₹999" className="w-full justify-center" />
+        <BuyButton label="Get Instant Access - ₹999" className="w-full" />
       </div>
     </section>
   )
