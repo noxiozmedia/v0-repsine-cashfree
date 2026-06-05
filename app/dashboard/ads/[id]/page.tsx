@@ -33,20 +33,7 @@ export default async function AdDetailPage({ params }: { params: Promise<{ id: s
               <AdVariantTabs variants={[...ad.variants]} />
             </div>
 
-            <div className="mt-10">
-              <h2 className="text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">
-                Tutorial
-              </h2>
-              <div className="mt-3 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-muted">
-                <iframe
-                  src={ad.videoEmbedUrl}
-                  title={`${ad.title} tutorial`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  className="h-full w-full"
-                />
-              </div>
-            </div>
+            {/* Tutorial section hidden until videos are ready */}
           </div>
 
           <aside className="flex flex-col gap-4">
