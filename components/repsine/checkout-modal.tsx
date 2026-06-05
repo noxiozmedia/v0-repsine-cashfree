@@ -7,7 +7,7 @@ import { X, Lock, Loader2, CheckCircle2, ShieldCheck, ArrowRight, RotateCcw } fr
   const PRICE = 999
   const ORIGINAL_PRICE = 1999
   // Toggle to show the dev "skip payment" button. Disabled while testing live payments.
-  const SHOW_DEV_BYPASS = false
+  const SHOW_DEV_BYPASS = true
 
 declare global {
   interface Window {
@@ -346,7 +346,7 @@ export function CheckoutModal({ open, onClose }: Props) {
               <div className="flex flex-col items-start gap-2 border-t border-border/60 pt-4">
                 <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                  <span>256-bit SSL · UPI, Cards &amp; Netbanking · 7-day Refund</span>
+                  <span>256-bit SSL · UPI, Cards &amp; Netbanking</span>
                 </div>
                 <p className="text-left text-[11px] text-muted-foreground">
                   By continuing you agree to our{" "}
