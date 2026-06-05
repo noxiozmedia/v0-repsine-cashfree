@@ -18,20 +18,20 @@ const features = [
     alt: "Day-by-day content calendar with post ideas for an aesthetic clinic",
   },
   {
-    tag: "Captions",
-    title: "Captions",
-    description:
-      "Skip the blank page. Get ready-to-use captions that educate, build trust and encourage patients to take action.",
-    image: "/images/caption.avif",
-    alt: "Ready-to-use Instagram caption with hashtags for a skincare clinic",
-  },
-  {
     tag: "Scripts",
     title: "WhatsApp & DM Scripts",
     description:
       "Know exactly what to say when patients ask about pricing, treatments or bookings — without awkward guesswork.",
     image: "/images/wp-scripts.jpg",
     alt: "WhatsApp chat script for replying to a patient about acne scars",
+  },
+  {
+    tag: "Captions",
+    title: "Captions",
+    description:
+      "Skip the blank page. Get ready-to-use captions that educate, build trust and encourage patients to take action.",
+    image: "/images/caption.avif",
+    alt: "Ready-to-use Instagram caption with hashtags for a skincare clinic",
   },
 ]
 
