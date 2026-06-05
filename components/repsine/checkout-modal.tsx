@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import { X, Lock, Loader2, CheckCircle2, ShieldCheck, ArrowRight, RotateCcw } from "lucide-react"
+import { trackMeta, newEventId } from "@/lib/meta-pixel"
 
   const PRICE = 999
   const ORIGINAL_PRICE = 1999
@@ -57,6 +58,15 @@ export function CheckoutModal({ open, onClose }: Props) {
   // Lock scroll + ESC close
   useEffect(() => {
     if (!open) return
+    // Fire Meta ViewContent when the checkout opens (Pixel + CAPI).
+    trackMeta({
+      eventName: "ViewContent",
+      eventId: newEventId(),
+      value: PRICE,
+      currency: "INR",
+      contentName: "Repsine Instagram Kit",
+      contentIds: ["repsine-instagram-kit"],
+    })
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") handleClose()
     }
@@ -112,6 +122,22 @@ export function CheckoutModal({ open, onClose }: Props) {
       if (res.ok && data.dashboardUrl) {
         setDashboardUrl(data.dashboardUrl)
         setEmailSent(true)
+        // Fire Meta Purchase (Pixel + CAPI, deduplicated by eventId).
+        const [firstName, ...rest] = name.trim().split(/\s+/)
+        trackMeta({
+          eventName: "Purchase",
+          eventId: `purchase_${orderId}`,
+          value: test ? PRICE : (paidOrder?.amount ?? PRICE),
+          currency: "INR",
+          contentName: "Repsine Instagram Kit",
+          contentIds: ["repsine-instagram-kit"],
+          user: {
+            email: email.trim(),
+            phone: phone.replace(/\D/g, ""),
+            firstName,
+            lastName: rest.join(" ") || undefined,
+          },
+        })
       } else {
         setError(data?.error || "We couldn't set up your access. Contact support@repsine.com.")
         setStage("failed")
@@ -150,6 +176,23 @@ export function CheckoutModal({ open, onClose }: Props) {
     setError(null)
     if (!validate()) return
     setStage("submitting")
+
+    // Fire Meta InitiateCheckout (Pixel + CAPI, deduplicated by eventId).
+    const [firstName, ...rest] = name.trim().split(/\s+/)
+    trackMeta({
+      eventName: "InitiateCheckout",
+      eventId: newEventId(),
+      value: PRICE,
+      currency: "INR",
+      contentName: "Repsine Instagram Kit",
+      contentIds: ["repsine-instagram-kit"],
+      user: {
+        email: email.trim(),
+        phone: phone.replace(/\D/g, ""),
+        firstName,
+        lastName: rest.join(" ") || undefined,
+      },
+    })
 
     try {
       const res = await fetch("/api/create-order", {

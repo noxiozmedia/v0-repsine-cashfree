@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Inter, Space_Grotesk } from "next/font/google"
 import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/next"
+import { MetaPixel } from "@/components/meta-pixel"
 import "./globals.css"
 
 const inter = Inter({
@@ -59,6 +60,7 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} ${fhTotalDisplay.variable} bg-background`}
     >
       <body className="font-sans antialiased">
+        <MetaPixel />
         {children}
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
