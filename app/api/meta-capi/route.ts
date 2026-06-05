@@ -22,10 +22,11 @@ function hashPhone(value?: string | null) {
 
 export async function POST(req: NextRequest) {
   try {
-    const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
+    // Pixel ID hardcoded per Meta's manual install instructions.
+    const pixelId = "839225112316916"
     const token = process.env.META_CAPI_ACCESS_TOKEN
 
-    if (!pixelId || !token) {
+    if (!token) {
       // Don't error the client flow if CAPI isn't configured.
       return NextResponse.json({ ok: false, skipped: true })
     }

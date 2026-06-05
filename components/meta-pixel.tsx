@@ -4,39 +4,43 @@ import Script from "next/script"
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
 
-const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID
+// Pixel ID hardcoded per Meta's manual install instructions.
+const PIXEL_ID = "839225112316916"
 
-// Manual Meta Pixel base-code install. Loads fbq, fires the initial PageView,
-// and re-fires PageView on client-side route changes.
-export function MetaPixel() {
+declare global {
+  interface Window {
+    fbq: (...args: unknown[]) => void
+    _fbq: unknown
+  }
+}
+
+// Re-fire PageView on every client-side navigation.
+function PixelPageView() {
   const pathname = usePathname()
-
   useEffect(() => {
-    if (!PIXEL_ID) return
-    // Fire PageView on every route change after the first load.
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "PageView")
     }
   }, [pathname])
+  return null
+}
 
-  if (!PIXEL_ID) return null
-
+export function MetaPixel() {
   return (
     <>
-      <Script id="meta-pixel-base" strategy="afterInteractive">
-        {`
-          !function(f,b,e,v,n,t,s)
-          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-          n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s)}(window, document,'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '${PIXEL_ID}');
-          fbq('track', 'PageView');
-        `}
-      </Script>
+      {/* Exact base code from Meta's manual install instructions */}
+      <Script id="meta-pixel-base" strategy="afterInteractive">{`
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window,document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '${PIXEL_ID}');
+        fbq('track', 'PageView');
+      `}</Script>
       <noscript>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -47,6 +51,7 @@ export function MetaPixel() {
           alt=""
         />
       </noscript>
+      <PixelPageView />
     </>
   )
 }
