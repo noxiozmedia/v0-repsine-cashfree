@@ -93,7 +93,7 @@ export function CheckoutModal({ open, onClose }: Props) {
     return Object.keys(e).length === 0
   }
 
-  async function grantAccess(orderId: string) {
+  async function grantAccess(orderId: string, test = false) {
     try {
       const res = await fetch("/api/post-payment", {
         method: "POST",
@@ -103,15 +103,21 @@ export function CheckoutModal({ open, onClose }: Props) {
           name: name.trim(),
           email: email.trim(),
           phone: phone.replace(/\D/g, ""),
+          ...(test ? { test: true, amount: PRICE } : {}),
         }),
       })
       const data = await res.json()
-      if (res.ok) {
-        if (data.dashboardUrl) setDashboardUrl(data.dashboardUrl)
+      if (res.ok && data.dashboardUrl) {
+        setDashboardUrl(data.dashboardUrl)
         setEmailSent(true)
+      } else {
+        setError(data?.error || "We couldn't set up your access. Contact support@repsine.com.")
+        setStage("failed")
       }
     } catch (err) {
       console.log("[v0] post-payment error", err)
+      setError("We couldn't set up your access. Contact support@repsine.com.")
+      setStage("failed")
     }
   }
 
@@ -190,7 +196,7 @@ export function CheckoutModal({ open, onClose }: Props) {
     const fakeOrderId = `dev_${Date.now()}`
     setPaidOrder({ id: fakeOrderId, amount: PRICE })
     setStage("success")
-    grantAccess(fakeOrderId)
+    grantAccess(fakeOrderId, true)
   }
 
   function tryAgain() {
@@ -214,7 +220,9 @@ export function CheckoutModal({ open, onClose }: Props) {
       aria-labelledby="checkout-title"
       className="repsine-cream fixed inset-0 z-[9999] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4"
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget && !handoff) handleClose()
+        // Don't dismiss on backdrop click during handoff or after a successful
+        // payment — the user must use the dashboard/close button instead.
+        if (e.target === e.currentTarget && !handoff && stage !== "success") handleClose()
       }}
       ref={dialogRef}
     >

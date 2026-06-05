@@ -26,10 +26,6 @@ export async function POST(request: Request) {
     const secret = process.env.CASHFREE_SECRET_KEY
     const resendKey = process.env.Resend_API_KEY
 
-    if (!resendKey) {
-      return NextResponse.json({ error: "Resend API key missing" }, { status: 500 })
-    }
-
     let orderAmount = 0
     const paidAt = new Date().toLocaleString("en-IN")
 
@@ -143,7 +139,11 @@ export async function POST(request: Request) {
 
     const pdfBuffer = Buffer.from(doc.output("arraybuffer"))
 
-    // 4) Send the welcome + receipt email
+    // 4) Send the welcome + receipt email (skipped if Resend isn't configured —
+    // access is still granted and the dashboard link is still returned).
+    let messageId: string | null = null
+
+    if (resendKey) {
     const resend = new Resend(resendKey)
 
     const html = `
@@ -210,10 +210,12 @@ export async function POST(request: Request) {
       console.log("[v0] Resend error", sent.error)
       // Don't fail the whole request: user is still created, link still returned
     }
+    messageId = sent.data?.id ?? null
+    }
 
     return NextResponse.json({
       ok: true,
-      messageId: sent.data?.id ?? null,
+      messageId,
       dashboardUrl,
     })
   } catch (err) {
