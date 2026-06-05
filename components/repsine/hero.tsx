@@ -52,7 +52,7 @@ export function Hero() {
           </div>
 
           {/* Check points */}
-          <ul className="order-6 mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:col-start-1 lg:row-start-5 lg:mt-6 lg:justify-start">
+          <ul className="order-6 mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:col-start-1 lg:row-start-5 lg:mt-4 lg:flex-col lg:items-start lg:gap-y-2.5">
             {checkPoints.map((point) => (
               <li key={point} className="flex items-center gap-2 text-sm font-medium text-foreground/80">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-primary">

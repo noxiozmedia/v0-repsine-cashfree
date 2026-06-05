@@ -38,21 +38,16 @@ export function BuyButton({ label = "BUY Now", className, variant = "default" }:
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          "group relative inline-flex h-12 cursor-pointer items-center overflow-hidden rounded-full bg-foreground pl-1.5 pr-5 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5",
+          "group inline-flex h-12 cursor-pointer items-center overflow-hidden rounded-full bg-foreground pl-1.5 pr-5 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5",
           className,
         )}
       >
-        {/* Purple circle — expands to fill on hover keeping padding */}
-        <span
-          aria-hidden="true"
-          className="absolute top-1.5 left-1.5 h-9 w-9 rounded-full bg-primary transition-[width,height,top,left] duration-500 ease-out group-hover:top-1.5 group-hover:left-1.5 group-hover:h-[calc(100%-0.75rem)] group-hover:w-[calc(100%-0.75rem)]"
-        />
-        {/* Arrow icon inside the purple circle */}
-        <span className="relative z-10 mr-2.5 flex h-9 w-9 flex-shrink-0 items-center justify-center">
+        {/* Circle with arrow — always left-anchored, shrink-0 so it never squishes */}
+        <span className="relative mr-3 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-primary transition-transform duration-300">
           <ChevronRight className="h-4 w-4 text-primary-foreground" />
         </span>
         {/* Label */}
-        <span className="relative z-10 tracking-wide transition-colors duration-300 group-hover:text-primary-foreground">
+        <span className="tracking-wide">
           {label}
         </span>
       </button>
