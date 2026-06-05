@@ -82,12 +82,18 @@ export async function POST(req: NextRequest) {
       custom_data: customData,
     }
 
+    // TEST_EVENT_CODE — remove once verified in Meta Events Manager.
+    const TEST_EVENT_CODE = "TEST12988"
+
     const res = await fetch(
       `https://graph.facebook.com/${API_VERSION}/${pixelId}/events?access_token=${token}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: [eventPayload] }),
+        body: JSON.stringify({
+          data: [eventPayload],
+          ...(TEST_EVENT_CODE ? { test_event_code: TEST_EVENT_CODE } : {}),
+        }),
       },
     )
 
