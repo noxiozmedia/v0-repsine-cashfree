@@ -322,16 +322,14 @@ export function CheckoutModal({ open, onClose }: Props) {
                 )}
               </button>
 
-              {process.env.NODE_ENV !== "production" && (
-                <button
-                  type="button"
-                  onClick={devBypass}
-                  disabled={busy}
-                  className="inline-flex h-9 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-dashed border-amber-500/60 bg-amber-500/10 text-xs font-semibold text-amber-700 transition-colors hover:bg-amber-500/20 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  DEV: Skip payment &amp; grant access
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={devBypass}
+                disabled={busy}
+                className="inline-flex h-9 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-dashed border-amber-500/60 bg-amber-500/10 text-xs font-semibold text-amber-700 transition-colors hover:bg-amber-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                DEV: Skip payment &amp; grant access
+              </button>
 
               <div className="flex flex-col items-start gap-2 border-t border-border/60 pt-4">
                 <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
