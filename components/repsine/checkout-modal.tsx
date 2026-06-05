@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import { X, Lock, Loader2, CheckCircle2, ShieldCheck, ArrowRight, RotateCcw } from "lucide-react"
 
-  const PRICE = 1
-  const ORIGINAL_PRICE = 4999
+  const PRICE = 999
+  const ORIGINAL_PRICE = 1999
   // Toggle to show the dev "skip payment" button. Disabled while testing live payments.
   const SHOW_DEV_BYPASS = false
 
@@ -379,7 +379,7 @@ export function CheckoutModal({ open, onClose }: Props) {
 
           {stage === "success" && (
             <div className="px-6 py-10 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/15 text-primary">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-500/15 text-green-600">
                 <CheckCircle2 className="h-8 w-8" />
               </div>
               <h2 className="font-display mt-5 text-xl font-bold text-foreground">
