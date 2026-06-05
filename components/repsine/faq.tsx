@@ -10,7 +10,7 @@ import {
 const faqs = [
   {
     q: "Do I need Canva experience?",
-    a: "No. Every template is designed to be edited in Canva with simple drag-and-drop changes.",
+    a: "No. Every template is designed to be edited in Canva with simple drag-and-drop changes. We also include step-by-step tutorials for each template so you always know exactly what to do.",
   },
   {
     q: "How long does it take to customize a template?",
