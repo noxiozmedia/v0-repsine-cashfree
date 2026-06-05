@@ -74,13 +74,13 @@ export function CheckoutModal({ open, onClose }: Props) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="checkout-title"
-      className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4"
-      onClick={(e) => {
-        if (e.target === dialogRef.current) handleClose()
+      className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) handleClose()
       }}
       ref={dialogRef}
     >
-      <div className="relative max-h-[95vh] w-full max-w-lg overflow-hidden rounded-t-3xl border border-border/60 bg-card shadow-2xl shadow-black/40 sm:rounded-3xl">
+      <div className="relative max-h-[95svh] w-full max-w-lg overflow-hidden rounded-t-3xl border border-border/60 bg-card shadow-2xl shadow-black/40 sm:max-h-[90vh] sm:rounded-3xl">
         {/* Header bar */}
         <div className="flex items-center justify-between border-b border-border/60 bg-background/40 px-5 py-3 backdrop-blur">
           <div className="flex items-center gap-2 text-left">
@@ -99,7 +99,7 @@ export function CheckoutModal({ open, onClose }: Props) {
           </button>
         </div>
 
-        <div className="max-h-[calc(95vh-49px)] overflow-y-auto">
+        <div className="max-h-[calc(95svh-49px)] overflow-y-auto sm:max-h-[calc(90vh-49px)]">
           {(stage === "details" || stage === "submitting") && (
             <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6 text-left">
               {/* Order summary card */}
