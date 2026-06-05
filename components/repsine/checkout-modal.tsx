@@ -201,19 +201,13 @@ export function CheckoutModal({ open, onClose }: Props) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="checkout-title"
-      className={`repsine-cream fixed inset-0 z-[9999] flex items-end justify-center p-0 sm:items-center sm:p-4 ${
-        handoff ? "pointer-events-none bg-transparent backdrop-blur-0" : "bg-black/70 backdrop-blur-sm"
-      }`}
+      className="repsine-cream fixed inset-0 z-[9999] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4"
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget) handleClose()
+        if (e.target === e.currentTarget && !handoff) handleClose()
       }}
       ref={dialogRef}
     >
-      <div
-        className={`relative max-h-[95svh] w-full max-w-lg overflow-hidden rounded-t-3xl border border-border/60 bg-card shadow-2xl shadow-black/40 sm:max-h-[90vh] sm:rounded-3xl ${
-          handoff ? "hidden" : ""
-        }`}
-      >
+      <div className="relative max-h-[95svh] w-full max-w-lg overflow-hidden rounded-t-3xl border border-border/60 bg-card shadow-2xl shadow-black/40 sm:max-h-[90vh] sm:rounded-3xl">
         {/* Header bar */}
         <div className="flex items-center justify-between border-b border-border/60 bg-background/40 px-5 py-3 backdrop-blur">
           <div className="flex items-center gap-2 text-left">
@@ -234,7 +228,16 @@ export function CheckoutModal({ open, onClose }: Props) {
         </div>
 
         <div className="max-h-[calc(95svh-49px)] overflow-y-auto sm:max-h-[calc(90vh-49px)]">
-          {(stage === "details" || stage === "submitting") && (
+          {handoff && (
+            <div className="flex flex-col items-center justify-center gap-4 px-6 py-16 text-center">
+              <Loader2 className="h-9 w-9 animate-spin text-primary" />
+              <div>
+                <p className="font-display text-base font-bold text-foreground">Opening secure checkout</p>
+                <p className="mt-1 text-sm text-muted-foreground">Complete your payment in the secure window.</p>
+              </div>
+            </div>
+          )}
+          {!handoff && (stage === "details" || stage === "submitting") && (
             <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6 text-left">
               {/* Order summary card */}
               <div className="rounded-2xl border border-border/60 bg-background/40 p-4">
