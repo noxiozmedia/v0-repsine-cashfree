@@ -38,8 +38,8 @@ export function Hero() {
             <Image
               src="/images/utf.png"
               alt="Repsine ready-to-post Instagram templates shown on phone, laptop and tablet"
-              width={4992}
-              height={2640}
+              width={999}
+              height={503}
               priority
               sizes="(max-width: 1024px) 100vw, 600px"
               className="h-auto w-full object-contain"

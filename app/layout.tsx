@@ -16,23 +16,24 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 })
 
-// Self-hosted brand display font. next/font preloads these files before
-// paint and builds a metric-matched fallback, and `display: "optional"`
-// avoids the late wrong-font -> brand-font swap (FOUT).
+// Self-hosted brand display font, served as tiny (~8KB) WOFF2 files that
+// next/font preloads at high priority before paint. `display: "block"` keeps
+// headline text invisible for a brief block period and then paints it directly
+// in FH Total Display, so the user never sees a wrong-font -> brand-font swap.
 const fhTotalDisplay = localFont({
   variable: "--font-fh-total",
-  display: "optional",
+  display: "block",
   preload: true,
   adjustFontFallback: "Arial",
   src: [
-    { path: "../public/fonts/fh-total/FHTotalDisplay-Regular.otf", weight: "400", style: "normal" },
-    { path: "../public/fonts/fh-total/FHTotalDisplay-RegularItalic.otf", weight: "400", style: "italic" },
-    { path: "../public/fonts/fh-total/FHTotalDisplay-Medium.otf", weight: "500", style: "normal" },
-    { path: "../public/fonts/fh-total/FHTotalDisplay-MediumItalic.otf", weight: "500", style: "italic" },
-    { path: "../public/fonts/fh-total/FHTotalDisplay-SemiBold.otf", weight: "600", style: "normal" },
-    { path: "../public/fonts/fh-total/FHTotalDisplay-SemiBoldItalic.otf", weight: "600", style: "italic" },
-    { path: "../public/fonts/fh-total/FHTotalDisplay-Bold.otf", weight: "700", style: "normal" },
-    { path: "../public/fonts/fh-total/FHTotalDisplay-BoldItalic.otf", weight: "700", style: "italic" },
+    { path: "../public/fonts/fh-total/FHTotalDisplay-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/fh-total/FHTotalDisplay-RegularItalic.woff2", weight: "400", style: "italic" },
+    { path: "../public/fonts/fh-total/FHTotalDisplay-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../public/fonts/fh-total/FHTotalDisplay-MediumItalic.woff2", weight: "500", style: "italic" },
+    { path: "../public/fonts/fh-total/FHTotalDisplay-SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "../public/fonts/fh-total/FHTotalDisplay-SemiBoldItalic.woff2", weight: "600", style: "italic" },
+    { path: "../public/fonts/fh-total/FHTotalDisplay-Bold.woff2", weight: "700", style: "normal" },
+    { path: "../public/fonts/fh-total/FHTotalDisplay-BoldItalic.woff2", weight: "700", style: "italic" },
   ],
 })
 

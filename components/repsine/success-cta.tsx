@@ -52,8 +52,8 @@ export function SuccessCta() {
               <Image
                 src="/images/utf.png"
                 alt="Repsine Instagram kit shown across phone, laptop and tablet"
-                width={4992}
-                height={2640}
+                width={999}
+                height={503}
                 sizes="(max-width: 1024px) 100vw, 512px"
                 className="h-auto w-full object-contain"
               />
