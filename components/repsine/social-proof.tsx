@@ -1,39 +1,41 @@
 import { Star } from "lucide-react"
 
-function GoogleIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <path
-        fill="#4285F4"
-        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1Z"
-      />
-      <path
-        fill="#34A853"
-        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.26 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23Z"
-      />
-      <path
-        fill="#FBBC05"
-        d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84Z"
-      />
-      <path
-        fill="#EA4335"
-        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38Z"
-      />
-    </svg>
-  )
-}
+const AVATARS = [
+  { initials: "SA", color: "bg-amber-700" },
+  { initials: "PK", color: "bg-stone-600" },
+  { initials: "MR", color: "bg-amber-900" },
+  { initials: "DV", color: "bg-stone-700" },
+]
 
 export function SocialProof() {
   return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-sm">
-      <GoogleIcon className="h-4 w-4 flex-shrink-0" />
+    <div className="inline-flex items-center gap-2.5 rounded-full border border-border bg-card px-3 py-1.5 shadow-sm">
+      {/* Avatar stack */}
+      <div className="flex -space-x-2">
+        {AVATARS.map((a) => (
+          <span
+            key={a.initials}
+            className={`${a.color} flex h-6 w-6 items-center justify-center rounded-full text-[9px] font-bold text-white ring-2 ring-card`}
+            aria-hidden="true"
+          >
+            {a.initials}
+          </span>
+        ))}
+      </div>
+
+      {/* Divider */}
+      <span className="h-4 w-px bg-border" aria-hidden="true" />
+
+      {/* Stars + rating */}
       <div className="flex items-center gap-1">
         {Array.from({ length: 5 }).map((_, i) => (
           <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />
         ))}
+        <span className="ml-1 text-xs font-semibold text-foreground">4.9</span>
       </div>
-      <span className="text-xs font-semibold text-foreground">4.9</span>
-      <span className="text-xs text-muted-foreground">· 2K+ clinics</span>
+
+      {/* Label */}
+      <span className="text-xs text-muted-foreground">2K+ clinics</span>
     </div>
   )
 }
