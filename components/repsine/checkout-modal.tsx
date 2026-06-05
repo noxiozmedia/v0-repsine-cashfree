@@ -33,6 +33,9 @@ export function CheckoutModal({ open, onClose }: Props) {
 
   const dialogRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
+  // True while we're handing off to Cashfree's own modal — hides our card so
+  // there's no bordered box flashing before Cashfree's UI appears.
+  const [handoff, setHandoff] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -76,6 +79,7 @@ export function CheckoutModal({ open, onClose }: Props) {
     setPaidOrder(null)
     setDashboardUrl(null)
     setEmailSent(false)
+    setHandoff(false)
     onClose()
   }
 
@@ -160,14 +164,19 @@ export function CheckoutModal({ open, onClose }: Props) {
       }
 
       const cashfree = await window.Cashfree({ mode: "production" })
+      // Hide our card right before Cashfree injects its modal so there's no
+      // bordered-box flash during the handoff.
+      setHandoff(true)
       await cashfree.checkout({
         paymentSessionId: data.payment_session_id,
         redirectTarget: "_modal",
       })
+      setHandoff(false)
 
       await verifyOrder(data.order_id)
     } catch (err) {
       console.log("[v0] checkout error", err)
+      setHandoff(false)
       setError(err instanceof Error ? err.message : "Something went wrong")
       setStage("failed")
     }
@@ -178,6 +187,7 @@ export function CheckoutModal({ open, onClose }: Props) {
     setPaidOrder(null)
     setDashboardUrl(null)
     setEmailSent(false)
+    setHandoff(false)
     setStage("details")
   }
 
@@ -191,13 +201,19 @@ export function CheckoutModal({ open, onClose }: Props) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="checkout-title"
-      className="repsine-cream fixed inset-0 z-[9999] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className={`repsine-cream fixed inset-0 z-[9999] flex items-end justify-center p-0 sm:items-center sm:p-4 ${
+        handoff ? "pointer-events-none bg-transparent backdrop-blur-0" : "bg-black/70 backdrop-blur-sm"
+      }`}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) handleClose()
       }}
       ref={dialogRef}
     >
-      <div className="relative max-h-[95svh] w-full max-w-lg overflow-hidden rounded-t-3xl border border-border/60 bg-card shadow-2xl shadow-black/40 sm:max-h-[90vh] sm:rounded-3xl">
+      <div
+        className={`relative max-h-[95svh] w-full max-w-lg overflow-hidden rounded-t-3xl border border-border/60 bg-card shadow-2xl shadow-black/40 sm:max-h-[90vh] sm:rounded-3xl ${
+          handoff ? "hidden" : ""
+        }`}
+      >
         {/* Header bar */}
         <div className="flex items-center justify-between border-b border-border/60 bg-background/40 px-5 py-3 backdrop-blur">
           <div className="flex items-center gap-2 text-left">
