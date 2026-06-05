@@ -228,9 +228,9 @@ export function CheckoutModal({ open, onClose }: Props) {
       }}
       ref={dialogRef}
     >
-      <div className="relative max-h-[95svh] w-full max-w-lg overflow-hidden rounded-t-3xl border border-border/60 bg-card shadow-2xl shadow-black/40 sm:max-h-[90vh] sm:rounded-3xl">
+      <div className="relative flex max-h-[95svh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl border border-border/60 bg-card shadow-2xl shadow-black/40 sm:max-h-[90vh] sm:rounded-3xl">
         {/* Header bar */}
-        <div className="flex items-center justify-between border-b border-border/60 bg-background/40 px-5 py-3 backdrop-blur">
+        <div className="flex shrink-0 items-center justify-between border-b border-border/60 bg-background/40 px-5 py-3 backdrop-blur">
           <div className="flex items-center gap-2 text-left">
             <Lock className="h-3.5 w-3.5 text-primary" />
             <p className="text-[10px] font-semibold tracking-[0.2em] text-foreground/70 uppercase">
@@ -248,7 +248,7 @@ export function CheckoutModal({ open, onClose }: Props) {
           </button>
         </div>
 
-        <div className="max-h-[calc(95svh-49px)] overflow-y-auto sm:max-h-[calc(90vh-49px)]">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain [scrollbar-gutter:stable]">
           {handoff && (
             <div className="flex flex-col items-center justify-center gap-4 px-6 py-16 text-center">
               <Loader2 className="h-9 w-9 animate-spin text-primary" />
