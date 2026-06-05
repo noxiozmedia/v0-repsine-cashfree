@@ -42,7 +42,7 @@ export function SuccessCta() {
               </ul>
 
               <div className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">
-                <BuyButton label="Get Instant Access — ₹999" />
+                <BuyButton label="Get Instant Access - ₹999" />
                 <SocialProof />
               </div>
             </div>

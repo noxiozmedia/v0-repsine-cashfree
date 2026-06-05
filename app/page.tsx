@@ -3,7 +3,6 @@ import { Features } from "@/components/repsine/features"
 import { HowItWorks } from "@/components/repsine/how-it-works"
 import { Faq } from "@/components/repsine/faq"
 import { SuccessCta } from "@/components/repsine/success-cta"
-import { SiteFooter } from "@/components/repsine/footer"
 
 export default function Page() {
   return (
@@ -13,7 +12,6 @@ export default function Page() {
       <HowItWorks />
       <Faq />
       <SuccessCta />
-      <SiteFooter />
     </main>
   )
 }

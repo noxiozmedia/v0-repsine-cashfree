@@ -2,12 +2,18 @@
 
 import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
-import { X, Lock, Loader2, CheckCircle2, ShieldCheck } from "lucide-react"
+import { X, Lock, Loader2, CheckCircle2, ShieldCheck, ArrowRight, RotateCcw } from "lucide-react"
 
-const COURSE_PRICE = 1299
+const PRICE = 999
 const ORIGINAL_PRICE = 4999
 
-type Stage = "details" | "submitting" | "success"
+declare global {
+  interface Window {
+    Cashfree: any
+  }
+}
+
+type Stage = "details" | "submitting" | "verifying" | "success" | "failed"
 
 type Props = {
   open: boolean
@@ -20,12 +26,27 @@ export function CheckoutModal({ open, onClose }: Props) {
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [error, setError] = useState<string | null>(null)
+  const [paidOrder, setPaidOrder] = useState<{ id: string; amount: number } | null>(null)
+  const [dashboardUrl, setDashboardUrl] = useState<string | null>(null)
+  const [emailSent, setEmailSent] = useState(false)
 
   const dialogRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  // Load the Cashfree SDK once
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (document.getElementById("cashfree-sdk")) return
+    const script = document.createElement("script")
+    script.id = "cashfree-sdk"
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js"
+    script.async = true
+    document.body.appendChild(script)
   }, [])
 
   // Lock scroll + ESC close
@@ -44,11 +65,17 @@ export function CheckoutModal({ open, onClose }: Props) {
   }, [open])
 
   function handleClose() {
+    // Don't allow closing mid-payment
+    if (stage === "submitting" || stage === "verifying") return
     setStage("details")
     setName("")
     setEmail("")
     setPhone("")
     setErrors({})
+    setError(null)
+    setPaidOrder(null)
+    setDashboardUrl(null)
+    setEmailSent(false)
     onClose()
   }
 
@@ -62,18 +89,102 @@ export function CheckoutModal({ open, onClose }: Props) {
     return Object.keys(e).length === 0
   }
 
+  async function grantAccess(orderId: string) {
+    try {
+      const res = await fetch("/api/post-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId,
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.replace(/\D/g, ""),
+        }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        if (data.dashboardUrl) setDashboardUrl(data.dashboardUrl)
+        setEmailSent(true)
+      }
+    } catch (err) {
+      console.log("[v0] post-payment error", err)
+    }
+  }
+
+  async function verifyOrder(orderId: string) {
+    setStage("verifying")
+    try {
+      const res = await fetch(`/api/order-status?orderId=${encodeURIComponent(orderId)}`, {
+        cache: "no-store",
+      })
+      const data = await res.json()
+      if (data?.order_status === "PAID") {
+        setPaidOrder({ id: data.order_id, amount: data.order_amount })
+        setStage("success")
+        grantAccess(data.order_id)
+      } else {
+        setError("We couldn't confirm your payment. If money was deducted, contact support@repsine.com.")
+        setStage("failed")
+      }
+    } catch (err) {
+      console.log("[v0] verify error", err)
+      setError("Something went wrong while confirming your payment.")
+      setStage("failed")
+    }
+  }
+
   async function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault()
+    setError(null)
     if (!validate()) return
     setStage("submitting")
-    // Simulated submit — replace with real API later
-    await new Promise((r) => setTimeout(r, 900))
-    setStage("success")
+
+    try {
+      const res = await fetch("/api/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.replace(/\D/g, ""),
+          amount: PRICE,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.payment_session_id) {
+        throw new Error(data?.error || "Could not start checkout. Please try again.")
+      }
+
+      if (!window.Cashfree) {
+        throw new Error("Payment system is still loading — please try again in a moment.")
+      }
+
+      const cashfree = await window.Cashfree({ mode: "production" })
+      await cashfree.checkout({
+        paymentSessionId: data.payment_session_id,
+        redirectTarget: "_modal",
+      })
+
+      await verifyOrder(data.order_id)
+    } catch (err) {
+      console.log("[v0] checkout error", err)
+      setError(err instanceof Error ? err.message : "Something went wrong")
+      setStage("failed")
+    }
+  }
+
+  function tryAgain() {
+    setError(null)
+    setPaidOrder(null)
+    setDashboardUrl(null)
+    setEmailSent(false)
+    setStage("details")
   }
 
   if (!open || !mounted) return null
 
-  const savings = ORIGINAL_PRICE - COURSE_PRICE
+  const savings = ORIGINAL_PRICE - PRICE
+  const busy = stage === "submitting" || stage === "verifying"
 
   return createPortal(
     <div
@@ -99,7 +210,8 @@ export function CheckoutModal({ open, onClose }: Props) {
             type="button"
             onClick={handleClose}
             aria-label="Close checkout"
-            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            disabled={busy}
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
           >
             <X className="h-4 w-4" />
           </button>
@@ -113,7 +225,7 @@ export function CheckoutModal({ open, onClose }: Props) {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-display text-base font-bold text-foreground">
-                      Canva Mastery Course
+                      Repsine Template Kit
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       One-time payment · Lifetime access
@@ -121,7 +233,7 @@ export function CheckoutModal({ open, onClose }: Props) {
                   </div>
                   <div className="text-right">
                     <p className="font-display text-lg font-bold text-foreground">
-                      ₹{COURSE_PRICE.toLocaleString("en-IN")}
+                      ₹{PRICE.toLocaleString("en-IN")}
                     </p>
                     <p className="text-xs text-muted-foreground line-through">
                       ₹{ORIGINAL_PRICE.toLocaleString("en-IN")}
@@ -158,6 +270,12 @@ export function CheckoutModal({ open, onClose }: Props) {
               />
               <PhoneField value={phone} onChange={setPhone} error={errors.phone} />
 
+              {error && (
+                <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={stage === "submitting"}
@@ -165,11 +283,11 @@ export function CheckoutModal({ open, onClose }: Props) {
               >
                 {stage === "submitting" ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" /> Submitting…
+                    <Loader2 className="h-4 w-4 animate-spin" /> Opening secure payment…
                   </>
                 ) : (
                   <>
-                    <Lock className="h-3.5 w-3.5" /> Continue
+                    <Lock className="h-3.5 w-3.5" /> Pay ₹{PRICE.toLocaleString("en-IN")}
                   </>
                 )}
               </button>
@@ -177,7 +295,7 @@ export function CheckoutModal({ open, onClose }: Props) {
               <div className="flex flex-col items-start gap-2 border-t border-border/60 pt-4">
                 <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                  <span>256-bit SSL Encryption · 7-day Refund Policy</span>
+                  <span>256-bit SSL · UPI, Cards &amp; Netbanking · 7-day Refund</span>
                 </div>
                 <p className="text-left text-[11px] text-muted-foreground">
                   By continuing you agree to our{" "}
@@ -200,24 +318,65 @@ export function CheckoutModal({ open, onClose }: Props) {
             </form>
           )}
 
+          {stage === "verifying" && (
+            <div className="flex flex-col items-center gap-3 px-6 py-12 text-center">
+              <Loader2 className="h-9 w-9 animate-spin text-primary" />
+              <p className="font-display text-base font-bold text-foreground">Confirming your payment…</p>
+              <p className="text-sm text-muted-foreground">Please don&apos;t close this window.</p>
+            </div>
+          )}
+
           {stage === "success" && (
             <div className="px-6 py-10 text-center">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/15 text-primary">
                 <CheckCircle2 className="h-8 w-8" />
               </div>
               <h2 className="font-display mt-5 text-xl font-bold text-foreground">
-                Details Received
+                Payment Successful
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                We&apos;ve received your details. Your secure payment link will be sent to{" "}
-                <span className="font-medium text-foreground">{email}</span> shortly.
+                Thank you, {name.split(" ")[0]}! {emailSent ? "We've emailed" : "We're sending"} your
+                receipt and access link to{" "}
+                <span className="font-medium text-foreground">{email}</span>.
+              </p>
+              {paidOrder && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Order ID: <span className="font-mono text-foreground/80">{paidOrder.id}</span>
+                </p>
+              )}
+
+              {dashboardUrl ? (
+                <a
+                  href={dashboardUrl}
+                  className="mt-6 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary px-8 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
+                >
+                  Access your dashboard <ArrowRight className="h-4 w-4" />
+                </a>
+              ) : (
+                <div className="mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border border-border/60 bg-background/40 text-sm font-semibold text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" /> Setting up your access…
+                </div>
+              )}
+            </div>
+          )}
+
+          {stage === "failed" && (
+            <div className="px-6 py-10 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-destructive/15 text-destructive">
+                <X className="h-8 w-8" />
+              </div>
+              <h2 className="font-display mt-5 text-xl font-bold text-foreground">
+                Payment Not Completed
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                {error || "Your payment didn't go through. No worries — you can try again."}
               </p>
               <button
                 type="button"
-                onClick={handleClose}
-                className="mt-6 inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-primary px-8 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
+                onClick={tryAgain}
+                className="mt-6 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary px-8 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
               >
-                Done
+                <RotateCcw className="h-4 w-4" /> Try again
               </button>
             </div>
           )}
