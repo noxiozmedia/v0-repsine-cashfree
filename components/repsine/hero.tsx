@@ -6,14 +6,14 @@ import { SiteHeader } from "./header"
 
 const checkPoints = ["No Design Skills Needed", "Edit & Post In Minutes", "Free Weekly Updates"]
 
-export function Hero() {
+export function Hero({ headerCta = "buy" }: { headerCta?: "buy" | "login" }) {
   return (
     <section className="relative overflow-hidden">
       {/* Cream glow background */}
       <div className="absolute inset-0 cream-glow opacity-90" aria-hidden="true" />
 
       <div className="relative">
-        <SiteHeader />
+        <SiteHeader cta={headerCta} />
 
         <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-x-12 px-4 pt-10 pb-24 sm:px-6 sm:pt-14 sm:pb-16 lg:grid-cols-2 lg:items-center lg:pt-20 lg:pb-24">
           {/* Social proof */}

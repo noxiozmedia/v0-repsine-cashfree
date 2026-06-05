@@ -1,7 +1,13 @@
 import Image from "next/image"
+import Link from "next/link"
+import { ChevronRight } from "lucide-react"
 import { BuyButton } from "./buy-button"
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  cta?: "buy" | "login"
+}
+
+export function SiteHeader({ cta = "buy" }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/60 backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-8">
@@ -18,7 +24,17 @@ export function SiteHeader() {
           </span>
         </a>
 
-        <BuyButton label="Get Access" variant="plain" />
+        {cta === "login" ? (
+          <Link
+            href="/auth/login"
+            className="inline-flex h-10 items-center justify-center gap-1 rounded-full bg-foreground pl-5 pr-3.5 text-sm font-semibold text-background transition-colors hover:bg-foreground/90"
+          >
+            Login
+            <ChevronRight className="h-4 w-4" />
+          </Link>
+        ) : (
+          <BuyButton label="Get Access" variant="plain" />
+        )}
       </div>
     </header>
   )

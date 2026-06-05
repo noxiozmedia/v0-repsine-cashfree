@@ -4,10 +4,10 @@ import { HowItWorks } from "@/components/repsine/how-it-works"
 import { Faq } from "@/components/repsine/faq"
 import { SuccessCta } from "@/components/repsine/success-cta"
 
-export default function Page() {
+export default function KitPage() {
   return (
     <main className="repsine-cream relative min-h-screen bg-background pb-20 text-foreground sm:pb-0">
-      <Hero headerCta="login" />
+      <Hero />
       <Features />
       <HowItWorks />
       <Faq />
