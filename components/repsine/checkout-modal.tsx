@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import { X, Lock, Loader2, CheckCircle2, ShieldCheck } from "lucide-react"
 
 const COURSE_PRICE = 1299
@@ -21,6 +22,11 @@ export function CheckoutModal({ open, onClose }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const dialogRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Lock scroll + ESC close
   useEffect(() => {
@@ -65,16 +71,16 @@ export function CheckoutModal({ open, onClose }: Props) {
     setStage("success")
   }
 
-  if (!open) return null
+  if (!open || !mounted) return null
 
   const savings = ORIGINAL_PRICE - COURSE_PRICE
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="checkout-title"
-      className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className="repsine-cream fixed inset-0 z-[9999] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) handleClose()
       }}
@@ -217,7 +223,8 @@ export function CheckoutModal({ open, onClose }: Props) {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
