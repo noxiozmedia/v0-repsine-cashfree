@@ -14,7 +14,7 @@ const features = [
     title: "Content Calendar",
     description:
       "Know exactly what to post each week with a proven content plan designed specifically for aesthetic clinics.",
-    image: "/images/content-calendar.jpg",
+    image: "/images/content-calendar.avif",
     alt: "Day-by-day content calendar with post ideas for an aesthetic clinic",
   },
   {
@@ -22,7 +22,7 @@ const features = [
     title: "Captions",
     description:
       "Skip the blank page. Get ready-to-use captions that educate, build trust and encourage patients to take action.",
-    image: "/images/captions.jpg",
+    image: "/images/caption.avif",
     alt: "Ready-to-use Instagram caption with hashtags for a skincare clinic",
   },
   {
