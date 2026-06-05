@@ -52,9 +52,9 @@ export function Features() {
           {features.map((feature) => (
             <article
               key={feature.title}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-shadow hover:shadow-xl hover:shadow-primary/5"
+              className="group flex flex-col rounded-2xl border border-border bg-card p-3 transition-shadow hover:shadow-xl hover:shadow-primary/5"
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-secondary">
+              <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-secondary ring-1 ring-border/60">
                 <Image
                   src={feature.image || "/placeholder.svg"}
                   alt={feature.alt}
@@ -64,7 +64,7 @@ export function Features() {
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                 />
               </div>
-              <div className="flex flex-1 flex-col gap-2 p-6 sm:p-7">
+              <div className="flex flex-1 flex-col gap-2 p-3 pt-5 sm:p-4 sm:pt-5">
                 <span className="text-[10px] font-semibold tracking-[0.18em] text-primary/70 uppercase">
                   {feature.tag}
                 </span>
