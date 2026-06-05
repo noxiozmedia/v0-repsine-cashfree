@@ -5,11 +5,13 @@ import Image from "next/image"
 import { CheckCircle2, ChevronLeft, ChevronRight, ExternalLink, PlayCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Template } from "@/lib/content/templates"
+import { createClient } from "@/lib/supabase/client"
 
 export function TemplateWorkspace({ template }: { template: Template }) {
   const variants = template.variants
   const [activeId, setActiveId] = useState(variants[0]?.id)
   const [slideIndex, setSlideIndex] = useState(0)
+  const [tutorialStatus, setTutorialStatus] = useState<"idle" | "sending" | "sent" | "error">("idle")
   const active = variants.find((v) => v.id === activeId) ?? variants[0]
 
   if (!active) return null
@@ -20,6 +22,25 @@ export function TemplateWorkspace({ template }: { template: Template }) {
 
   function prevSlide() { setSlideIndex((i) => (i - 1 + slideCount) % slideCount) }
   function nextSlide() { setSlideIndex((i) => (i + 1) % slideCount) }
+
+  async function requestTutorial() {
+    setTutorialStatus("sending")
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      const res = await fetch("/api/request-tutorial", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          templateTitle: template.title,
+          userEmail: user?.email ?? "unknown",
+        }),
+      })
+      setTutorialStatus(res.ok ? "sent" : "error")
+    } catch {
+      setTutorialStatus("error")
+    }
+  }
 
   function handleVariantChange(id: typeof activeId) {
     setActiveId(id)
@@ -222,18 +243,20 @@ export function TemplateWorkspace({ template }: { template: Template }) {
         <div>
           <p className="text-sm font-semibold text-foreground">Want a step-by-step tutorial?</p>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            Request a video tutorial for this template and we&apos;ll add it for you.
+            {tutorialStatus === "sent"
+              ? "Request received! We'll add the tutorial soon."
+              : "Request a video tutorial for this template and we'll add it for you."}
           </p>
         </div>
-        <a
-          href={`https://wa.me/916295747270?text=${encodeURIComponent(`Hi! I'd like to request a tutorial for the "${template.title}" template on Repsine.`)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
+        <button
+          type="button"
+          onClick={requestTutorial}
+          disabled={tutorialStatus === "sending" || tutorialStatus === "sent"}
+          className="inline-flex h-9 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-semibold text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-60"
         >
           <PlayCircle className="h-3.5 w-3.5 text-primary" />
-          Request Tutorial
-        </a>
+          {tutorialStatus === "sending" ? "Sending..." : tutorialStatus === "sent" ? "Requested" : "Request Tutorial"}
+        </button>
       </div>
     </div>
   )
