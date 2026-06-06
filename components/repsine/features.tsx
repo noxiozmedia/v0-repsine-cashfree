@@ -48,7 +48,7 @@ export function Features() {
             What&apos;s Inside
           </span>
           <h2 className="mt-5 font-display text-3xl leading-tight font-semibold tracking-tight text-balance text-foreground sm:text-4xl">
-            Everything You Need To Stay Consistent On Instagram
+            Everything You Need To Stay Consistent On Instagram,
           </h2>
         </div>
 
