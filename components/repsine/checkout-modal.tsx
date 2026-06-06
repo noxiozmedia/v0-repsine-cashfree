@@ -308,7 +308,7 @@ export function CheckoutModal({ open, onClose }: Props) {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-display text-base font-bold text-foreground">
-                      Repsine Template Kit
+                      Aesthetic Clinic Kit
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       One-time payment · Lifetime access
