@@ -105,8 +105,6 @@ export async function POST(req: NextRequest) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           data: [eventPayload],
-          // TEST_EVENT_CODE — remove once verified in Meta Events Manager.
-          test_event_code: "TEST12988",
         }),
       },
     )
