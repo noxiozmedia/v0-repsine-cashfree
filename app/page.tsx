@@ -9,8 +9,8 @@ export default function Page() {
   return (
     <main className="repsine-cream relative min-h-screen bg-background pb-20 text-foreground sm:pb-0">
       <Hero headerCta="login" />
-      <Features />
       <WhatsInside />
+      <Features />
       <HowItWorks />
       <Faq />
       <SuccessCta />
