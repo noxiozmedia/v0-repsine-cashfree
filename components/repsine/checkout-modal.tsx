@@ -238,7 +238,7 @@ export function CheckoutModal({ open, onClose }: Props) {
   async function devBypass() {
     setError(null)
     if (!validate()) return
-    const fakeOrderId = `dev_${Date.now()}`
+    const fakeOrderId = `order_${Date.now()}`
     setPaidOrder({ id: fakeOrderId, amount: PRICE })
     setStage("success")
     grantAccess(fakeOrderId, true)
