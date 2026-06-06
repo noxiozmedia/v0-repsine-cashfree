@@ -40,6 +40,18 @@ function getCookie(name: string): string | undefined {
   return match ? decodeURIComponent(match[2]) : undefined
 }
 
+// Resolve the Facebook click id (fbc). Prefer the cookie set by the Pixel,
+// otherwise construct it from the fbclid URL param per Meta's spec:
+// fb.<subdomainIndex>.<creationTime>.<fbclid>
+function resolveFbc(): string | undefined {
+  const cookie = getCookie("_fbc")
+  if (cookie) return cookie
+  if (typeof window === "undefined") return undefined
+  const fbclid = new URLSearchParams(window.location.search).get("fbclid")
+  if (!fbclid) return undefined
+  return `fb.1.${Date.now()}.${fbclid}`
+}
+
 // Fire a standard event on the browser Pixel and mirror it through CAPI.
 export function trackMeta(opts: MetaEventOptions) {
   const { eventName, eventId, value, currency = "INR", contentName, contentIds, user } = opts
@@ -64,7 +76,7 @@ export function trackMeta(opts: MetaEventOptions) {
       customData,
       user,
       fbp: getCookie("_fbp"),
-      fbc: getCookie("_fbc"),
+      fbc: resolveFbc(),
     }
     fetch("/api/meta-capi", {
       method: "POST",
