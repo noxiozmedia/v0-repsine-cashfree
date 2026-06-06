@@ -8,7 +8,7 @@ import { trackMeta, newEventId } from "@/lib/meta-pixel"
   const PRICE = 999
   const ORIGINAL_PRICE = 1999
   // Toggle to show the dev "skip payment" button. Disabled while testing live payments.
-  const SHOW_DEV_BYPASS = false
+  const SHOW_DEV_BYPASS = true
 
 declare global {
   interface Window {
