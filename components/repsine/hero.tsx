@@ -23,7 +23,7 @@ export function Hero({ headerCta = "buy" }: { headerCta?: "buy" | "login" }) {
 
           {/* Headline */}
           <h1 className="order-2 mt-6 text-center font-display text-4xl leading-[1.08] font-semibold tracking-tight text-balance text-foreground sm:text-5xl lg:col-start-1 lg:row-start-2 lg:mt-5 lg:max-w-xl lg:text-left lg:text-[3.4rem]">
-            Have an Instagram, patients can trust - <em>without adding <span className="not-italic">more</span> work to your day</em>
+            Build an Instagram, patients can trust - <em>without adding <span className="not-italic">more</span> work to your day</em>
           </h1>
 
           {/* Subhead */}
