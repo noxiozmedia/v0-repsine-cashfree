@@ -1,7 +1,6 @@
 import Image from "next/image"
 import { Check } from "lucide-react"
 import { BuyButton } from "./buy-button"
-import { SocialProof } from "./social-proof"
 import { SiteHeader } from "./header"
 
 const checkPoints = ["No Design Skills Needed", "Edit & Post In Minutes", "Free Weekly Updates"]
@@ -16,11 +15,6 @@ export function Hero({ headerCta = "buy" }: { headerCta?: "buy" | "login" }) {
         <SiteHeader cta={headerCta} />
 
         <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-x-12 px-4 pt-10 pb-24 sm:px-6 sm:pt-14 sm:pb-16 lg:grid-cols-2 lg:items-center lg:pt-20 lg:pb-24">
-          {/* Social proof */}
-          <div className="order-1 flex justify-center lg:col-start-1 lg:row-start-1 lg:justify-start">
-            <SocialProof />
-          </div>
-
           {/* Headline */}
           <h1 className="order-2 mt-6 text-center font-display text-4xl leading-[1.08] font-semibold tracking-tight text-balance text-foreground sm:text-5xl lg:col-start-1 lg:row-start-2 lg:mt-5 lg:max-w-xl lg:text-left lg:text-[3.4rem]">
             Build an Instagram, patients can trust - <em>without adding <span className="not-italic">more</span> work to your day</em>

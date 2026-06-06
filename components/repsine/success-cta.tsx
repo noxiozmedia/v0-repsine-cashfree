@@ -1,7 +1,6 @@
 import Image from "next/image"
 import { Check } from "lucide-react"
 import { BuyButton } from "./buy-button"
-import { SocialProof } from "./social-proof"
 
 const points = [
   "Stay Consistent On Instagram",
@@ -43,7 +42,6 @@ export function SuccessCta() {
 
               <div className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">
                 <BuyButton label="Get Instant Access - ₹999" />
-                <SocialProof />
               </div>
             </div>
 
