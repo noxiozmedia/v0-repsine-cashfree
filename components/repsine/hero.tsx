@@ -17,14 +17,12 @@ export function Hero({ headerCta = "buy" }: { headerCta?: "buy" | "login" }) {
         <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-x-12 px-4 pt-10 pb-24 sm:px-6 sm:pt-14 sm:pb-16 lg:grid-cols-2 lg:items-center lg:pt-20 lg:pb-24">
           {/* Headline */}
           <h1 className="order-2 mt-6 text-center font-display text-4xl leading-[1.08] font-semibold tracking-tight text-balance text-foreground sm:text-5xl lg:col-start-1 lg:row-start-2 lg:mt-5 lg:max-w-xl lg:text-left lg:text-[3.4rem]">
-            Build an Instagram, patients can trust - <em>without adding <span className="not-italic">more</span> work to your day</em>
+            Done-For-You Instagram Content For <em>Aesthetic Clinics</em>
           </h1>
 
           {/* Subhead */}
           <p className="order-3 mt-5 text-center text-sm leading-relaxed text-pretty text-muted-foreground sm:text-base lg:col-start-1 lg:row-start-3 lg:max-w-xl lg:text-left">
-            Stop wondering what to post. Get ready-to-use templates, captions, WhatsApp scripts and content
-            plans designed specifically for aesthetic clinics — so your Instagram looks active, professional and
-            trustworthy before patients ever contact you.
+            25+ templates, 20+ captions, 30+ DM scripts and a 30-day content plan — designed specifically for aesthetic clinics.
           </p>
 
           {/* Mockup PNG — no background. After subtext on mobile, right side on desktop */}
