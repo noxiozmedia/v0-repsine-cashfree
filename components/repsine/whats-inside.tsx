@@ -3,13 +3,13 @@ import { LayoutGrid, MessageSquareQuote, CalendarDays, MessagesSquare } from "lu
 const items = [
   {
     icon: LayoutGrid,
-    count: "20+",
+    count: "25+",
     title: "Instagram Templates",
     description: "Posts, carousels & stories — before/after, testimonials, FAQs and more.",
   },
   {
     icon: MessageSquareQuote,
-    count: "50+",
+    count: "20+",
     title: "Caption Frameworks",
     description: "Ready-to-use caption formulas for every category and content type.",
   },
@@ -21,7 +21,7 @@ const items = [
   },
   {
     icon: MessagesSquare,
-    count: "20+",
+    count: "30+",
     title: "DM & WhatsApp Scripts",
     description: "Exact replies for pricing, bookings and treatment questions.",
   },
