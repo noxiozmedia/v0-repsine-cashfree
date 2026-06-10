@@ -5,11 +5,10 @@ import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const slides = [
-  { image: "/dashboard/templates/testimonial-post.jpg", label: "Testimonial" },
-  { image: "/dashboard/templates/before-after-post.jpg", label: "Before / After" },
+  { image: "/dashboard/templates/before-after-c1.jpg", label: "Before / After" },
+  { image: "/dashboard/templates/testimonial-story.jpg", label: "Testimonial Story" },
   { image: "/dashboard/templates/faq-1.jpg", label: "FAQ Carousel" },
   { image: "/dashboard/templates/pain-1.jpg", label: "Problem / Pain" },
-  { image: "/dashboard/templates/before-after-c2.jpg", label: "Before / After" },
 ]
 
 export function TemplateCarousel() {
