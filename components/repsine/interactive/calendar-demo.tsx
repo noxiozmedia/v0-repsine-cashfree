@@ -85,7 +85,7 @@ export function CalendarDemo() {
           <p className="mt-0.5 text-[13px] leading-relaxed text-muted-foreground">{active.details}</p>
         </div>
 
-        <div className="rounded-lg border border-dashed border-border bg-muted/40 px-3 py-2">
+        <div className="rounded-lg border border-dashed border-[#8a4b3a] bg-[#8a4b3a]/5 px-3 py-2">
           <p className="text-[10px] font-semibold tracking-wide text-foreground/40 uppercase">CTA</p>
           <p className="mt-0.5 text-[13px] font-medium leading-relaxed text-foreground/80">{active.cta}</p>
         </div>

@@ -58,7 +58,7 @@ export function TemplateCarousel() {
         type="button"
         aria-label="Previous template"
         onClick={() => go(-1)}
-        className="absolute left-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-background/90 text-foreground shadow-md backdrop-blur transition hover:bg-background"
+        className="absolute left-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-[#8a4b3a] bg-background/90 text-[#8a4b3a] shadow-md backdrop-blur transition hover:bg-background"
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
@@ -66,7 +66,7 @@ export function TemplateCarousel() {
         type="button"
         aria-label="Next template"
         onClick={() => go(1)}
-        className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-background/90 text-foreground shadow-md backdrop-blur transition hover:bg-background"
+        className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-[#8a4b3a] bg-background/90 text-[#8a4b3a] shadow-md backdrop-blur transition hover:bg-background"
       >
         <ChevronRight className="h-4 w-4" />
       </button>

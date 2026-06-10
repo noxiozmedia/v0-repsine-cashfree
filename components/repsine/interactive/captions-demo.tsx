@@ -123,7 +123,7 @@ export function CaptionsDemo() {
                 setPaused(true)
                 setIndex(i)
               }}
-              className={`h-1.5 cursor-pointer rounded-full transition-all ${i === index ? "w-5 bg-primary" : "w-1.5 bg-border"}`}
+              className={`h-1.5 cursor-pointer rounded-full transition-all ${i === index ? "w-5 bg-primary" : "w-1.5 bg-card"}`}
             />
           ))}
         </div>

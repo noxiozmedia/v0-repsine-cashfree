@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Send, ChevronLeft, ChevronRight } from "lucide-react"
+import { Send, ChevronLeft, ChevronRight, RotateCcw } from "lucide-react"
 
 // Short, demo-friendly reply variants.
 const replyVariants = [
@@ -38,6 +38,12 @@ export function ChatDemo() {
     setVariant((v) => (v + dir + replyVariants.length) % replyVariants.length)
   }
 
+  const restart = () => {
+    setSent(false)
+    setPaused(false)
+    setVariant(0)
+  }
+
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden rounded-xl bg-[#0b141a] ring-1 ring-border/60">
       {/* Chat header */}
@@ -67,6 +73,20 @@ export function ChatDemo() {
           </div>
         )}
       </div>
+
+      {/* Restart button — replay the flow after sending */}
+      {sent && (
+        <div className="absolute inset-x-0 bottom-3 flex justify-center duration-300 animate-in fade-in">
+          <button
+            type="button"
+            onClick={restart}
+            className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-[#2a3942] px-3.5 py-1.5 text-[11px] font-semibold text-white shadow-lg shadow-black/30 ring-1 ring-white/10 transition hover:bg-[#34434d]"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            Restart
+          </button>
+        </div>
+      )}
 
       {/* Floating reply popup — rounded card, auto-cycles, vanishes once sent */}
       {!sent && (
