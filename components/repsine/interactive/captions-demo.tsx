@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ChevronLeft, ChevronRight, Check, Copy } from "lucide-react"
 
 // A small, demo-friendly selection of caption frameworks.
@@ -29,7 +29,7 @@ DM us to know what could work for your skin.`,
   },
   {
     title: "Educational",
-    body: `3 things nobody tells you about [Treatment] 👇
+    body: `3 things nobody tells you about [Treatment]
 
 1. It works at the root, not just the surface.
 2. Results compound over a few sessions.
@@ -43,12 +43,23 @@ Save this for later — and DM us your questions.`,
 export function CaptionsDemo() {
   const [index, setIndex] = useState(0)
   const [copied, setCopied] = useState(false)
+  const [paused, setPaused] = useState(false)
   const active = captionDemos[index]
 
   const go = (dir: 1 | -1) =>
     setIndex((i) => (i + dir + captionDemos.length) % captionDemos.length)
 
+  // Auto-advance through captions until the user interacts.
+  useEffect(() => {
+    if (paused) return
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % captionDemos.length)
+    }, 3000)
+    return () => clearInterval(id)
+  }, [paused])
+
   async function copy() {
+    setPaused(true)
     const text = `${active.body}\n\n${active.hashtags.map((h) => `#${h}`).join(" ")}`
     try {
       await navigator.clipboard.writeText(text)
@@ -60,7 +71,7 @@ export function CaptionsDemo() {
   }
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden rounded-xl bg-card ring-1 ring-border/60">
+    <div className="flex w-full flex-col overflow-hidden rounded-xl border-2 border-[#7a2e2e] bg-card">
       {/* Header: title + copy */}
       <div className="flex items-center justify-between border-b border-border/60 bg-muted/30 px-3.5 py-2.5">
         <span className="text-[11px] font-semibold tracking-[0.14em] text-primary uppercase">
@@ -77,7 +88,7 @@ export function CaptionsDemo() {
       </div>
 
       {/* Caption body */}
-      <div className="flex flex-1 flex-col overflow-y-auto px-4 py-4">
+      <div key={index} className="flex flex-col px-4 py-4 duration-300 animate-in fade-in">
         <p className="whitespace-pre-line text-[13px] leading-relaxed text-foreground/85">
           {active.body}
         </p>
@@ -91,7 +102,10 @@ export function CaptionsDemo() {
         <button
           type="button"
           aria-label="Previous caption"
-          onClick={() => go(-1)}
+          onClick={() => {
+            setPaused(true)
+            go(-1)
+          }}
           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border bg-card text-foreground transition hover:bg-muted"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -102,7 +116,10 @@ export function CaptionsDemo() {
               key={c.title}
               type="button"
               aria-label={`Go to ${c.title}`}
-              onClick={() => setIndex(i)}
+              onClick={() => {
+                setPaused(true)
+                setIndex(i)
+              }}
               className={`h-1.5 cursor-pointer rounded-full transition-all ${i === index ? "w-5 bg-primary" : "w-1.5 bg-border"}`}
             />
           ))}
@@ -110,7 +127,10 @@ export function CaptionsDemo() {
         <button
           type="button"
           aria-label="Next caption"
-          onClick={() => go(1)}
+          onClick={() => {
+            setPaused(true)
+            go(1)
+          }}
           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border bg-card text-foreground transition hover:bg-muted"
         >
           <ChevronRight className="h-4 w-4" />

@@ -71,30 +71,32 @@ export function Features() {
         </div>
 
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {features.map((feature) => (
-            <article
-              key={feature.title}
-              className={`group flex flex-col rounded-2xl border border-border bg-card p-3 transition-shadow hover:shadow-xl hover:shadow-primary/5${feature.mobileOrder ? ` ${feature.mobileOrder}` : ""}`}
-            >
-              <div className="relative aspect-square w-full overflow-hidden rounded-xl">
-                <FeatureDemo demo={feature.demo} />
-              </div>
-              <div className="flex flex-1 flex-col gap-2 p-3 pt-5 sm:p-4 sm:pt-5">
-                <span className="text-[10px] font-semibold tracking-[0.18em] text-primary/70 uppercase">
-                  {feature.tag}
-                </span>
-                <h3 className="font-display text-xl font-semibold tracking-tight text-foreground">
-                  {feature.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
-              </div>
-            </article>
-          ))}
+          {features.map((feature) => {
+            // Templates + chat use a fixed 1:1 frame; calendar + captions size to their content.
+            const isFixed = feature.demo === "templates" || feature.demo === "scripts"
+            return (
+              <article
+                key={feature.title}
+                className={`group flex flex-col rounded-2xl border border-border bg-card p-3 transition-shadow hover:shadow-xl hover:shadow-primary/5${feature.mobileOrder ? ` ${feature.mobileOrder}` : ""}`}
+              >
+                <div
+                  className={`relative w-full overflow-hidden rounded-xl${isFixed ? " aspect-square" : ""}`}
+                >
+                  <FeatureDemo demo={feature.demo} />
+                </div>
+                <div className="flex flex-1 flex-col gap-2 p-3 pt-5 sm:p-4 sm:pt-5">
+                  <span className="text-[10px] font-semibold tracking-[0.18em] text-primary/70 uppercase">
+                    {feature.tag}
+                  </span>
+                  <h3 className="font-display text-xl font-semibold tracking-tight text-foreground">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
+                </div>
+              </article>
+            )
+          })}
         </div>
-
-        <p className="mt-10 text-center text-sm font-medium text-muted-foreground">
-          Got questions? <span className="text-foreground">Ask first!</span>
-        </p>
       </div>
     </section>
   )
