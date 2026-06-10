@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { calendar } from "@/lib/content/calendar"
 
 const typeStyles: Record<string, string> = {
@@ -15,12 +15,22 @@ const pickerDays = calendar.slice(0, 7)
 
 export function CalendarDemo() {
   const [day, setDay] = useState(1)
+  const [paused, setPaused] = useState(false)
   const active = calendar.find((d) => d.day === day) ?? calendar[0]
 
+  // Auto-advance through the 7 days until the user interacts.
+  useEffect(() => {
+    if (paused) return
+    const id = setInterval(() => {
+      setDay((d) => (d % pickerDays.length) + 1)
+    }, 2800)
+    return () => clearInterval(id)
+  }, [paused])
+
   return (
-    <div className="flex w-full flex-col overflow-hidden rounded-xl border-2 border-[#7a2e2e] bg-card">
+    <div className="flex w-full flex-col overflow-hidden rounded-xl bg-[oklch(0.9_0.03_66)]">
       {/* Day picker */}
-      <div className="border-b border-border/60 bg-muted/30 px-3 py-3">
+      <div className="px-3 py-3">
         <p className="mb-2 text-[10px] font-semibold tracking-[0.16em] text-foreground/50 uppercase">
           Select a day
         </p>
@@ -29,11 +39,14 @@ export function CalendarDemo() {
             <button
               key={d.day}
               type="button"
-              onClick={() => setDay(d.day)}
+              onClick={() => {
+                setPaused(true)
+                setDay(d.day)
+              }}
               className={`flex h-9 flex-1 cursor-pointer flex-col items-center justify-center rounded-lg border text-[11px] font-semibold leading-none transition-colors ${
                 d.day === day
                   ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card text-foreground/60 hover:border-primary/40 hover:text-foreground"
+                  : "border-transparent bg-card text-foreground/60 hover:text-foreground"
               }`}
             >
               <span className="text-[8px] font-medium opacity-70">Day</span>
@@ -44,7 +57,7 @@ export function CalendarDemo() {
       </div>
 
       {/* Day content (dashboard-style) */}
-      <div className="flex flex-col gap-3 p-4">
+      <div key={day} className="m-2 mt-0 flex flex-col gap-3 rounded-lg bg-card p-4 duration-300 animate-in fade-in">
         <div className="flex items-center gap-2">
           <span className="rounded-md bg-foreground px-2 py-0.5 text-[10px] font-bold text-background">
             Day {active.day}

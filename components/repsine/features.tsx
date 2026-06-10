@@ -97,6 +97,10 @@ export function Features() {
             )
           })}
         </div>
+
+        <p className="mt-10 text-center text-sm font-medium text-muted-foreground">
+          Got questions? <span className="text-foreground">Please ask first!</span>
+        </p>
       </div>
     </section>
   )

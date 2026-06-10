@@ -71,9 +71,9 @@ export function CaptionsDemo() {
   }
 
   return (
-    <div className="flex w-full flex-col overflow-hidden rounded-xl border-2 border-[#7a2e2e] bg-card">
+    <div className="flex w-full flex-col overflow-hidden rounded-xl bg-[oklch(0.9_0.03_66)]">
       {/* Header: title + copy */}
-      <div className="flex items-center justify-between border-b border-border/60 bg-muted/30 px-3.5 py-2.5">
+      <div className="flex items-center justify-between px-3.5 py-2.5">
         <span className="text-[11px] font-semibold tracking-[0.14em] text-primary uppercase">
           {active.title}
         </span>
@@ -87,8 +87,11 @@ export function CaptionsDemo() {
         </button>
       </div>
 
-      {/* Caption body */}
-      <div key={index} className="flex flex-col px-4 py-4 duration-300 animate-in fade-in">
+      {/* Caption body — fixed min height to the tallest caption so cards don't jump */}
+      <div
+        key={index}
+        className="m-2 mt-0 flex min-h-[260px] flex-col rounded-lg bg-card px-4 py-4 duration-300 animate-in fade-in"
+      >
         <p className="whitespace-pre-line text-[13px] leading-relaxed text-foreground/85">
           {active.body}
         </p>
@@ -98,7 +101,7 @@ export function CaptionsDemo() {
       </div>
 
       {/* Swipe controls */}
-      <div className="flex items-center justify-between border-t border-border/60 px-3 py-2.5">
+      <div className="flex items-center justify-between px-3 pb-2.5">
         <button
           type="button"
           aria-label="Previous caption"
