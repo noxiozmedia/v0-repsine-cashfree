@@ -5,10 +5,19 @@ import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const slides = [
+  // Before / After
   { image: "/dashboard/templates/before-after-c1.jpg", label: "Before / After" },
+  { image: "/dashboard/templates/before-after-c2.jpg", label: "Before / After" },
+  { image: "/dashboard/templates/before-after-c3.jpg", label: "Before / After" },
+  // Testimonial Story
   { image: "/dashboard/templates/testimonial-story.jpg", label: "Testimonial Story" },
+  // FAQ
   { image: "/dashboard/templates/faq-1.jpg", label: "FAQ Carousel" },
+  { image: "/dashboard/templates/faq-2.jpg", label: "FAQ Carousel" },
+  // Problem / Pain
   { image: "/dashboard/templates/pain-1.jpg", label: "Problem / Pain" },
+  { image: "/dashboard/templates/pain-2.jpg", label: "Problem / Pain" },
+  { image: "/dashboard/templates/pain-5.jpg", label: "Problem / Pain" },
 ]
 
 export function TemplateCarousel() {
