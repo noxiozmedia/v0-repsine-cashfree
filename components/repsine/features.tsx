@@ -13,7 +13,7 @@ type Feature = {
 
 const features: Feature[] = [
   {
-    tag: "Templates",
+    tag: "20+ Templates",
     title: "Templates",
     description:
       "Ready-to-post designs for testimonials, before/afters, FAQs and more — preview them right here.",
