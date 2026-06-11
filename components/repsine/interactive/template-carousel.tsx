@@ -56,15 +56,10 @@ export function TemplateCarousel() {
       {/* gradient for control legibility */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
 
-      {/* label and chip */}
-      <div className="absolute left-3 top-3 flex items-center gap-2">
-        <span className="rounded-full bg-background/90 px-3 py-1 text-[11px] font-semibold text-foreground shadow-sm backdrop-blur">
-          {slides[index].label}
-        </span>
-        <span className="rounded-full bg-primary/15 px-2.5 py-1 text-[10px] font-semibold text-primary shadow-sm backdrop-blur">
-          20+ Templates
-        </span>
-      </div>
+      {/* label */}
+      <span className="absolute left-3 top-3 rounded-full bg-background/90 px-3 py-1 text-[11px] font-semibold text-foreground shadow-sm backdrop-blur">
+        {slides[index].label}
+      </span>
 
       {/* arrows */}
       <button
