@@ -3,7 +3,7 @@ import { Check } from "lucide-react"
 import { BuyButton } from "./buy-button"
 import { SiteHeader } from "./header"
 
-const checkPoints = ["No Design Skills Needed", "Edit & Post In Minutes", "Free Weekly Updates"]
+const checkPoints = ["Post Consistently", "Look Professional Online", "Free Weekly Updates"]
 
 export function Hero({ headerCta = "buy" }: { headerCta?: "buy" | "login" }) {
   return (
