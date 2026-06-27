@@ -1,7 +1,6 @@
 "use client"
 
 import { Suspense, useEffect, useRef, useState } from "react"
-import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ArrowRight, CheckCircle2, KeyRound, Loader2, Mail, Sparkles } from "lucide-react"
 import { RepsineLogo } from "@/components/repsine-logo"
@@ -80,19 +79,23 @@ function LoginInner() {
     }
   }
 
+  // Magic link — generated server-side and delivered via Resend.
   async function sendMagicLink(e?: React.FormEvent) {
     e?.preventDefault()
     if (!isValidEmail(email)) return setError("Enter a valid email")
     setError(null)
     setLoading(true)
     try {
-      const res = await fetch("/api/auth/request-magic-link", {
+      const res = await fetch("/api/auth/send-magic-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email,
+          redirectTo: `${window.location.origin}/auth/callback`,
+        }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data?.error ?? "Could not send link")
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || "Could not send link")
       setLinkSent(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not send link")
@@ -101,19 +104,20 @@ function LoginInner() {
     }
   }
 
+  // OTP — 6-digit code generated server-side and delivered via Resend.
   async function sendOtp(e?: React.FormEvent) {
     e?.preventDefault()
     if (!isValidEmail(email)) return setError("Enter a valid email")
     setError(null)
     setLoading(true)
     try {
-      const res = await fetch("/api/auth/request-otp", {
+      const res = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data?.error ?? "Could not send code")
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || "Could not send code")
       setOtpSent(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not send code")
@@ -124,29 +128,29 @@ function LoginInner() {
 
   async function verifyOtp(e: React.FormEvent) {
     e.preventDefault()
-    if (!/^\d{4}$/.test(code)) return setError("Enter the 4-digit code")
+    if (!/^\d{6}$/.test(code)) return setError("Enter the 6-digit code")
     setError(null)
     setLoading(true)
     try {
-      // 1) Validate the 4-digit code against our auth_tokens table
-      const res = await fetch("/api/auth/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data?.error ?? "Invalid or expired code")
-
-      // 2) Use the returned Supabase email_otp client-side to create the session
       const supabase = createClient()
-      const { data: session, error: sErr } = await supabase.auth.verifyOtp({
-        email: data.email,
-        token: data.token,
-        type: "email",
-      })
-      if (sErr) throw sErr
-      if (!session.session) throw new Error("Sign-in failed. Please try again.")
-      const passwordSet = session.user?.user_metadata?.password_set === true
+      // The code is minted via admin.generateLink, whose verification type can
+      // be "email" or "magiclink" depending on the account — try both.
+      const types = ["email", "magiclink"] as const
+      let session = null
+      let user = null
+      let lastError: unknown = null
+      for (const type of types) {
+        const { data, error } = await supabase.auth.verifyOtp({ email, token: code, type })
+        if (!error && data.session) {
+          session = data.session
+          user = data.user
+          lastError = null
+          break
+        }
+        lastError = error
+      }
+      if (!session) throw lastError instanceof Error ? lastError : new Error("Sign-in failed. Please try again.")
+      const passwordSet = user?.user_metadata?.password_set === true
       router.replace(passwordSet ? "/dashboard" : "/auth/setup-password")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not verify code")
@@ -345,10 +349,10 @@ function LoginInner() {
                 </p>
               )}
               <Button type="submit" className="h-11 w-full" disabled={loading}>
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Email me a 4-digit code"}
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Email me a 6-digit code"}
               </Button>
               <p className="text-center text-xs text-muted-foreground">
-                Code is valid for 10 minutes.
+                Code is valid for 1 hour.
               </p>
             </form>
           )}
@@ -364,20 +368,20 @@ function LoginInner() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="code" className="sr-only">
-                  4-digit code
+                  6-digit code
                 </Label>
                 <Input
                   id="code"
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
-                  maxLength={4}
+                  maxLength={6}
                   required
                   autoFocus
                   autoComplete="one-time-code"
-                  placeholder="0000"
+                  placeholder="000000"
                   value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                   className="h-14 text-center text-2xl font-semibold tracking-[0.4em]"
                 />
               </div>
@@ -389,7 +393,7 @@ function LoginInner() {
               <Button
                 type="submit"
                 className="h-11 w-full"
-                disabled={loading || code.length !== 4}
+                disabled={loading || code.length !== 6}
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Verify and sign in"}
               </Button>
@@ -417,16 +421,6 @@ function LoginInner() {
             </form>
           )}
         </div>
-
-        <p className="mt-5 text-center text-xs text-muted-foreground">
-          Haven&apos;t purchased yet?{" "}
-          <Link
-            href="/"
-            className="font-medium text-foreground underline-offset-2 hover:underline"
-          >
-            Get access
-          </Link>
-        </p>
       </div>
     </div>
   )
