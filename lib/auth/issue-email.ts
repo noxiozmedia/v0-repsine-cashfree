@@ -37,12 +37,20 @@ export async function issueEmailAuth(email: string, redirectTo: string) {
 
   if (error) throw error
 
-  const actionLink = data?.properties?.action_link
+  const hashedToken = data?.properties?.hashed_token
   const otp = data?.properties?.email_otp
+  const verificationType = data?.properties?.verification_type ?? "magiclink"
 
-  if (!actionLink || !otp) {
+  if (!hashedToken || !otp) {
     throw new Error("Failed to generate sign-in credentials")
   }
 
-  return { actionLink, otp }
+  // Build a link that points directly to OUR app's callback and verifies the
+  // hashed token client-side. This avoids Supabase's hosted /auth/v1/verify
+  // redirect, which otherwise sends users to the dashboard "Site URL"
+  // (e.g. localhost) instead of the domain they're actually using.
+  const base = redirectTo.split("?")[0]
+  const actionLink = `${base}?token_hash=${encodeURIComponent(hashedToken)}&type=${encodeURIComponent(verificationType)}`
+
+  return { actionLink, otp, hashedToken, verificationType }
 }
