@@ -1,19 +1,5 @@
-import { Hero } from "@/components/repsine/hero"
-import { Features } from "@/components/repsine/features"
-import { WhatsInside } from "@/components/repsine/whats-inside"
-import { HowItWorks } from "@/components/repsine/how-it-works"
-import { Faq } from "@/components/repsine/faq"
-import { SuccessCta } from "@/components/repsine/success-cta"
+import { redirect } from "next/navigation"
 
 export default function Page() {
-  return (
-    <main className="repsine-cream relative min-h-screen bg-background pb-20 text-foreground sm:pb-0">
-      <Hero headerCta="login" />
-      <WhatsInside />
-      <Features />
-      <HowItWorks />
-      <Faq />
-      <SuccessCta />
-    </main>
-  )
+  redirect("/auth/login")
 }
