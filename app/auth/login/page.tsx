@@ -79,22 +79,23 @@ function LoginInner() {
     }
   }
 
-  // Magic link — native Supabase: emails a clickable link that lands on /auth/callback.
+  // Magic link — generated server-side and delivered via Resend.
   async function sendMagicLink(e?: React.FormEvent) {
     e?.preventDefault()
     if (!isValidEmail(email)) return setError("Enter a valid email")
     setError(null)
     setLoading(true)
     try {
-      const supabase = createClient()
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          shouldCreateUser: true,
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
+      const res = await fetch("/api/auth/send-magic-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          redirectTo: `${window.location.origin}/auth/callback`,
+        }),
       })
-      if (error) throw error
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || "Could not send link")
       setLinkSent(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not send link")
@@ -103,19 +104,20 @@ function LoginInner() {
     }
   }
 
-  // OTP — native Supabase: emails a 6-digit code the user types below.
+  // OTP — 6-digit code generated server-side and delivered via Resend.
   async function sendOtp(e?: React.FormEvent) {
     e?.preventDefault()
     if (!isValidEmail(email)) return setError("Enter a valid email")
     setError(null)
     setLoading(true)
     try {
-      const supabase = createClient()
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: { shouldCreateUser: true },
+      const res = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       })
-      if (error) throw error
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || "Could not send code")
       setOtpSent(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not send code")
@@ -131,14 +133,24 @@ function LoginInner() {
     setLoading(true)
     try {
       const supabase = createClient()
-      const { data, error } = await supabase.auth.verifyOtp({
-        email,
-        token: code,
-        type: "email",
-      })
-      if (error) throw error
-      if (!data.session) throw new Error("Sign-in failed. Please try again.")
-      const passwordSet = data.user?.user_metadata?.password_set === true
+      // The code is minted via admin.generateLink, whose verification type can
+      // be "email" or "magiclink" depending on the account — try both.
+      const types = ["email", "magiclink"] as const
+      let session = null
+      let user = null
+      let lastError: unknown = null
+      for (const type of types) {
+        const { data, error } = await supabase.auth.verifyOtp({ email, token: code, type })
+        if (!error && data.session) {
+          session = data.session
+          user = data.user
+          lastError = null
+          break
+        }
+        lastError = error
+      }
+      if (!session) throw lastError instanceof Error ? lastError : new Error("Sign-in failed. Please try again.")
+      const passwordSet = user?.user_metadata?.password_set === true
       router.replace(passwordSet ? "/dashboard" : "/auth/setup-password")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not verify code")
