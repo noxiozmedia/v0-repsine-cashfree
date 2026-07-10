@@ -5,7 +5,7 @@ import Image from "next/image"
 import { CheckCircle2, ChevronLeft, ChevronRight, ExternalLink, PlayCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Template } from "@/lib/content/templates"
-import { createClient } from "@/lib/supabase/client"
+import { USER } from "@/lib/user"
 
 export function TemplateWorkspace({ template }: { template: Template }) {
   const variants = template.variants
@@ -26,14 +26,12 @@ export function TemplateWorkspace({ template }: { template: Template }) {
   async function requestTutorial() {
     setTutorialStatus("sending")
     try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
       const res = await fetch("/api/request-tutorial", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           templateTitle: template.title,
-          userEmail: user?.email ?? "unknown",
+          userEmail: USER.email,
         }),
       })
       setTutorialStatus(res.ok ? "sent" : "error")
