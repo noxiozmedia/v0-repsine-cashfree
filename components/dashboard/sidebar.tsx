@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils"
 import { navItems } from "./nav-items"
 import { ThemeToggle } from "./theme-toggle"
 import { RepsineLogo } from "@/components/repsine-logo"
-import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
 export function DashboardSidebar({ email }: { email?: string }) {
@@ -16,10 +15,8 @@ export function DashboardSidebar({ email }: { email?: string }) {
   const router = useRouter()
   const [helpOpen, setHelpOpen] = useState(false)
 
-  async function handleSignOut() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push("/auth/login")
+  function handleSignOut() {
+    router.push("/")
   }
 
   return (

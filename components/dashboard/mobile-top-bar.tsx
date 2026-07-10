@@ -4,17 +4,14 @@ import { useState } from "react"
 import { LogOut, HelpCircle, MessageCircle, Mail, X } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 import { RepsineLogo } from "@/components/repsine-logo"
-import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
 export function DashboardMobileTopBar() {
   const router = useRouter()
   const [helpOpen, setHelpOpen] = useState(false)
 
-  async function handleSignOut() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push("/auth/login")
+  function handleSignOut() {
+    router.push("/")
   }
 
   return (

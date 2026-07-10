@@ -5,19 +5,10 @@ import { templates } from "@/lib/content/templates"
 import { calendar } from "@/lib/content/calendar"
 import { captions } from "@/lib/content/captions"
 import { scripts } from "@/lib/content/scripts"
-import { createClient } from "@/lib/supabase/server"
-import { DEMO_USER } from "@/lib/auth/preview"
+import { USER } from "@/lib/user"
 
-export default async function DashboardHome() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  const firstName =
-    (user?.user_metadata?.full_name as string | undefined)?.split(" ")[0] ||
-    user?.email?.split("@")[0] ||
-    DEMO_USER.fullName.split(" ")[0]
+export default function DashboardHome() {
+  const firstName = USER.fullName.split(" ")[0]
 
   const stats = [
     { label: "Templates", value: "10+", href: "/dashboard/templates" },
